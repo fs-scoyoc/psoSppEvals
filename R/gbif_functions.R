@@ -240,7 +240,7 @@ gbif_spp <- function(gbif_data, locale = TRUE, correct = TRUE){
   }
   
   # Subset species names
-  t_ids = sf::st_drop_geometry(seinet_data) |>
+  t_ids = sf::st_drop_geometry(gbif_data) |>
     dplyr::select(taxon_id, scientific_name) |>
     dplyr::filter(!taxon_id == "" | !is.na(taxon_id)) |>
     dplyr::distinct() |>
@@ -270,7 +270,7 @@ gbif_spp <- function(gbif_data, locale = TRUE, correct = TRUE){
 
   
   # Subset taxonomy
-  taxa = sf::st_drop_geometry(seinet_data) |>
+  taxa = sf::st_drop_geometry(gbif_data) |>
     dplyr::select(dplyr::any_of(taxa_select)) |>
     dplyr::distinct()
   
