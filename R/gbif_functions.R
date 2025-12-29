@@ -232,20 +232,31 @@ gbif_spp <- function(gbif_data, locale = TRUE, correct = TRUE){
   # Date formats
   date_formats = c("%Y-%m-%d %H:%M:%S", "%Y-%m-%d", "%Y-%m", "%Y", "ymd HMS",
                    "ymd", "ymd HM")
-
+  taxa_select = c("taxon_id", "kingdom", "phylum", "class", "order", "family",
+                  "genus", "species", "subspecies", "variety", "form")
   # Locale
   if(isTRUE(locale)){
     locale = stringr::str_c(unique(gbif_data$locale), collapse = ", ")
   }
+  
+  # Subset species names
+  t_ids = sf::st_drop_geometry(seinet_data) |>
+    dplyr::select(taxon_id, scientific_name) |>
+    dplyr::filter(!taxon_id == "" | !is.na(taxon_id)) |>
+    dplyr::distinct() |>
+    dplyr::mutate(dup_taxon = ifelse(duplicated(taxon_id) |
+                                       duplicated(taxon_id, fromLast = TRUE),
+                                     "Yes", "No"))
+  
   # Summarize data
-  dat = sf::st_drop_geometry(gbif_data) |>
-    dplyr::select(taxonKey, occurrenceID, scientific_name, eventDate)  |>
+  t_id_sum = sf::st_drop_geometry(gbif_data) |>
+    dplyr::select(taxon_id, eventDate, occurrenceID)  |>
     dplyr::mutate(
       date = lubridate::parse_date_time(eventDate, date_formats) |> as.Date(),
       year = lubridate::year(date)
       ) |>
     dplyr::distinct() |>
-    dplyr::group_by(scientific_name) |>
+    dplyr::group_by(taxon_id) |>
     dplyr::summarize(
       nObs = dplyr::n(),
       minYear = min(year, na.rm = TRUE),
@@ -255,12 +266,20 @@ gbif_spp <- function(gbif_data, locale = TRUE, correct = TRUE){
                      NA),
       .groups = "drop"
       ) |>
-    dplyr::mutate(locale = locale, source = "GBIF") |>
-    dplyr::distinct(scientific_name, .keep_all = TRUE) |>
-    mpsgSE::get_taxonomies() |> 
+    dplyr::mutate(locale = locale, source = "GBIF")
+
+  
+  # Subset taxonomy
+  taxa = sf::st_drop_geometry(seinet_data) |>
+    dplyr::select(dplyr::any_of(taxa_select)) |>
+    dplyr::distinct()
+  
+  dat = dplyr::left_join(t_ids, t_id_sum, by = "taxon_id",
+                         relationship = 'many-to-many')|>
+    dplyr::left_join(taxa, by = 'taxon_id', relationship = 'many-to-many') |>
     dplyr::arrange(kingdom, phylum, class, order, family, genus,
                    species, scientific_name)
-
+  
   # Correct Taxon IDs
   if(correct) dat = mpsgSE::correct_taxon_ids(dat) 
 

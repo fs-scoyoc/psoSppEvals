@@ -188,7 +188,6 @@ build_seinet_spp <- function(seinet_data, locale = FALSE, correct = TRUE){
                    "ymd", "ymd HM")
   taxa_select = c("taxon_id", "kingdom", "phylum", "class", "order", "family",
                   "genus", "species", "subspecies", "variety", "form")
-
   # Locale
   if(!isFALSE(locale)){
     locale = stringr::str_c(unique(seinet_data$locale), collapse = ", ")
@@ -202,6 +201,7 @@ build_seinet_spp <- function(seinet_data, locale = FALSE, correct = TRUE){
     dplyr::mutate(dup_taxon = ifelse(duplicated(taxon_id) |
                                        duplicated(taxon_id, fromLast = TRUE),
                                      "Yes", "No"))
+  
   # Summarize data
   t_id_sum = sf::st_drop_geometry(seinet_data) |>
     dplyr::select(taxon_id, occurrenceID, eventDate) |>
@@ -220,6 +220,7 @@ build_seinet_spp <- function(seinet_data, locale = FALSE, correct = TRUE){
       .groups = "drop"
       ) |>
     dplyr::mutate(locale = locale, source = "SEINet")
+  
   # Subset taxonomy
   taxa = sf::st_drop_geometry(seinet_data) |>
     dplyr::select(dplyr::any_of(taxa_select)) |>
