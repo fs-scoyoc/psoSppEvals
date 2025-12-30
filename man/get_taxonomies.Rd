@@ -11,8 +11,8 @@ get_taxonomies(spp_list, query_field = "scientific_name", correct = FALSE)
 
 \item{query_field}{The name of the variable with valid scientific names.}
 
-\item{correct}{Logical. Use \code{correct_taxon_ids()} to correct known issues
-with taxon ID's and sceentific names.}
+\item{correct}{Logical. If TRUE, \code{correct_taxon_ids()} is used to correct
+known issues with taxon ID's and scientific names. Default is FALSE.}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble::tibble()}}

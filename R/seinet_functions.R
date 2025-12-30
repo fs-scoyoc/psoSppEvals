@@ -158,7 +158,7 @@ get_seinet_data <- function(dir_path, crs = NULL, correct = TRUE){
 #'
 #' @param seinet_data Spatial SEINet data from `get_seinet_data()`.
 #' @param locale Location description of data. E.g., unit acronym or "Buffer"
-#' @param correct Logical. Run `correct_taxon_ids()` on data. Default is TRUE.
+#' @param correct Logical. Run `correct_taxon_ids()` on data. Default is FALSE.
 #'
 #' @return A [tibble::tibble()].
 #'
@@ -181,7 +181,7 @@ get_seinet_data <- function(dir_path, crs = NULL, correct = TRUE){
 #' spp_list <- build_seinet_spp(sei_dat)
 #'
 #' ## End(Not run)
-build_seinet_spp <- function(seinet_data, locale = FALSE, correct = TRUE){
+build_seinet_spp <- function(seinet_data, locale = FALSE, correct = FALSE){
   
   # Date formats
   date_formats = c("%Y-%m-%d %H:%M:%S", "%Y-%m-%d", "%Y-%m", "%Y", "ymd HMS",

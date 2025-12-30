@@ -8,8 +8,8 @@
 #'
 #' @param spp_list A data frame containing valid scientific species names.
 #' @param query_field The name of the variable with valid scientific names.
-#' @param correct Logical. Use `correct_taxon_ids()` to correct known issues 
-#'     with taxon ID's and sceentific names. 
+#' @param correct Logical. If TRUE, `correct_taxon_ids()` is used to correct 
+#'     known issues with taxon ID's and scientific names. Default is FALSE.
 #'
 #' @returns A [tibble::tibble()]
 #' @seealso [correct_taxon_ids()]
