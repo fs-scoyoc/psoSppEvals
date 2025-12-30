@@ -2,23 +2,44 @@
 % Please edit documentation in R/correct_taxon_ids.R
 \name{correct_taxon_ids}
 \alias{correct_taxon_ids}
-\title{Correct known issues with taxon ID's}
+\title{Correct known issues with taxon ID's and scientific names.}
 \usage{
-correct_taxon_ids(spp_list)
+correct_taxon_ids(spp_list, query_field = "scientific_name")
 }
 \arguments{
 \item{spp_list}{A data frame with taxon ID's from \code{get_taxonomies()}.}
+
+\item{query_field}{Field holding scientific names}
 }
 \value{
-a data frame with corrected taxon ID's
+A \code{\link[tibble:tibble]{tibble::tibble()}} with corrected taxon ID's and scientific names.
 }
 \description{
-Correct known issues with taxon ID's
+Documentation will be updated shortly.
 }
 \examples{
 library(mpsgSE)
 
-spp_list <- mpsgSE::sp_list_ex |>
-  get_taxonomies() |> 
-  correct_taxon_ids()
+ spp_list = tibble::tibble(
+   common_name = c("Western Toad", "Northern Leopard Frog", "Mountain Plover", 
+                   "Snowy Plover", "American Goshawk", "Ferruginous Hawk", 
+                   "Hopi Chipmunk", "Canada Lynx", "American Pika",
+                   "Largemouth Bass", "Westslope Cutthroat Trout", 
+                   "Vargo's Furcula", "Western Bumblebee", "Monarch"),
+   scientific_name = c("Anaxyrus boreas", "Lithobates pipiens", 
+                       "Anarhynchus montanus", "Anarhynchus nivosus", 
+                       "Accipiter atricapillus", "Buteo regalis", 
+                       "Neotamias rufus", "Lynx canadensis", "Ochotona princeps", 
+                       "Micropterus nigricans", "Oncorhynchus lewisi", 
+                       "Furcula vargoi", "Bombus occidentalis", 
+                       "Danaus plexippus")
+   ) |> 
+   dplyr::mutate(
+     taxon_id = taxize::get_gbifid(scientific_name, ask = FALSE, rows = 1, 
+                                   messages = FALSE)) |> 
+   dplyr::distinct()
+ correct_taxon_ids(spp_list)
+}
+\seealso{
+\code{\link[=get_taxonomies]{get_taxonomies()}}
 }

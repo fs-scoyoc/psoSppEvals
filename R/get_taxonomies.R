@@ -8,9 +8,11 @@
 #'
 #' @param spp_list A data frame containing valid scientific species names.
 #' @param query_field The name of the variable with valid scientific names.
+#' @param correct Logical. Use `correct_taxon_ids()` to correct known issues 
+#'     with taxon ID's and sceentific names. 
 #'
 #' @returns A [tibble::tibble()]
-#'
+#' @seealso [correct_taxon_ids()]
 #' @export
 #'
 #' @examples
@@ -20,7 +22,8 @@
 #' spp_list <- get_taxonomies(sp_list_ex)
 #'
 #' ## End(Not run)
-get_taxonomies <- function(spp_list, query_field = "scientific_name") {
+get_taxonomies <- function(spp_list, query_field = "scientific_name", 
+                           correct = FALSE) {
   # Get list of distinct species.
   distinct_spp = spp_list |>
     dplyr::select(dplyr::any_of(query_field)) |>
@@ -72,7 +75,14 @@ get_taxonomies <- function(spp_list, query_field = "scientific_name") {
     dplyr::mutate(gbif_taxonID = as.character(gbif_taxonID)) |>
     dplyr::left_join(all_taxonomies, by = "gbif_taxonID") |>
     dplyr::select(dplyr::any_of(variable_order))
-  returned_dat = dplyr::left_join(spp_list, all_spp_taxonomies, by=query_field)
+  returned_dat = dplyr::left_join(spp_list, all_spp_taxonomies, 
+                                  by=query_field) |> 
+    dplyr::distinct()
+  
+  if(correct) {
+    returned_dat = mpsgSE::correct_taxon_ids(returned_dat, query_field = query_field)
+    }
+  
   return(returned_dat)
 }
 

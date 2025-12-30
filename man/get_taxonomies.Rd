@@ -4,12 +4,15 @@
 \alias{get_taxonomies}
 \title{Get Taxonomies from GBIF}
 \usage{
-get_taxonomies(spp_list, query_field = "scientific_name")
+get_taxonomies(spp_list, query_field = "scientific_name", correct = FALSE)
 }
 \arguments{
 \item{spp_list}{A data frame containing valid scientific species names.}
 
 \item{query_field}{The name of the variable with valid scientific names.}
+
+\item{correct}{Logical. Use \code{correct_taxon_ids()} to correct known issues
+with taxon ID's and sceentific names.}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble::tibble()}}
@@ -28,4 +31,7 @@ library(mpsgSE)
 spp_list <- get_taxonomies(sp_list_ex)
 
 ## End(Not run)
+}
+\seealso{
+\code{\link[=correct_taxon_ids]{correct_taxon_ids()}}
 }
