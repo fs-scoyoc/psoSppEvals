@@ -63,6 +63,19 @@
 "imbcr_mgmt_units"
 
 
+#' Taxon ID and Scientific Name corrections
+#' 
+#' Manually generated through trial and error
+#' @format A data frame of 7 observations and 4 variables.
+#' \describe{
+#'   \item{common_name}{Common species name.}
+#'   \item{errored_name}{Name that is not being queried in GBIF.}
+#'   \item{corrected_name}{A scientific name for the same speces in the GBIF backbome taxononmy.}
+#'   \item{taxon_id}{Taxon ID.}
+#' }
+"name_corrections"
+
+
 #' 2024 Regional Forester's Sensitive Species List for Forest Service Regions 1-10
 #'
 #' @format A data frame of 4142 observations and 11 variables.
