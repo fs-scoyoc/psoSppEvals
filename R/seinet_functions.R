@@ -92,7 +92,7 @@ build_seinet_spatial_data <- function(sei_data, spp_list) {
 #' library("mpsgSE")
 #'
 #' # Path to data folder
-#' data_folder <- file.path("T:/path/to/project/directory", "data/SEINet")
+#' data_folder <- file.path("data", "SEINet")
 #'
 #' # Pull data from existing SEINet query
 #' sei_dat <- get_seinet_data(data_folder, crs = "EPSG:26913")
@@ -137,7 +137,8 @@ get_seinet_data <- function(dir_path, crs = NULL, correct = TRUE){
                               by = "SEINet_taxonID",
                               relationship = 'many-to-many')
   #  Correct Taxon IDs
-  if(correct) sei_data = mpsgSE::correct_taxon_ids(sei_data) 
+  if(correct) sei_data = mpsgSE::correct_taxon_ids(sei_data, 
+                                                   query_field = "scientificName") 
   
   # Re-project CRS
   if(!is.null(crs)){

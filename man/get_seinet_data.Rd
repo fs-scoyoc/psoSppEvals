@@ -39,7 +39,7 @@ format and unzipped before using this function.
 library("mpsgSE")
 
 # Path to data folder
-data_folder <- file.path("T:/path/to/project/directory", "data/SEINet")
+data_folder <- file.path("data", "SEINet")
 
 # Pull data from existing SEINet query
 sei_dat <- get_seinet_data(data_folder, crs = "EPSG:26913")
