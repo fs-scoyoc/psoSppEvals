@@ -39,6 +39,9 @@ pull_landfire <- function(plan_area_sf, lf_dir, email_address, res = 30){
   )
   # Transform AoA to raster CRS
   plan_area_proj = terra::vect(plan_area_sf) |> terra::project(terra::crs(lf))
+  plan_area_proj$area_m2 = terra::expanse(plan_area_proj, unit = "m")
+  plan_area_proj$acres = plan_area_proj$area_m2 / 4046.86
+  
   # Mask raster to AoA
   lf_aoa = terra::mask(lf, plan_area_proj)
   # Save raster
@@ -60,7 +63,8 @@ pull_landfire <- function(plan_area_sf, lf_dir, email_address, res = 30){
     dplyr::summarise(count = dplyr::n()) |> 
     dplyr::left_join(attr_table, by = "evt_name") |> 
     dplyr::mutate(area_m2 = count * prod(terra::res(lf_aoa)), 
-                  acres = area_m2 / 4046.86)
+                  acres = area_m2 / 4046.86, 
+                  pct_area = (area_m2 / sum(plan_area_proj$area_m2) * 100))
   phys_data = evt_data |> 
     dplyr::group_by(evt_phys, evt_gp_n, evt_sbcls, evt_name) |> 
     dplyr::summarise(count = sum(count), 
