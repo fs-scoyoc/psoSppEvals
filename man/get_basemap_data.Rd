@@ -9,6 +9,9 @@ get_basemap_data(
   region_number,
   forest_number,
   forest_name,
+  admin_bndry = TRUE,
+  plan_area = TRUE,
+  districts = TRUE,
   target_crs = "EPSG:4326"
 )
 }
@@ -21,6 +24,20 @@ get_basemap_data(
 
 \item{forest_name}{The Name of the National Forest.}
 
+\item{admin_bndry}{Optional. 'sf' object of administrative Forest Service
+boundary can be provided. Default is TRUE. If TRUE administrative Forest
+Service boundary will be pulled from the Forest Service ArcGIS REST
+service.}
+
+\item{plan_area}{Optional. 'sf' object of the plan area (Forest Service land)
+boundary can be provided. Default is TRUE. If TRUE the plan area boundary
+will be pulled from the Forest Service ArcGIS REST service.}
+
+\item{districts}{Optional. 'sf' object of the Forest Service district
+boundaries for the National Forest can be provided. Default is TRUE. If
+TRUE the district boundary will be pulled from the Forest Service ArcGIS
+REST service.}
+
 \item{target_crs}{The target coordinate reference system. The default is
 EPSG:4326 (WGS 84).}
 }
@@ -31,7 +48,7 @@ A list of \link[sf:sf]{sf::sf} objects.
 Pull spatial base map data for North and South America, the lower 48 US
 states, and a user specified National Forest. Continental and national
 scale data are acquired using the \code{rnaturalearth} package and Forest
-Service data are acquired from Forest Service EDW Rest Services
+Service data are acquired from Forest Service Rest Services
 (https://apps.fs.usda.gov/arcx/rest/services/EDW) using \code{arcgislayers}
 package. Roads data are acquired using the \code{osmdata} package.
 }

@@ -62,7 +62,7 @@ clip_fc <- function(sf_lyr, sf_clip, locale = NULL){
 #' Pull spatial base map data for North and South America, the lower 48 US 
 #'     states, and a user specified National Forest. Continental and national 
 #'     scale data are acquired using the `rnaturalearth` package and Forest 
-#'     Service data are acquired from Forest Service EDW Rest Services
+#'     Service data are acquired from Forest Service Rest Services
 #'     (https://apps.fs.usda.gov/arcx/rest/services/EDW) using `arcgislayers` 
 #'     package. Roads data are acquired using the `osmdata` package.
 #'
@@ -70,6 +70,17 @@ clip_fc <- function(sf_lyr, sf_clip, locale = NULL){
 #' @param region_number The Forest Service Region number
 #' @param forest_number The Forest Service Forest number.
 #' @param forest_name The Name of the National Forest.
+#' @param admin_bndry Optional. 'sf' object of administrative Forest Service 
+#'     boundary can be provided. Default is TRUE. If TRUE administrative Forest
+#'     Service boundary will be pulled from the Forest Service ArcGIS REST 
+#'     service.
+#' @param plan_area Optional. 'sf' object of the plan area (Forest Service land) 
+#'     boundary can be provided. Default is TRUE. If TRUE the plan area boundary 
+#'     will be pulled from the Forest Service ArcGIS REST service.
+#' @param districts Optional. 'sf' object of the Forest Service district 
+#'     boundaries for the National Forest can be provided. Default is TRUE. If 
+#'     TRUE the district boundary will be pulled from the Forest Service ArcGIS 
+#'     REST service.
 #' @param target_crs The target coordinate reference system. The default is 
 #'      EPSG:4326 (WGS 84).
 #'
@@ -117,13 +128,17 @@ clip_fc <- function(sf_lyr, sf_clip, locale = NULL){
 #' basemap_data <- get_basemap_data(states, region_number, forest_number, 
 #'                                  forest_name)
 get_basemap_data = function(states, region_number, forest_number, forest_name,
-                            target_crs = "EPSG:4326"){
+                            admin_bndry = TRUE, plan_area = TRUE, 
+                            districts = TRUE, target_crs = "EPSG:4326"){
   
-  # states = c("Colorado", "Kansas", "Oklahoma", "New Mexico", "Texas")
+  # states = "Colorado"
   # region_number = "02"
-  # forest_number = "12"
-  # forest_name = "Pike and San Isabel National Forests"
+  # forest_number = "15"
+  # forest_name = "White River National Forests"
   # target_crs = "EPSG:26913"
+  # admin_bndry = targets::tar_read(admin_bndry)
+  # plan_area = targets::tar_read(plan_area)
+  # districts = TRUE
   
   message("Western hemisphere")
   americas = rnaturalearth::ne_countries(scale = "medium",
@@ -156,29 +171,34 @@ get_basemap_data = function(states, region_number, forest_number, forest_name,
   
   message("FS Boundaries")
   # Administrative Boundary
-  admin_bndry = mpsgSE::read_edw_lyr("EDW_ForestSystemBoundaries_01") |> 
-    dplyr::filter(region == region_number & forestnumber == forest_number) |>
-    sf::st_transform(target_crs) |> 
-    sf::st_make_valid()
+  if (isTRUE(admin_bndry)) {
+    ad_bdy = mpsgSE::read_edw_lyr("EDW_ForestSystemBoundaries_01") |> 
+      dplyr::filter(region == region_number & forestnumber == forest_number) |>
+      sf::st_transform(target_crs) |> 
+      sf::st_make_valid()
+    } else (ad_bdy = admin_bndry)
   # Plan Area (Forest Service Land)
-  plan_area = mpsgSE::read_edw_lyr("EDW_BasicOwnership_02") |> 
-    dplyr::filter(forestname == forest_name) |>
-    dplyr::filter(ownerclassification == "USDA FOREST SERVICE") |>
-    sf::st_transform(target_crs) |> 
-    sf::st_make_valid()
+  if (isTRUE(plan_area)) {
+    pl_ar = mpsgSE::read_edw_lyr("EDW_BasicOwnership_02") |> 
+      dplyr::filter(forestname == forest_name) |>
+      dplyr::filter(ownerclassification == "USDA FOREST SERVICE") |>
+      sf::st_transform(target_crs) |> 
+      sf::st_make_valid()
+    } else (pl_ar = plan_area)
   # Ranger Districts
-  districts = mpsgSE::read_edw_lyr("EDW_RangerDistricts_03", layer = 1) |> 
-    dplyr::filter(region == region_number & forestnumber == forest_number) |>
-    sf::st_transform(target_crs) |> 
-    sf::st_make_valid()
-  # Buffer
+  if (isTRUE(districts)){
+    dists = mpsgSE::read_edw_lyr("EDW_RangerDistricts_03", layer = 1) |>
+      dplyr::filter(region == region_number & forestnumber == forest_number) |>
+      sf::st_transform(target_crs) |>
+      sf::st_make_valid()
+    } else (dists = districts)
+  # Area of Analysis
   aoa = sf::st_buffer(admin_bndry, units::as_units(3,"mi")) |> 
     sf::st_transform(target_crs) |> 
     sf::st_make_valid()
-  # Area of Analysis
-  aoa_bbox = aoa |> sf::st_bbox() |> sf::st_transform(target_crs)
-  plan_area_doughnut = sf::st_buffer(plan_area, units::as_units(1,"km")) |> 
-    sf::st_difference(plan_area) |> 
+  # Buffer
+  plan_area_doughnut = sf::st_buffer(pl_ar, units::as_units(1,"km")) |> 
+    sf::st_difference(pl_ar) |> 
     sf::st_transform(target_crs) |> 
     sf::st_make_valid() |> 
     suppressWarnings()
@@ -201,8 +221,9 @@ get_basemap_data = function(states, region_number, forest_number, forest_name,
     sf::st_crop(roads_aoa) |> 
     suppressWarnings()
   
-  dat = tibble::lst(americas, north_america, l_48, aoa, aoa_bbox, admin_bndry, 
-                    plan_area, districts, plan_area_doughnut, roads)
+  dat = tibble::lst(americas, north_america, l_48, aoa, 
+                    "admin_bndry" = ad_bdy, "plan_area" = pl_ar, 
+                    "districts" = dists, plan_area_doughnut, roads)
   return(dat)
 }
 
