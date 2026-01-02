@@ -64,12 +64,14 @@ pull_landfire <- function(plan_area_sf, lf_dir, email_address, res = 30){
     dplyr::left_join(attr_table, by = "evt_name") |> 
     dplyr::mutate(area_m2 = count * prod(terra::res(lf_aoa)), 
                   acres = area_m2 / 4046.86, 
-                  pct_area = (area_m2 / sum(plan_area_proj$area_m2) * 100))
+                  pct_area = (area_m2 / sum(plan_area_proj$area_m2) * 100), 
+                  .groups = 'drop')
   phys_data = evt_data |> 
     dplyr::group_by(evt_phys, evt_gp_n, evt_sbcls, evt_name) |> 
     dplyr::summarise(count = sum(count), 
                      area_m2 = sum(area_m2), 
                      acres = sum(acres), 
+                     pct_area = (area_m2 / sum(plan_area_proj$area_m2) * 100), 
                      .groups = 'drop')
   # Return summarized data
   return(list("EVT" = evt_data, "PHYS" = phys_data))
