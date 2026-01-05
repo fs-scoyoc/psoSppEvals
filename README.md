@@ -24,7 +24,7 @@ Please let us know if we missed anything by submitting an
 
 **Maintainer:** [Matt Van Scoyoc](https://github.com/fs-scoyoc)
 
-**Version:** 0.2.0
+**Version:** 0.3.0
 
 **License:** Mit + file 
 [LICENSE](https://github.com/fs-scoyoc/mpsgSE/blob/main/LICENSE.md)
