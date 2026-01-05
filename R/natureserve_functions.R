@@ -253,9 +253,11 @@ count_spp_by_hab <- function(ns_habitats){
 #' This function imports NatureServe species data for a given state into R.
 #'
 #' @param state A character with state code, example: "CO".
-#' @param taxonomy TRUE of FALSE.  TRUE if you want to return the data with
-#'                     taxonomic information included.  This can take a long
-#'                     time for states with large lists.
+#' @param taxonomy Logical. TRUE if you want to return the data with
+#'     taxonomic information included.  This can take a long time for states 
+#'     with large lists.
+#' @param correct Logical. If TRUE, `correct_taxon_ids()` is used to correct 
+#'     known issues with taxon ID's and scientific names. Default is FALSE.
 #'
 #' @return A [list()]
 #' @export
@@ -264,7 +266,7 @@ count_spp_by_hab <- function(ns_habitats){
 #' library("mpsgSE")
 #' co_ns_data_no_taxonid <- get_ns_state_list("CO", taxonomy = FALSE)
 #' co_ns_data <- get_ns_state_list("CO")
-get_ns_state_list <- function(state, taxonomy = TRUE) {
+get_ns_state_list <- function(state, taxonomy = TRUE, correct = FALSE) {
   # state = "CO"; taxonomy = TRUE
 
   # Function to pull S-ranks
@@ -300,7 +302,10 @@ get_ns_state_list <- function(state, taxonomy = TRUE) {
     dplyr::ungroup() |> 
     dplyr::distinct()
   # get taxon ids and taxonomies
-  if (taxonomy) sss <- mpsgSE::get_taxonomies(sss)
+  if (isTRUE(taxonomy) & isFALSE(correct)) sss <- mpsgSE::get_taxonomies(sss)
+  if (isTRUE(taxonomy) & isTRUE(correct)){
+    sss <- mpsgSE::get_taxonomies(sss, correct = TRUE)
+    }
   
   # construct output list
   l <- list()
