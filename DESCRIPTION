@@ -39,7 +39,8 @@ Imports:
     terra,
     tibble,
     tidyr,
-    tidyselect
+    tidyselect, 
+    writexl
 Depends: 
     R (>= 4.1.0)
 LazyData: true

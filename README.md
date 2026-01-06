@@ -33,7 +33,8 @@ Please let us know if we missed anything by submitting an
 
 **Imports:** arcgislayers, BIEN, devtools, dplyr, ebirdst, foreign, glue, httr2, 
 janitor, lubridate, natserv, osmdata, readr, readxl, remotes, rgbif, 
-rlandfire, rnaturalearth, sf, stringr, taxize, terra, tibble, tidyr, tidyselect
+rlandfire, rnaturalearth, sf, stringr, taxize, terra, tibble, tidyr, tidyselect, 
+writexl
 
 **Issues:** This package is under active development and changes often with out 
 warning. Functions may experience breaking changes at any time.
