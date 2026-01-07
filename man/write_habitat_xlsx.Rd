@@ -9,7 +9,8 @@ write_habitat_xlsx(
   lf_data,
   lf_extract_data,
   unit_code,
-  tar_scc_library
+  dir_path = "output",
+  scc_library
 )
 }
 \arguments{
@@ -21,7 +22,10 @@ write_habitat_xlsx(
 
 \item{unit_code}{4-letter Forest Service unit acronym.}
 
-\item{dir_path}{Directory path to save workbook in.}
+\item{dir_path}{Directory path to save workbook in. Default is a subfolder in
+your working directory named "output".}
+
+\item{scc_library}{Directory path to SCC SharePoint Library to make a copy in.}
 }
 \value{
 Nothing.
