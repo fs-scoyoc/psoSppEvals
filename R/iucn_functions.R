@@ -74,9 +74,10 @@ build_iucn_maps <- function(iucn_paths) {
 get_iucn_shp_paths <- function(eligible_list){
 
   # Read in RDS file and filter to eligible list
-  iucn_tids = readRDS(file.path("T:/FS/NFS/PSO/MPSG/Data/ExternalData/IUCN",
-                                "iucn_tid_paths"))
+  iucn_shp_paths = readRDS(file.path("T:/FS/NFS/PSO/MPSG/Data/ExternalData/IUCN",
+                                "iucn_shp_paths"))
   # Filter by 'taxon_id'
-  iucn_paths = dplyr::filter(iucn_tids, taxon_id %in% eligible_list$taxon_id)
+  iucn_paths = dplyr::filter(iucn_shp_paths, 
+                             taxon_id %in% eligible_list$taxon_id)
   return(iucn_paths)
 }
