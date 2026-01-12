@@ -37,6 +37,7 @@ download_ebird_range_maps = function(spp_list, output_path, ebird_access_key){
   eligible_birds = spp_list |>
     dplyr::filter(class == "Aves") |>
     dplyr::select(taxon_id, scientific_name) |>
+    dplyr::distinct() |> 
     dplyr::left_join(ebirdst::ebirdst_runs, by = "scientific_name") |> 
     dplyr::filter(has_trends == TRUE)
   
@@ -102,6 +103,7 @@ download_ebird_status_maps = function(spp_list, output_path, ebird_access_key){
   eligible_birds = spp_list |>
     dplyr::filter(class == "Aves") |>
     dplyr::select(taxon_id, scientific_name) |>
+    dplyr::distinct() |> 
     dplyr::left_join(ebirdst::ebirdst_runs, by = "scientific_name")
 
   birds_w_status_maps = dplyr::filter(eligible_birds, has_trends == TRUE)
@@ -156,6 +158,7 @@ download_ebird_trends_maps <- function(spp_list, output_path, ebird_access_key){
   eligible_birds = spp_list |>
     dplyr::filter(class == "Aves") |>
     dplyr::select(taxon_id, scientific_name) |>
+    dplyr::distinct() |> 
     dplyr::left_join(ebirdst::ebirdst_runs, by = "scientific_name") |> 
     dplyr::filter(has_trends == TRUE)
   
@@ -201,6 +204,7 @@ get_ebird_regional_stats <- function(spp_list, ebird_access_key){
   ebird_spp <- spp_list |>
     dplyr::filter(class == "Aves") |>
     dplyr::select(taxon_id, scientific_name) |>
+    dplyr::distinct() |> 
     dplyr::left_join(ebirdst::ebirdst_runs, by = "scientific_name") |> 
     dplyr::filter(has_trends == TRUE)
   
@@ -273,6 +277,7 @@ get_ebird_trends <- function(spp_list, output_path, ebird_access_key){
   eligible_birds = spp_list |>
     dplyr::filter(class == "Aves") |>
     dplyr::select(taxon_id, scientific_name) |>
+    dplyr::distinct() |> 
     dplyr::left_join(ebirdst::ebirdst_runs, by = "scientific_name") |> 
     dplyr::filter(has_trends == TRUE) |> 
     dplyr::mutate(n_yrs = trends_end_year - trends_start_year)

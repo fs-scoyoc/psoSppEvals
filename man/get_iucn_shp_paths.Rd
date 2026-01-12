@@ -4,10 +4,10 @@
 \alias{get_iucn_shp_paths}
 \title{Get paths to IUCN Shapefiles}
 \usage{
-get_iucn_shp_paths(eligible_list)
+get_iucn_shp_paths(spp_list)
 }
 \arguments{
-\item{eligible_list}{A species list with taxon ID's from \code{get_taxonomies()}.}
+\item{spp_list}{A species list with taxon ID's from \code{get_taxonomies()}.}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble::tibble()}}.

@@ -29,7 +29,7 @@ download_bien_range_maps <- function(spp_list, output_path) {
   plants = spp_list |>
     dplyr::filter(kingdom == "Plantae") |>
     dplyr::select(taxon_id, scientific_name) |> 
-    dplyr::distinct(taxon_id, .keep_all = TRUE)
+    dplyr::distinct()
   
   # evaluate output directory
   if(!dir.exists(output_path)) dir.create(output_path)

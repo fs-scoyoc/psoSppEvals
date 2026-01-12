@@ -55,7 +55,7 @@ build_iucn_maps <- function(iucn_paths) {
 #'     to the eligible species list. The *.RDS file is on the MPSG T-drive, so 
 #'     this function will fail if you are not on a FS network or in the FS VDI.
 #'
-#' @param eligible_list A species list with taxon ID's from `get_taxonomies()`.
+#' @param spp_list A species list with taxon ID's from `get_taxonomies()`.
 #'
 #' @seealso [get_taxonomies()]
 #' 
@@ -71,14 +71,14 @@ build_iucn_maps <- function(iucn_paths) {
 #' bien_map_paths <- get_iucn_shp_paths(spp_list)
 #' 
 #' ## End(Not run)                     
-get_iucn_shp_paths <- function(eligible_list){
-
+get_iucn_shp_paths <- function(spp_list){
+  sp_l <- spp_list |> dplyr::pull(taxon_id) |> unique()
+  
   # Read in RDS file and filter to eligible list
   iucn_shp_paths = readRDS(
     file.path("T:/FS/NFS/PSO/MPSG/Data/ExternalData/IUCN", "iucn_shp_paths")
     )
   # Filter by 'taxon_id'
-  iucn_paths = dplyr::filter(iucn_shp_paths, 
-                             taxon_id %in% eligible_list$taxon_id)
+  iucn_paths = dplyr::filter(iucn_shp_paths, taxon_id %in% sp_l)
   return(iucn_paths)
 }
