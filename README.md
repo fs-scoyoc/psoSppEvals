@@ -67,7 +67,7 @@ this document becomes part of the project record.
 
 -   `build_imbcr_spp`: Summarize IMBCR data by species.
 
--   `build_iucn_maps`: Read spatial range data from International Union for 
+-   `build_iucn_maps`: Deprecated. See. `get_iucn_maps()`. Read spatial range data from International Union for 
 Conservation of Nature (IUCN) into R. This function requires access to internal 
 Forest Service servers.
 
@@ -135,7 +135,9 @@ access to internal Forest Service servers.
 -   `get_imbcr_trends`: Read IMBCR trend data into R. This function requires 
 access to internal Forest Service servers.
 
--   `get_iucn_shp_paths`: Retrieve file paths to IUCN shapefiles. This function 
+-   `get_iucn_maps`: Read IUCN range data into R.
+
+-   `get_iucn_shp_paths`: Deprecated. See. `get_iucn_maps()`. Retrieve file paths to IUCN shapefiles. This function 
 requires access to internal Forest Service servers.
 
 -   `get_ns_habitat`: Read NatureServe habitat types for a given species into R.

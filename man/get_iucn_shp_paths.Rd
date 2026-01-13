@@ -2,7 +2,7 @@
 % Please edit documentation in R/iucn_functions.R
 \name{get_iucn_shp_paths}
 \alias{get_iucn_shp_paths}
-\title{Get paths to IUCN Shapefiles}
+\title{Get paths to IUCN Shapefiles (Deprecated)}
 \usage{
 get_iucn_shp_paths(spp_list)
 }

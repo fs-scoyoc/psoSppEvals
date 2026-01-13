@@ -2,7 +2,7 @@
 % Please edit documentation in R/iucn_functions.R
 \name{build_iucn_maps}
 \alias{build_iucn_maps}
-\title{Build IUCN Maps}
+\title{Build IUCN Maps (Deprecated)}
 \usage{
 build_iucn_maps(iucn_paths)
 }

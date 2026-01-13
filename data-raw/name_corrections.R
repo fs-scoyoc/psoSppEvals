@@ -34,27 +34,35 @@ invisible(lapply(pkgs, library, character.only = TRUE))
 # data ----
 name_corrections = tibble::tibble(
   # Common names
-  common_name = c("Mountain Plover", "Snowy Plover", "American Goshawk",
-                  "Hopi Chipmunk", "Largemouth Bass", 
-                  "Westslope Cutthroat Trout", "Vargo's Furcula"),
+  common_name = c("Mountain Plover", "Snowy Plover", "Snowy Plover", 
+                  "American Goshawk", "Hopi Chipmunk", "Largemouth Bass", 
+                  "Westslope Cutthroat Trout", "Vargo's Furcula", 
+                  "a lepidostomatid caddisfly", "Lapland Buttercup", 
+                  "Rough Rattlesnake-root", "Open-ground Whitlow-grass", 
+                  "Diana Fritillary"),
   # Names throwing taxon ID errors
-  errored_name = c("Anarhynchus montanus", "Anarhynchus nivosus",
-                   "Accipiter atricapillus", "Neotamias rufus",
-                   "Micropterus nigricans", "Oncorhynchus lewisi",
-                   "Furcula vargoi"), 
+  errored_name = c("Anarhynchus montanus", "Anarhynchus nivosus", 
+                   "Anarhynchus nivosus nivosus", "Accipiter atricapillus", 
+                   "Neotamias rufus", "Micropterus nigricans", 
+                   "Oncorhynchus lewisi", "Furcula vargoi", 	
+                   "Lepidostoma apache", "Ranunculus lapponicus", 
+                   "Prenanthes aspera", "Draba aprica", "Argynnis diana"), 
   # Corrected scientific names
-  corrected_name = c("Charadrius montanus", "Charadrius nivosus",
-                     "Accipiter gentilis atricapillus", "Tamias rufus",
-                     "Micropterus floridanus", "Oncorhynchus clarkii lewisi",
-                     "Furcula vargoi")
+  corrected_name = c("Charadrius montanus", "Charadrius nivosus", 
+                     "Charadrius nivosus", "Accipiter gentilis atricapillus", 
+                     "Tamias rufus", "Micropterus floridanus",
+                     "Oncorhynchus clarkii lewisi", "Furcula vargoi", 	
+                     "Lepidostoma apache", "Coptidium lapponicum", 
+                     "Nabalus asper", "Abdra aprica", "Speyeria diana")
   ) |> 
   # Pull taxon IDs from GBIF
   dplyr::mutate(
     taxon_id = taxize::get_gbifid(corrected_name, ask = FALSE, rows = 1, 
                                   messages = FALSE),
-    taxon_id = as.numeric(taxon_id),
     # manual corrections
-    taxon_id = ifelse(errored_name == "Furcula vargoi", 10047243, taxon_id)
+    taxon_id = ifelse(errored_name == "Furcula vargoi", 10047243, taxon_id),
+    taxon_id = ifelse(errored_name == "Lepidostoma apache", 125954696, taxon_id),
+    taxon_id = as.numeric(taxon_id)
   )
 
 # save ----
