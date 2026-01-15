@@ -2,15 +2,14 @@
 #' 
 #' This function downloads range maps from the Botanical Information and Ecology 
 #'     Network (BIEN; <https://bien.nceas.ucsb.edu/bien/>) API for plants 
-#'     identified as eligible for Species of Conservation Concern.
+#'     identified as eligible for Species of Conservation Concern and returns a
+#'     spatial (`sf`) object.
 #'
 #' @param spp_list List of species with taxonomies from `get_taxonomies()`.
 #' @param output_path Directory path to save range map data to.
 #' 
 #' @seealso [get_taxonomies()]
-#'
-#' @return A [tibble::tibble()]
-#' 
+#' @return As `sf` object.
 #' @export
 #' 
 #' @examples

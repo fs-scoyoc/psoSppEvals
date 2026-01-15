@@ -12,12 +12,13 @@ download_bien_range_maps(spp_list, output_path)
 \item{output_path}{Directory path to save range map data to.}
 }
 \value{
-A \code{\link[tibble:tibble]{tibble::tibble()}}
+As \code{sf} object.
 }
 \description{
 This function downloads range maps from the Botanical Information and Ecology
 Network (BIEN; \url{https://bien.nceas.ucsb.edu/bien/}) API for plants
-identified as eligible for Species of Conservation Concern.
+identified as eligible for Species of Conservation Concern and returns a
+spatial (\code{sf}) object.
 }
 \examples{
 ## Not run:

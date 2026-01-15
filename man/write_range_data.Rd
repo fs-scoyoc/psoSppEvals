@@ -4,7 +4,13 @@
 \alias{write_range_data}
 \title{Write range data to geodatabase}
 \usage{
-write_range_data(ebird_range, iucn_maps, bien_maps, gdb_path)
+write_range_data(
+  ebird_range,
+  iucn_maps,
+  bien_maps,
+  gdb_path,
+  return_sf = FALSE
+)
 }
 \arguments{
 \item{ebird_range}{eBird range maps from this pipeline}
@@ -14,12 +20,16 @@ write_range_data(ebird_range, iucn_maps, bien_maps, gdb_path)
 \item{bien_maps}{bien maps from this pipeline}
 
 \item{gdb_path}{path to geodatabase}
+
+\item{return_sf}{Optional. TRUE/FALSE. Return a list of \code{sf} objects. Default
+is FALSE.}
 }
 \value{
 A list of \code{sf} objects including BIEN, eBird, and IUCN range data.
 }
 \description{
-Write range data to geodatabase
+This function writes spatial (\code{sf}) BIEN, eBird, and IUCN range data to a
+geodatabase and has the option to return a list of \code{sf} objects.
 }
 \examples{
 # Coming soon 
