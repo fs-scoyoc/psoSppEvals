@@ -35,6 +35,17 @@ get_taxonomies <- function(spp_list, query_field = "scientific_name",
     stringr::str_replace("[\r\n]", "") |>
     stringr::str_replace("  ", " ") |>
     stringr::str_to_sentence()
+  
+  # Correct Scientific Names with known Errors
+  if(correct) {
+    # Read corrected names data frame
+    cor_names = mpsgSE::name_corrections
+    # Match scientific names
+    mat_nam = match(distinct_spp$my_clean_query_name, cor_names$errored_name)
+    # Correct scientific names
+    distinct_spp$my_clean_query_name[!is.na(mat_nam)] = cor_names$corrected_name[mat_nam[!is.na(mat_nam)]]
+  }
+  
   # Get GBIF Taxon ID's
   distinct_spp$gbif_taxonID <- taxize::get_gbifid(
     distinct_spp$my_clean_query_name, ask = FALSE, rows = 1, messages = FALSE
@@ -79,9 +90,6 @@ get_taxonomies <- function(spp_list, query_field = "scientific_name",
                                   by=query_field) |> 
     dplyr::distinct()
   
-  if(correct) {
-    returned_dat = mpsgSE::correct_taxon_ids(returned_dat, query_field = query_field)
-    }
   
   return(returned_dat)
 }
