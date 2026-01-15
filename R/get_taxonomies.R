@@ -90,7 +90,6 @@ get_taxonomies <- function(spp_list, query_field = "scientific_name",
                                   by=query_field) |> 
     dplyr::distinct()
   
-  
   return(returned_dat)
 }
 
