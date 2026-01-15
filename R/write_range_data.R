@@ -1,9 +1,14 @@
 #' Write range data to geodatabase
 #'
+#' This function writes spatial (`sf`) BIEN, eBird, and IUCN range data to a 
+#'     geodatabase and has the option to return a list of `sf` objects. 
+#'
 #' @param ebird_range eBird range maps from this pipeline
 #' @param iucn_maps iucn maps from this pipeline
 #' @param bien_maps bien maps from this pipeline
 #' @param gdb_path path to geodatabase
+#' @param return_sf Optional. TRUE/FALSE. Return a list of `sf` objects. Default 
+#'     is FALSE.
 #'
 #' @returns A list of `sf` objects including BIEN, eBird, and IUCN range data.
 #' @seealso [download_ebird_range_maps()], [download_bien_range_maps()], [build_iucn_maps()]
@@ -13,7 +18,8 @@
 #' # Coming soon 
 #' message("Stay tuned.")
 #' 
-write_range_data <- function(ebird_range, iucn_maps, bien_maps, gdb_path){
+write_range_data <- function(ebird_range, iucn_maps, bien_maps, gdb_path, 
+                             return_sf = FALSE){
   
   # gdb_path = file.path("data", "MBF_spp_eval.gdb")
   
@@ -40,23 +46,16 @@ write_range_data <- function(ebird_range, iucn_maps, bien_maps, gdb_path){
   
   message("Writing BIEN Maps")
   # bien_maps = targets::tar_read(bien_maps)
-  bien_maps_sf = lapply(bien_maps$scientific_name, function(sp){
-    sp_dat = dplyr::filter(bien_maps, scientific_name == sp)
-    shp_path = file.path("output/bien_maps", paste0(gsub(" ", "_", sp), ".shp"))
-    sf_dat = sf::read_sf(shp_path) |> 
-      dplyr::mutate(taxon_id = sp_dat$taxon_id)
-    return(sf_dat)
-  }) |>
-    dplyr::bind_rows() |> 
-    sf::st_as_sf() |> 
-    sf::st_cast("POLYGON")
   arcgisbinding::arc.write(
     path = file.path(gdb_path, "RangeMaps", "BIEN_Maps"),
-    data = bien_maps_sf,
+    data = bien_maps,
     overwrite = TRUE
   )
   
-  return(range_maps = list("bien_maps" = bien_maps_sf, 
-                           "ebird_maps" = ebird_sf, 
-                           "iucn_maps" = iucn_maps))
+  if (return_sf){
+    return(range_maps = list("bien_maps" = bien_maps, 
+                             "ebird_maps" = ebird_sf, 
+                             "iucn_maps" = iucn_maps))
+    
+    }
 }

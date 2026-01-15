@@ -44,5 +44,15 @@ download_bien_range_maps <- function(spp_list, output_path) {
     dplyr::rename("scientific_name" = species) |> 
     mpsgSE::get_taxonomies(query_field = "scientific_name", correct = TRUE)
   
-  return(bien_maps)
+  bien_maps_sf = lapply(bien_maps$scientific_name, function(sp){
+    sp_dat = dplyr::filter(bien_maps, scientific_name == sp)
+    shp_path = file.path(output_path, paste0(gsub(" ", "_", sp), ".shp"))
+    sf_dat = sf::read_sf(shp_path) |> dplyr::mutate(taxon_id = sp_dat$taxon_id)
+    return(sf_dat)
+  }) |>
+    dplyr::bind_rows() |> 
+    sf::st_as_sf() |> 
+    sf::st_cast("POLYGON")
+  
+  return(bien_maps_sf)
   }
