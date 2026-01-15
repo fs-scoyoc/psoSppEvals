@@ -42,7 +42,7 @@ download_bien_range_maps <- function(spp_list, output_path) {
     dplyr::filter(range_map_downloaded == "Yes") |> 
     dplyr::mutate(species = gsub("_", " ", species)) |> 
     dplyr::rename("scientific_name" = species) |> 
-    mpsgSE::get_taxonomies(query_field = "scientific_name")
+    mpsgSE::get_taxonomies(query_field = "scientific_name", correct = TRUE)
   
   return(bien_maps)
   }

@@ -16,7 +16,7 @@ write_range_data(ebird_range, iucn_maps, bien_maps, gdb_path)
 \item{gdb_path}{path to geodatabase}
 }
 \value{
-Nothing.
+A list of \code{sf} objects including BIEN, eBird, and IUCN range data.
 }
 \description{
 Write range data to geodatabase

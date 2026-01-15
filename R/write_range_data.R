@@ -5,7 +5,7 @@
 #' @param bien_maps bien maps from this pipeline
 #' @param gdb_path path to geodatabase
 #'
-#' @returns Nothing.
+#' @returns A list of `sf` objects including BIEN, eBird, and IUCN range data.
 #' @seealso [download_ebird_range_maps()], [download_bien_range_maps()], [build_iucn_maps()]
 #' @export
 #' 
@@ -55,4 +55,8 @@ write_range_data <- function(ebird_range, iucn_maps, bien_maps, gdb_path){
     data = bien_maps_sf,
     overwrite = TRUE
   )
+  
+  return(range_maps = list("bien_maps" = bien_maps_sf, 
+                           "ebird_maps" = ebird_sf, 
+                           "iucn_maps" = iucn_maps))
 }
