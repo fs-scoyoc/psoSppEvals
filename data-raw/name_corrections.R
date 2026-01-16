@@ -31,7 +31,9 @@ invisible(lapply(pkgs, library, character.only = TRUE))
 
 
 
-# data ----
+# Name Corrections ----
+# This data frame has common name, scientific names that do not return taxon 
+#     ID's, and corrected names for the same species that will return taxon ID's 
 name_corrections = tibble::tibble(
   # Common names
   common_name = c("Mountain Plover", "Snowy Plover", "Snowy Plover", 
@@ -65,5 +67,20 @@ name_corrections = tibble::tibble(
     taxon_id = as.numeric(taxon_id)
   )
 
+
+# manual corrections ----
+# This is a data frame of species that won't query in GBIF, but taxon IDs were 
+#     found manually on the GBIF website.
+manual_corrections <- tibble::tibble(
+  # Common names
+  common_name = c("Vargo's Furcula", "a lepidostomatid caddisfly"),
+  # Names throwing taxon ID errors
+  scientific_name = c("Furcula vargoi", "Lepidostoma apache"), 
+  # Taxon ID's
+  taxon_id = c(10047243, 125954696)
+  )
+
+
 # save ----
 usethis::use_data(name_corrections, overwrite = TRUE)
+usethis::use_data(manual_corrections, overwrite = TRUE)

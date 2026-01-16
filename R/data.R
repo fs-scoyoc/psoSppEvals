@@ -59,8 +59,20 @@
 
 #' List of National Forests and Grasslands IMBCR surveys on.
 #'
-#' @format ## `imbcr_mgmt_units`
+#' @format A vector of management units from the IMBCR data.
 "imbcr_mgmt_units"
+
+
+#' Scientific names with manually corrected taxon ID's
+#' 
+#' Manually generated through trial and error
+#' @format A data frame of 2 observations and 3 variables
+#' \describe{
+#'   \item{common_name}{Common species name.}
+#'   \item{scientific_name}{Scientific name of species.}
+#'   \item{taxon_id}{Taxon ID.}
+#' }
+"manual_corrections"
 
 
 #' Taxon ID and Scientific Name corrections

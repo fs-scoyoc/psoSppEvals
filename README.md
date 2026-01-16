@@ -67,34 +67,25 @@ this document becomes part of the project record.
 
 -   `build_imbcr_spp`: Summarize IMBCR data by species.
 
--   `build_iucn_maps`: Deprecated. See. `get_iucn_maps()`. Read spatial range data from International Union for 
-Conservation of Nature (IUCN) into R. This function requires access to internal 
-Forest Service servers.
+-   `build_iucn_maps`: **Deprecated**. See. `get_iucn_maps()`. Read spatial range data from International Union for Conservation of Nature (IUCN) into R. This function requires access to internal Forest Service servers.
 
--   `build_map_source`: Build a data frame of map source information for Quarto 
-script.
+-   `build_map_source`: Build a data frame of map source information for Quarto script.
 
--   `build_ns_spp_list`: Build a species list with global and state NatureServe 
-conservation rankings from `get_ns_state_list().`
+-   `build_ns_spp_list`: Build a species list with global and state NatureServe conservation rankings from `get_ns_state_list().`
 
--   `build_seinet_spatial_data`: Subset eligible species from spatial SEINet 
-data and reduce variables.
+-   `build_seinet_spatial_data`: Subset eligible species from spatial SEINet data and reduce variables.
 
 -   `build_seinet_spp`: Summarize SEINet data by species.
 
 -   `clip_fc`: Clip an `sf` object to polygon.
 
--   `combine_natureserve_data`: Combine NatureServe data from 
-`get_ns_state_list()`.
+-   `combine_natureserve_data`: Combine NatureServe data from `get_ns_state_list()`.
 
--   `combine_ns_habs`: Combine two NatureServe habitat data frames from 
-`get_ns_habitat()`.
+-   `combine_ns_habs`: Combine two NatureServe habitat data frames from `get_ns_habitat()`.
 
--   `combine_ns_spp_lists`: Combine two NatureServe species lists from 
-`build_ns_spp_list()`.
+-   `combine_ns_spp_lists`: Combine two NatureServe species lists from `build_ns_spp_list()`.
 
--   `combine_ns_state_lists`: Combine two NatureServe State lists from 
-`get_ns_state_list()`.
+-   `combine_ns_state_lists`: Combine two NatureServe State lists from `get_ns_state_list()`.
 
 -   `correct_taxon_ids`: Correct known issues with taxon ID's.
 
@@ -102,11 +93,9 @@ data and reduce variables.
 
 -   `download_bien_range_maps`: Download BIEN range map data and read them into R.
 
--   `download_ebird_range_maps`: Download eBird range map data and read them 
-into R.
+-   `download_ebird_range_maps`: Download eBird range map data and read them into R.
 
--   `download_ebird_status_maps`: Download eBird status map data and read them 
-into R.
+-   `download_ebird_status_maps`: Download eBird status map data and read them into R.
 
 -   `download_ebird_trends_maps`: Download eBird trend data and read them into R.
 
@@ -118,64 +107,49 @@ into R.
 
 -   `get_bc_regions`: Clip Birds of Conservation Regions to a polygon.
 
--   `get_bcr_list`: Get USGS Birds of Conservation Concern breeding bird list 
-for National Forest or Grassland.
+-   `get_bcr_list`: Get USGS Birds of Conservation Concern breeding bird list for National Forest or Grassland.
 
--   `get_ebird_regional_stats`: Download eBird regional statistics and read them 
-into R.
+-   `get_ebird_regional_stats`: Download eBird regional statistics and read them into R.
 
 -   `get_ebird_trends`: Calculate abundance trends from eBird data.
 
--   `get_gbif`: Query and download species occurrence records from GBIF and read 
-them into R as spatial (`sf`)data.
+-   `get_gbif`: Query and download species occurrence records from GBIF and read them into R as spatial (`sf`)data.
 
--   `get_imbcr_data`: Read IMBCR occurrence data into R. This function requires 
-access to internal Forest Service servers.
+-   `get_imbcr_data`: Read IMBCR occurrence data into R. This function requires access to internal Forest Service servers.
 
--   `get_imbcr_trends`: Read IMBCR trend data into R. This function requires 
-access to internal Forest Service servers.
+-   `get_imbcr_trends`: Read IMBCR trend data into R. This function requires access to internal Forest Service servers.
 
 -   `get_iucn_maps`: Read IUCN range data into R.
 
--   `get_iucn_shp_paths`: Deprecated. See. `get_iucn_maps()`. Retrieve file paths to IUCN shapefiles. This function 
-requires access to internal Forest Service servers.
+-   `get_iucn_shp_paths`: **Deprecated**. See. `get_iucn_maps()`. Retrieve file paths to IUCN shapefiles. This function requires access to internal Forest Service servers.
 
 -   `get_ns_habitat`: Read NatureServe habitat types for a given species into R.
 
 -   `get_ns_state_list`: Import NatureServe species data for a given state into R.
 
--   `get_rfss_list`: Read a Forest Service Regional Forester's Sensitive Species 
-List into R.
+-   `get_rfss_list`: Read a Forest Service Regional Forester's Sensitive Species List into R.
 
 -   `get_seinet_data`: Read SEINet data in Darwin Core Archive format into R.
 
--   `get_synonyms`: Query taxonomic synonyms from the GBIF backbone taxonomies 
-database.
+-   `get_synonyms`: Query taxonomic synonyms from the GBIF backbone taxonomies database.
 
--   `get_taxonomies`: Query taxon ID and taxonomic information from the GBIF 
-backbone taxonomies database.
+-   `get_taxonomies`: Query taxon ID and taxonomic information from the GBIF backbone taxonomies database.
 
 -   `list_regions`: List Forest Service regions used in `get_rfss_list()`.
 
--   `ns_ranks`: **Deprecated**. Generate a species list with NatureServe global 
-and state conservation rankings.
+-   `ns_ranks`: **Deprecated**. Generate a species list with NatureServe global and state conservation rankings.
 
--   `pull_landfire`: Pull LANDFIRE data for an area of interest using the 
-`rlandfire` package.
+-   `pull_landfire`: Pull LANDFIRE data for an area of interest using the `rlandfire` package.
 
--   `pull_nwi_data`: Pull USGS National Wetland Inventory (NWI) from the NWI 
-ArcGIS REST services.
+-   `pull_nwi_data`: Pull USGS National Wetland Inventory (NWI) from the NWI ArcGIS REST services.
 
--   `read_edw_lyr`: Read spatial data from Forest Service ArcGIS REST Services 
-into R.
+-   `read_edw_lyr`: Read spatial data from Forest Service ArcGIS REST Services into R.
 
 -   `read_fc`: Read feature class from a geodatabase into R.
 
--   `wkt_string`: Create a well-known text string from an `sf` polygon object 
-for `get_gbif()`.
+-   `wkt_string`: Create a well-known text string from an `sf` polygon object for `get_gbif()`.
 
--   `write_habitat_xlsx`: Write an Excel workbook of NatureServe and LANDFIRE 
-habitat types.
+-   `write_habitat_xlsx`: Write an Excel workbook of NatureServe and LANDFIRE habitat types.
 
 -   `write_range_data`: Write ebird, BIEN, and IUCN range data to a geodatabase.
 
@@ -187,18 +161,18 @@ from their sources.
 
 -   `bcc_list`: 2024 US Fish & Wildlife Birds of Conservation Concern List.
 
--   `bcc_regions`: North American Bird Conservation Initiative Birds 
-Conservation Regions.
+-   `bcc_regions`: North American Bird Conservation Initiative Birds Conservation Regions.
 
 -   `fs_units`: National Forests and Grasslands.
 
--   `imbcr_mgmt_units`: List of National Forests and Grasslands IMBCR conducts 
-surveys on.
+-   `imbcr_mgmt_units`: List of National Forests and Grasslands IMBCR conducts surveys on.
 
--   `rfss`: 2024 Forest Service Regional Forester's Sensitive Species List for 
-Regions 1-10.
+-   `manual_corrections`: List of species that do not return taxon  ID's. Corrected taxon ID's for the same species have been manually queried in GBIF.
+
+-   `name_corrections`: This data frame has common names, scientific names that do not return taxon ID's, and corrected names for the same species that will return taxon ID's.
+
+-   `rfss`: 2024 Forest Service Regional Forester's Sensitive Species List for Regions 1-10.
 
 -   `rfss_taxonomy`: Taxonomy for `rfss` using `mpsgSE::get_taxonomies()`.
 
--   `sp_list_ex`: An example data set of common names and scientific names of 
-species.
+-   `sp_list_ex`: An example data set of common names and scientific names of species.

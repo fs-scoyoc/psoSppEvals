@@ -24,6 +24,8 @@
 #' ## End(Not run)
 get_taxonomies <- function(spp_list, query_field = "scientific_name", 
                            correct = FALSE) {
+  # spp_list = sp_list_ex
+  
   # Get list of distinct species.
   distinct_spp = spp_list |>
     dplyr::select(dplyr::any_of(query_field)) |>
@@ -41,9 +43,9 @@ get_taxonomies <- function(spp_list, query_field = "scientific_name",
     # Read corrected names data frame
     cor_names = mpsgSE::name_corrections
     # Match scientific names
-    mat_nam = match(distinct_spp$my_clean_query_name, cor_names$errored_name)
+    matched_names = match(distinct_spp$my_clean_query_name, cor_names$errored_name)
     # Correct scientific names
-    distinct_spp$my_clean_query_name[!is.na(mat_nam)] = cor_names$corrected_name[mat_nam[!is.na(mat_nam)]]
+    distinct_spp$my_clean_query_name[!is.na(matched_names)] = cor_names$corrected_name[matched_names[!is.na(matched_names)]]
   }
   
   # Get GBIF Taxon ID's
@@ -75,7 +77,8 @@ get_taxonomies <- function(spp_list, query_field = "scientific_name",
   }
 
   # Convert list to data frame
-  all_taxonomies = lapply(seq_along(taxonomy_list), convert_taxonomy, taxonomy_list) |>
+  all_taxonomies = lapply(seq_along(taxonomy_list), convert_taxonomy, 
+                          taxonomy_list) |>
     dplyr::bind_rows()
 
   # Create final data frame
@@ -86,9 +89,20 @@ get_taxonomies <- function(spp_list, query_field = "scientific_name",
     dplyr::mutate(gbif_taxonID = as.character(gbif_taxonID)) |>
     dplyr::left_join(all_taxonomies, by = "gbif_taxonID") |>
     dplyr::select(dplyr::any_of(variable_order))
+  
   returned_dat = dplyr::left_join(spp_list, all_spp_taxonomies, 
                                   by=query_field) |> 
     dplyr::distinct()
+  
+  if(correct) {
+    # Read corrected names data frame
+    man_names = manual_corrections
+    # Match scientific names
+    matched_names = match(as.vector(returned_dat[, query_field]), 
+                          man_names$errored_name)
+    # Correct scientific names
+    returned_dat[, query_field][!is.na(matched_names)] = cor_names$corrected_name[matched_names[!is.na(matched_names)]]
+  }
   
   return(returned_dat)
 }

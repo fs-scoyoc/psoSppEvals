@@ -5,8 +5,7 @@
 \alias{imbcr_mgmt_units}
 \title{List of National Forests and Grasslands IMBCR surveys on.}
 \format{
-\subsection{\code{imbcr_mgmt_units}}{
-}
+A vector of management units from the IMBCR data.
 }
 \usage{
 imbcr_mgmt_units
