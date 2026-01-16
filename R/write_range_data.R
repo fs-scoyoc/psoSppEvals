@@ -3,9 +3,9 @@
 #' This function writes spatial (`sf`) BIEN, eBird, and IUCN range data to a 
 #'     geodatabase and has the option to return a list of `sf` objects. 
 #'
+#' @param bien_maps bien maps from this pipeline
 #' @param ebird_range eBird range maps from this pipeline
 #' @param iucn_maps iucn maps from this pipeline
-#' @param bien_maps bien maps from this pipeline
 #' @param gdb_path path to geodatabase
 #' @param return_sf Optional. TRUE/FALSE. Return a list of `sf` objects. Default 
 #'     is FALSE.
@@ -18,13 +18,21 @@
 #' # Coming soon 
 #' message("Stay tuned.")
 #' 
-write_range_data <- function(ebird_range, iucn_maps, bien_maps, gdb_path, 
+write_range_data <- function(bien_maps, ebird_range, iucn_maps, gdb_path, 
                              return_sf = FALSE){
   
   # gdb_path = file.path("data", "MBF_spp_eval.gdb")
   
   # Activate ArcGIS license
   arcgisbinding::arc.check_product()
+  
+  message("Writing BIEN Maps")
+  # bien_maps = targets::tar_read(bien_maps)
+  arcgisbinding::arc.write(
+    path = file.path(gdb_path, "RangeMaps", "BIEN_Maps"),
+    data = bien_maps,
+    overwrite = TRUE
+  )
   
   message("Writing eBird Range Maps")
   # ebird_range = targets::tar_read(ebird_range_maps)
@@ -44,17 +52,8 @@ write_range_data <- function(ebird_range, iucn_maps, bien_maps, gdb_path,
     overwrite = TRUE
   )
   
-  message("Writing BIEN Maps")
-  # bien_maps = targets::tar_read(bien_maps)
-  arcgisbinding::arc.write(
-    path = file.path(gdb_path, "RangeMaps", "BIEN_Maps"),
-    data = bien_maps,
-    overwrite = TRUE
-  )
-  
   if (return_sf){
-    return(range_maps = list("bien_maps" = bien_maps, 
-                             "ebird_maps" = ebird_sf, 
+    return(range_maps = list("bien_maps" = bien_maps, "ebird_maps" = ebird_sf, 
                              "iucn_maps" = iucn_maps))
     
     }

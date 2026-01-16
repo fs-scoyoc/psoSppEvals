@@ -88,32 +88,16 @@
 "name_corrections"
 
 
-#' 2024 Regional Forester's Sensitive Species List for Forest Service Regions 1-10
+#' 2025 Regional Forester's Sensitive Species List for Forest Service Regions 1-10
 #'
 #' @format A data frame of 4142 observations and 11 variables.
 #' \describe{
-#'   \item{taxon_id}{MPSG taxon ID.}
 #'   \item{scientific_name}{Scientific name of species.}
-#'   \item{group_level2}{Taxonomic group}
+#'   \item{common_name}{Common name of species.}
 #'   \item{region}{Forest Service Region}
-#'   \item{rfssl}{Logical. Is the species on a Regional Forester's Sensitive Species List}
-#'   \item{region_num}{Forest Service Region number.}
-#'   \item{status_area}{Area label.}
-#'   \item{status_authority}{Authority label.}
-#'   \item{status_all}{Complete status label.}
-#'   \item{status_simple}{Simple status description.}
-#'   \item{status_type}{Status type}
-#' }
-#' @source Compiled from Regional Forester's Sensitive Species Lists as part of 2024 NOGA effort.
-"rfss"
-
-
-#' Taxonomy for 2024 Regional Forester's Sensitive Species List for Forest Service Regions 1-10
-#'
-#' @format A data frame of 3746 observations and 12 variables.
-#' \describe{
+#'   \item{orig_scientific_name}{Origial, uncleaned and unverified scientific name of species.}
 #'   \item{taxon_id}{MPSG taxon ID.}
-#'   \item{scientific_name}{Scientific name of species.}
+#'   \item{gbif_taxonID}{Taxon ID from GBIF.}
 #'   \item{kingdom}{Taxonomic Kingdom}
 #'   \item{phylum}{Taxonomic Phylum}
 #'   \item{class}{Taxonomic Class}
@@ -125,8 +109,8 @@
 #'   \item{form}{Taxonomic Form}
 #'   \item{variety}{Taxonomic Variety}
 #' }
-#' @source Compiled from Regional Forester's Sensitive Species Lists as part of 2024 NOGA effort. Taxonomy was generated using 'mpsgSE::get_taxonomies()'.
-"rfss_taxonomy"
+#' @source Compiled from 2025 Regional Forester's Sensitive Species Lists acquired 12 January 2026 from Nichole Panico.
+"rfss"
 
 
 #' An example dataset of common names and scientific names of species.

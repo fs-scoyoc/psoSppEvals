@@ -5,19 +5,19 @@
 \title{Write range data to geodatabase}
 \usage{
 write_range_data(
+  bien_maps,
   ebird_range,
   iucn_maps,
-  bien_maps,
   gdb_path,
   return_sf = FALSE
 )
 }
 \arguments{
+\item{bien_maps}{bien maps from this pipeline}
+
 \item{ebird_range}{eBird range maps from this pipeline}
 
 \item{iucn_maps}{iucn maps from this pipeline}
-
-\item{bien_maps}{bien maps from this pipeline}
 
 \item{gdb_path}{path to geodatabase}
 

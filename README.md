@@ -171,8 +171,6 @@ from their sources.
 
 -   `name_corrections`: This data frame has common names, scientific names that do not return taxon ID's, and corrected names for the same species that will return taxon ID's.
 
--   `rfss`: 2024 Forest Service Regional Forester's Sensitive Species List for Regions 1-10.
-
--   `rfss_taxonomy`: Taxonomy for `rfss` using `mpsgSE::get_taxonomies()`.
+-   `rfss`: 2025 Forest Service Regional Forester's Sensitive Species List for Regions 1-10.
 
 -   `sp_list_ex`: An example data set of common names and scientific names of species.
