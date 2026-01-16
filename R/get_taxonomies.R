@@ -24,7 +24,7 @@
 #' ## End(Not run)
 get_taxonomies <- function(spp_list, query_field = "scientific_name", 
                            correct = FALSE) {
-  # spp_list = sp_list_ex
+  # spp_list = mpsgSE::sp_list_ex
   
   # Get list of distinct species.
   distinct_spp = spp_list |>
@@ -36,6 +36,7 @@ get_taxonomies <- function(spp_list, query_field = "scientific_name",
     stringr::str_replace("[\r\n]", " ") |>
     stringr::str_replace("[\r\n]", "") |>
     stringr::str_replace("  ", " ") |>
+    stringr::str_replace("[^A-Za-z0-9 ]", "") |> 
     stringr::str_to_sentence()
   
   # Correct Scientific Names with known Errors
@@ -95,13 +96,7 @@ get_taxonomies <- function(spp_list, query_field = "scientific_name",
     dplyr::distinct()
   
   if(correct) {
-    # Read corrected names data frame
-    man_names = manual_corrections
-    # Match scientific names
-    matched_names = match(as.vector(returned_dat[, query_field]), 
-                          man_names$errored_name)
-    # Correct scientific names
-    returned_dat[, query_field][!is.na(matched_names)] = cor_names$corrected_name[matched_names[!is.na(matched_names)]]
+    returned_dat = correct_taxon_ids(returned_dat, query_field = query_field)
   }
   
   return(returned_dat)

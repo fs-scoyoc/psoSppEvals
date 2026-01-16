@@ -4,12 +4,19 @@
 \alias{correct_taxon_ids}
 \title{Correct known issues with taxon ID's and scientific names.}
 \usage{
-correct_taxon_ids(spp_list, query_field = "scientific_name")
+correct_taxon_ids(
+  spp_list,
+  query_field = "scientific_name",
+  scientific_names = FALSE
+)
 }
 \arguments{
 \item{spp_list}{A data frame with taxon ID's from \code{get_taxonomies()}.}
 
 \item{query_field}{Field holding scientific names}
+
+\item{scientific_names}{Optional. TRUE/FALSE. Update query field scientific
+names with corrected scientific names. Default is FALSE.}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble::tibble()}} with corrected taxon ID's and scientific names.
