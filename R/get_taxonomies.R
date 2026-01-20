@@ -24,7 +24,8 @@
 #' ## End(Not run)
 get_taxonomies <- function(spp_list, query_field = "scientific_name", 
                            correct = FALSE) {
-  # spp_list = mpsgSE::sp_list_ex
+  # spp_list = iucn_paths[1:100, ]
+  # query_field = "iucn_name"; correct = TRUE
   
   # Get list of distinct species.
   distinct_spp = spp_list |>
@@ -96,7 +97,7 @@ get_taxonomies <- function(spp_list, query_field = "scientific_name",
     dplyr::distinct()
   
   if(correct) {
-    returned_dat = correct_taxon_ids(returned_dat, query_field = query_field)
+    returned_dat = mpsgSE::correct_taxon_ids(returned_dat, query_field = query_field)
   }
   
   return(returned_dat)
