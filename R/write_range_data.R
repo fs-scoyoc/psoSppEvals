@@ -29,7 +29,7 @@ write_range_data <- function(bien_maps, ebird_range, iucn_maps, gdb_path,
   message("Writing BIEN Maps")
   # bien_maps = targets::tar_read(bien_maps)
   arcgisbinding::arc.write(
-    path = file.path(gdb_path, "RangeMaps", "BIEN_Maps"),
+    path = file.path(gdb_path, "RangeMaps", "BIEN"),
     data = bien_maps,
     overwrite = TRUE
   )
@@ -39,7 +39,7 @@ write_range_data <- function(bien_maps, ebird_range, iucn_maps, gdb_path,
   ebird_sf = sf::st_as_sf(ebird_range) |> sf::st_cast("POLYGON") |> 
     dplyr::rename("sort_order" = order)
   arcgisbinding::arc.write(
-    path = file.path(gdb_path, "RangeMaps", "eBird_RangeMaps"),
+    path = file.path(gdb_path, "RangeMaps", "eBird"),
     data = ebird_sf,
     overwrite = TRUE
   )
@@ -47,14 +47,14 @@ write_range_data <- function(bien_maps, ebird_range, iucn_maps, gdb_path,
   message("Writing IUCN Maps")
   # iucn_maps = targets::tar_read(iucn_maps)
   arcgisbinding::arc.write(
-    path = file.path(gdb_path, "RangeMaps", "IUCN_Maps"),
+    path = file.path(gdb_path, "RangeMaps", "IUCN"),
     data = iucn_maps,
     overwrite = TRUE
   )
   
   if (return_sf){
-    return(range_maps = list("bien_maps" = bien_maps, "ebird_maps" = ebird_sf, 
-                             "iucn_maps" = iucn_maps))
+    return(range_maps = list("bien" = bien_maps, "ebird" = ebird_sf, 
+                             "iucn" = iucn_maps))
     
     }
 }
