@@ -36,7 +36,7 @@ write_range_data <- function(bien_maps, ebird_range, iucn_maps, gdb_path,
   
   message("Writing eBird Range Maps")
   # ebird_range = targets::tar_read(ebird_range_maps)
-  ebird_sf = sf::st_as_sf(ebird_range) |> sf::st_cast("POLYGON") |> 
+  ebird_sf = ebird_range |> sf::st_cast("POLYGON") |> 
     dplyr::rename("sort_order" = order)
   arcgisbinding::arc.write(
     path = file.path(gdb_path, "RangeMaps", "eBird"),
