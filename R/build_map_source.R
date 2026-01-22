@@ -21,6 +21,7 @@
 #' 
 #' library("mpsgSE")
 #' ebird_key <- "abcde12fghij34"
+#' 
 #' # Build speceis list
 #' spp_list <- get_taxonomies(sp_list_ex)
 #' 
@@ -37,26 +38,32 @@
 #'                                         ebird_access_key = ebird_key)
 #' 
 #' # IUCN Maps
-#' map_paths <- get_iucn_shp_paths(spp_list)
-#' iucn_maps <- build_iucn_maps(map_paths)
+#' iucn_maps <- get_iucn_maps(spp_list)
 #'
 #' # Build map source data frame
 #' map_sources <- build_map_source(spp_list, bien_maps, ebird_maps, iucn_maps)
 #' 
 #' ## End(Not run)                     
 build_map_source <- function(spp_list, bien_maps, ebird_maps, iucn_maps) {
-  all_maps = dplyr::bind_rows(
-    sf::st_drop_geometry(iucn_maps) |> dplyr::select(taxon_id) |> 
-      dplyr::mutate(taxon_id = as.numeric(taxon_id), source = "IUCN"),
-    dplyr::select(bien_maps, taxon_id) |> 
-      dplyr::mutate(taxon_id = as.numeric(taxon_id), source = "BIEN"),
-    sf::st_drop_geometry(ebird_maps)|> dplyr::select(taxon_id) |> 
-      dplyr::distinct() |> 
-      dplyr::mutate(taxon_id = as.numeric(taxon_id), source = "eBird")
-    )
+  all_maps = spp_list |>
+    dplyr::select(taxon_id) |>
+    dplyr::distinct() |> 
+    dplyr::mutate(
+      bien = ifelse(taxon_id %in% bien_maps$taxon_id, "BIEN", NA),
+      ebird = ifelse(taxon_id %in% ebird_maps$taxon_id, "eBird", NA),
+      iucn = ifelse(taxon_id %in% iucn_maps$taxon_id, "IUCN", NA)
+    ) |> 
+    tidyr::pivot_longer(cols = c(bien, ebird, iucn), names_to = "data", 
+                        values_to = 'source') |> 
+    dplyr::filter(!is.na(source)) |>
+    dplyr::group_by(taxon_id) |> 
+    dplyr::reframe(map_source = stringr::str_c(source, collapse = ", "))
+  
   source_list = spp_list |>
-    dplyr::select(taxon_id, scientific_name, common_name, kingdom:genus) |>
-    dplyr::left_join(all_maps, by = "taxon_id", relationship = 'many-to-many') |> 
-    dplyr::distinct()
+    dplyr::select(taxon_id) |>
+    dplyr::distinct() |> 
+    dplyr::left_join(all_maps, by = 'taxon_id') |> 
+    dplyr::mutate(map_source = ifelse(is.na(map_source), "gbif", map_source))
+  
   return(source_list)
 }

@@ -29,6 +29,7 @@ taxonomies, and range map data sources.
 
 library("mpsgSE")
 ebird_key <- "abcde12fghij34"
+
 # Build speceis list
 spp_list <- get_taxonomies(sp_list_ex)
 
@@ -45,8 +46,7 @@ ebird_maps <- download_ebird_range_maps(spp_list,
                                         ebird_access_key = ebird_key)
 
 # IUCN Maps
-map_paths <- get_iucn_shp_paths(spp_list)
-iucn_maps <- build_iucn_maps(map_paths)
+iucn_maps <- get_iucn_maps(spp_list)
 
 # Build map source data frame
 map_sources <- build_map_source(spp_list, bien_maps, ebird_maps, iucn_maps)
