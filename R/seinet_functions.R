@@ -183,12 +183,14 @@ get_seinet_data <- function(dir_path, crs = NULL, correct = TRUE){
 #'
 #' ## End(Not run)
 build_seinet_spp <- function(seinet_data, locale = FALSE, correct = FALSE){
+  # seinet_data = targets::tar_read(sei_unit); locale = "FIF" 
   
   # Date formats
   date_formats = c("%Y-%m-%d %H:%M:%S", "%Y-%m-%d", "%Y-%m", "%Y", "ymd HMS",
                    "ymd", "ymd HM")
-  taxa_select = c("taxon_id", "kingdom", "phylum", "class", "order", "family",
-                  "genus", "species", "subspecies", "variety", "form")
+  taxa_select = c("taxon_id", "scientificName", "kingdom", "phylum", "class", 
+                  "order", "family", "genus", "species", "subspecies", 
+                  "variety", "form")
   # Locale
   if(!isFALSE(locale)){
     locale = stringr::str_c(unique(seinet_data$locale), collapse = ", ")
@@ -204,23 +206,35 @@ build_seinet_spp <- function(seinet_data, locale = FALSE, correct = FALSE){
                                      "Yes", "No"))
   
   # Summarize data
-  t_id_sum = sf::st_drop_geometry(seinet_data) |>
-    dplyr::select(taxon_id, occurrenceID, eventDate) |>
+  t_dates = sf::st_drop_geometry(seinet_data) |>
+    dplyr::select(taxon_id, scientificName, eventDate) |>
     dplyr::mutate(
       date = lubridate::parse_date_time(eventDate, date_formats) |> as.Date(),
       year = lubridate::year(date)
     ) |>
-    dplyr::group_by(taxon_id) |>
+    dplyr::filter(!is.na(year) & !is.na(taxon_id)) |> 
+    dplyr::group_by(taxon_id, scientificName) |>
     dplyr::summarize(
-      nObs = dplyr::n(),
       minYear = min(year, na.rm = TRUE),
       maxYear = max(year, na.rm = TRUE),
+      .groups = "drop"
+    )
+  
+  t_id_sum = sf::st_drop_geometry(seinet_data) |>
+    dplyr::select(taxon_id, scientificName, occurrenceID) |>
+    dplyr::group_by(taxon_id, scientificName) |>
+    dplyr::summarize(
+      nObs = dplyr::n(),
       occID = ifelse(nObs <= 6,
                      stringr::str_c(unique(occurrenceID), collapse = ", "),
                      NA),
       .groups = "drop"
       ) |>
-    dplyr::mutate(locale = locale, source = "SEINet")
+    dplyr::left_join(t_dates, by = c('taxon_id', 'scientificName')) |> 
+    dplyr::select(taxon_id, scientificName, nObs, minYear, maxYear, occID) |>
+    dplyr::mutate(locale = locale, source = "SEINet") |> 
+    dplyr::filter(!is.na(taxon_id))
+    
   
   # Subset taxonomy
   taxa = sf::st_drop_geometry(seinet_data) |>
@@ -228,9 +242,10 @@ build_seinet_spp <- function(seinet_data, locale = FALSE, correct = FALSE){
     dplyr::distinct()
 
 
-  dat = dplyr::left_join(t_ids, t_id_sum, by = "taxon_id",
+  dat = dplyr::left_join(t_ids, t_id_sum, by = c('taxon_id', 'scientificName'),
                          relationship = 'many-to-many')|>
-    dplyr::left_join(taxa, by = 'taxon_id', relationship = 'many-to-many') |>
+    dplyr::left_join(taxa, by = c('taxon_id', 'scientificName'), 
+                     relationship = 'many-to-many') |>
     dplyr::arrange(kingdom, phylum, class, order, family, genus,
                    species, scientificName) |>
     dplyr::rename("scientific_name" = scientificName)

@@ -63,7 +63,7 @@ build_map_source <- function(spp_list, bien_maps, ebird_maps, iucn_maps) {
     dplyr::select(taxon_id) |>
     dplyr::distinct() |> 
     dplyr::left_join(all_maps, by = 'taxon_id') |> 
-    dplyr::mutate(map_source = ifelse(is.na(map_source), "gbif", map_source))
+    dplyr::mutate(map_source = ifelse(is.na(map_source), "GBIF", map_source))
   
   return(source_list)
 }

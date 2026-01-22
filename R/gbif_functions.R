@@ -206,7 +206,7 @@ get_gbif <- function(gbif_key, t_path, aoa_wkt = NULL, gbif_user = NULL,
 #'
 #' @param gbif_data Spatial GBIF data from `get_gbif()`.
 #' @param locale Logical. Location description of data. E.g., unit acronym or "Buffer"
-#' @param correct Logical. Run `correct_taxon_ids()` on data. Default is TRUE.
+#' @param correct Logical. Run `correct_taxon_ids()` on data. Default is FALSE
 #'
 #' @return A tibble.
 #' @seealso [get_gbif()], [get_taxonomies()], [correct_taxon_ids()]
@@ -228,12 +228,15 @@ get_gbif <- function(gbif_key, t_path, aoa_wkt = NULL, gbif_user = NULL,
 #' gbif_list <- gbif_spp(gbif_dat)
 #'
 #' ## End(Not run)
-gbif_spp <- function(gbif_data, locale = TRUE, correct = TRUE){
+gbif_spp <- function(gbif_data, locale = TRUE, correct = FALSE){
+  # gbif_data = targets::tar_read(gbif_unit)
+  
   # Date formats
   date_formats = c("%Y-%m-%d %H:%M:%S", "%Y-%m-%d", "%Y-%m", "%Y", "ymd HMS",
                    "ymd", "ymd HM")
-  taxa_select = c("taxon_id", "kingdom", "phylum", "class", "order", "family",
-                  "genus", "species", "subspecies", "variety", "form")
+  taxa_select = c("taxon_id", "scientific_name", "kingdom", "phylum", "class", 
+                  "order", "family", "genus", "species", "subspecies", 
+                  "variety", "form")
   # Locale
   if(isTRUE(locale)){
     locale = stringr::str_c(unique(gbif_data$locale), collapse = ", ")
@@ -249,24 +252,33 @@ gbif_spp <- function(gbif_data, locale = TRUE, correct = TRUE){
                                      "Yes", "No"))
   
   # Summarize data
-  t_id_sum = sf::st_drop_geometry(gbif_data) |>
-    dplyr::select(taxon_id, eventDate, occurrenceID)  |>
+  t_dates = sf::st_drop_geometry(gbif_data) |>
+    dplyr::select(taxon_id, scientific_name, eventDate)  |>
     dplyr::mutate(
       date = lubridate::parse_date_time(eventDate, date_formats) |> as.Date(),
       year = lubridate::year(date)
-      ) |>
+    ) |>
+    dplyr::filter(!is.na(year) & !(is.na(taxon_id))) |> 
+    dplyr::group_by(taxon_id, scientific_name) |>
+    dplyr::summarize(minYear = min(year, na.rm = TRUE),
+                     maxYear = max(year, na.rm = TRUE),
+                     .groups = "drop")
+  
+  t_id_sum = sf::st_drop_geometry(gbif_data) |>
+    dplyr::select(taxon_id, scientific_name, occurrenceID)  |>
     dplyr::distinct() |>
-    dplyr::group_by(taxon_id) |>
+    dplyr::group_by(taxon_id, scientific_name) |>
     dplyr::summarize(
       nObs = dplyr::n(),
-      minYear = min(year, na.rm = TRUE),
-      maxYear = max(year, na.rm = TRUE),
       occID = ifelse(nObs <= 6, 
                      stringr::str_c(unique(occurrenceID), collapse = "; "),
                      NA),
       .groups = "drop"
       ) |>
-    dplyr::mutate(locale = locale, source = "GBIF")
+    dplyr::left_join(t_dates, by = c("taxon_id", "scientific_name")) |> 
+    dplyr::select(taxon_id, scientific_name, nObs, minYear, maxYear, occID) |> 
+    dplyr::mutate(locale = locale, source = "GBIF") |>
+    dplyr::filter(!is.na(taxon_id))
 
   
   # Subset taxonomy
@@ -274,9 +286,11 @@ gbif_spp <- function(gbif_data, locale = TRUE, correct = TRUE){
     dplyr::select(dplyr::any_of(taxa_select)) |>
     dplyr::distinct()
   
-  dat = dplyr::left_join(t_ids, t_id_sum, by = "taxon_id",
+  dat = dplyr::left_join(t_ids, t_id_sum, 
+                         by = c("taxon_id", "scientific_name"),
                          relationship = 'many-to-many')|>
-    dplyr::left_join(taxa, by = 'taxon_id', relationship = 'many-to-many') |>
+    dplyr::left_join(taxa, by = c("taxon_id", "scientific_name"), 
+                     relationship = 'many-to-many') |>
     dplyr::arrange(kingdom, phylum, class, order, family, genus,
                    species, scientific_name)
   
