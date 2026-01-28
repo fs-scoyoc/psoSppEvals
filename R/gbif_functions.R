@@ -1,6 +1,6 @@
 #' Subset eligible species from GBIF data and reduce variables.
 #'
-#' @param gbif_data Spatial GBIF data from [get_gbif()].
+#' @param gbif_data Spatial GBIF data from [get_gbif_data()].
 #' @param spp_list Species list that includes taxon ID from [get_taxonomies()].
 #'                     This is the list that is used to subset the spatial data.
 #'
@@ -9,7 +9,7 @@
 #' @details
 #' Additional details...
 #'
-#' @seealso [get_gbif()], [gbif_spp()], [get_taxonomies()]
+#' @seealso [get_gbif_data()], [build_gbif_spp()], [get_taxonomies()]
 #'
 #' @export
 #'
@@ -22,9 +22,9 @@
 #' t_path <- file.path("T:/path/to/project/directory/data")
 #'
 #' # Pull data from existing GBIF query
-#' gbif_dat <- get_gbif(gbif_key = '9999999-999999999999999', t_path = t_path)
+#' gbif_dat <- get_gbif_data(gbif_key = '9999999-999999999999999', t_path = t_path)
 #' # Summarize species
-#' gbif_list <- gbif_spp(gbif_dat)
+#' gbif_list <- build_gbif_spp(gbif_dat)
 #' # Subset data
 #' birds <- dplyr::filter(gbif_list, class == "Aves")
 #' # Subset spatial data
@@ -114,19 +114,19 @@ build_gbif_spatial_data <- function(gbif_data, spp_list) {
 #' sf_aoa <- read_fc(lyr = "AdminBdy_1kmBuffer", dsn = gdb_path, crs = "NAD83")
 #'
 #' # New GBIF data query
-#' gbif_dat <- get_gbif(gbif_key = 'new',
-#'                      t_path = file.path(t_path, "data"),
-#'                      aoa_wkt = wkt_string(sf_aoa),
-#'                      gbif_user = Sys.getenv("GBIF_USER"),
-#'                      gbif_pwd = Sys.getenv("GBIF_PWD"),
-#'                      gbif_email = Sys.getenv("GBIF_EMAIL"),
-#'                      crs = 'NAD83')
+#' gbif_dat <- get_gbif_data(gbif_key = 'new',
+#'                           t_path = file.path(t_path, "data"),
+#'                           aoa_wkt = wkt_string(sf_aoa),
+#'                           gbif_user = Sys.getenv("GBIF_USER"),
+#'                           gbif_pwd = Sys.getenv("GBIF_PWD"),
+#'                           gbif_email = Sys.getenv("GBIF_EMAIL"),
+#'                           crs = 'NAD83')
 #'
 #' # Pull data from existing GBIF query
-#' gbif_dat <- get_gbif(gbif_key = '9999999-999999999999999',
-#'                      t_path = file.path(t_path, "data"),
-#'                      crs = 'NAD83')
-get_gbif <- function(gbif_key, t_path, aoa_wkt = NULL, gbif_user = NULL,
+#' gbif_dat <- get_gbif_data(gbif_key = '9999999-999999999999999',
+#'                           t_path = file.path(t_path, "data"),
+#'                           crs = 'NAD83')
+get_gbif_data <- function(gbif_key, t_path, aoa_wkt = NULL, gbif_user = NULL,
                      gbif_pwd = NULL, gbif_email = NULL, gbif_format = "DWCA",
                      crs = NULL, process_data = TRUE, correct = TRUE){
   #-- Function variables
@@ -196,20 +196,20 @@ get_gbif <- function(gbif_key, t_path, aoa_wkt = NULL, gbif_user = NULL,
 
 #' Summarize GBIF data by species
 #'
-#' This function summarizes the spatial GBIF object from `get_gbif()` by
+#' This function summarizes the spatial GBIF object from `get_gbif_data()` by
 #'     species. Currently this function only works when
-#'     `get_gbif(..., process_data = TRUE)`. The summary includes the number of
+#'     `get_gbif_data(..., process_data = TRUE)`. The summary includes the number of
 #'     records per species, minimum and maximum year a species is observed, and
 #'     the GBIF occurrence ID if there are less than seven (7) observations.
 #'     This function then verifies taxonomy using the `get_taxonomies()`
 #'     function.
 #'
-#' @param gbif_data Spatial GBIF data from `get_gbif()`.
+#' @param gbif_data Spatial GBIF data from `get_gbif_data()`.
 #' @param locale Logical. Location description of data. E.g., unit acronym or "Buffer"
 #' @param correct Logical. Run `correct_taxon_ids()` on data. Default is FALSE
 #'
 #' @return A tibble.
-#' @seealso [get_gbif()], [get_taxonomies()], [correct_taxon_ids()]
+#' @seealso [get_gbif_data()], [get_taxonomies()], [correct_taxon_ids()]
 #' @export
 #'
 #' @examples
@@ -221,14 +221,14 @@ get_gbif <- function(gbif_key, t_path, aoa_wkt = NULL, gbif_user = NULL,
 #' t_path <- file.path("T:/path/to/project/directory")
 #'
 #' # Pull data from existing GBIF query
-#' gbif_dat <- get_gbif(gbif_key = '9999999-999999999999999',
-#'                      t_path = file.path(t_path, "data"))
+#' gbif_dat <- get_gbif_data(gbif_key = '9999999-999999999999999',
+#'                           t_path = file.path(t_path, "data"))
 #'
 #' # Summarize species
-#' gbif_list <- gbif_spp(gbif_dat)
+#' gbif_list <- build_gbif_spp(gbif_dat)
 #'
 #' ## End(Not run)
-gbif_spp <- function(gbif_data, locale = TRUE, correct = FALSE){
+build_gbif_spp <- function(gbif_data, locale = TRUE, correct = FALSE){
   # gbif_data = targets::tar_read(gbif_unit)
   
   # Date formats

@@ -63,6 +63,8 @@ this document becomes part of the project record.
 
 -   `build_gbif_spatial_data`: Subset eligible species from spatial GBIF data.
 
+-   `build_gbif_spp`: Summarize GBIF data by species.
+
 -   `build_imbcr_spatial_data`: Subset eligible species from spatial IMBCR data.
 
 -   `build_imbcr_spp`: Summarize IMBCR data by species.
@@ -101,8 +103,6 @@ this document becomes part of the project record.
 
 -   `extract_landfire_evt`: Extract LANDFIRE EVT data to points.
 
--   `gbif_spp`: Summarize GBIF data by species.
-
 -   `get_basemap_data`: Read basemap data into R for Quarto script.
 
 -   `get_bc_regions`: Clip Birds of Conservation Regions to a polygon.
@@ -113,7 +113,7 @@ this document becomes part of the project record.
 
 -   `get_ebird_trends`: Calculate abundance trends from eBird data.
 
--   `get_gbif`: Query and download species occurrence records from GBIF and read them into R as spatial (`sf`)data.
+-   `get_gbif_data`: Query and download species occurrence records from GBIF and read them into R as spatial (`sf`)data.
 
 -   `get_imbcr_data`: Read IMBCR occurrence data into R. This function requires access to internal Forest Service servers.
 

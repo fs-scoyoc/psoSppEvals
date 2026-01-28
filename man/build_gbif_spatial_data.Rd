@@ -7,7 +7,7 @@
 build_gbif_spatial_data(gbif_data, spp_list)
 }
 \arguments{
-\item{gbif_data}{Spatial GBIF data from \code{\link[=get_gbif]{get_gbif()}}.}
+\item{gbif_data}{Spatial GBIF data from \code{\link[=get_gbif_data]{get_gbif_data()}}.}
 
 \item{spp_list}{Species list that includes taxon ID from \code{\link[=get_taxonomies]{get_taxonomies()}}.
 This is the list that is used to subset the spatial data.}
@@ -30,9 +30,9 @@ library("mpsgSE")
 t_path <- file.path("T:/path/to/project/directory/data")
 
 # Pull data from existing GBIF query
-gbif_dat <- get_gbif(gbif_key = '9999999-999999999999999', t_path = t_path)
+gbif_dat <- get_gbif_data(gbif_key = '9999999-999999999999999', t_path = t_path)
 # Summarize species
-gbif_list <- gbif_spp(gbif_dat)
+gbif_list <- build_gbif_spp(gbif_dat)
 # Subset data
 birds <- dplyr::filter(gbif_list, class == "Aves")
 # Subset spatial data
@@ -41,5 +41,5 @@ gbif_birds <- build_gbif_spatial_data(gbif_dat, birds)
 ## End(Not run)
 }
 \seealso{
-\code{\link[=get_gbif]{get_gbif()}}, \code{\link[=gbif_spp]{gbif_spp()}}, \code{\link[=get_taxonomies]{get_taxonomies()}}
+\code{\link[=get_gbif_data]{get_gbif_data()}}, \code{\link[=build_gbif_spp]{build_gbif_spp()}}, \code{\link[=get_taxonomies]{get_taxonomies()}}
 }

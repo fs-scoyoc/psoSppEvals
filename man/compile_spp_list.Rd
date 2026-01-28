@@ -30,7 +30,7 @@ sf_fs <- read_fc(lyr = "PlanArea", dsn = gdb_path, crs = "NAD83")
 sf_buff <- read_fc(lyr = "PlanArea_1kmBuffer", dsn = gdb_path, crs = "NAD83")
 
 # Pull data from existing GBIF query
-gbif_dat <- get_gbif(gbif_key = '9999999-999999999999999', 
+gbif_dat <- get_gbif_data(gbif_key = '9999999-999999999999999', 
                      t_path = file.path(t_path, "data"))
 
 # Clip to extents
@@ -40,5 +40,5 @@ gbif_list <- compile_spp_list(unit_gbif, buff_gbif)
 ## End(Not run)                     
 }
 \seealso{
-\code{\link[=gbif_spp]{gbif_spp()}}, \code{\link[=build_seinet_spp]{build_seinet_spp()}}, \code{\link[=build_imbcr_spp]{build_imbcr_spp()}}
+\code{\link[=build_gbif_spp]{build_gbif_spp()}}, \code{\link[=build_seinet_spp]{build_seinet_spp()}}, \code{\link[=build_imbcr_spp]{build_imbcr_spp()}}
 }

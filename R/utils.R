@@ -14,7 +14,7 @@
 #' @param gbif_buff Species list for 1-km Buffer.
 #'
 #' @return A tibble.
-#' @seealso [gbif_spp()], [build_seinet_spp()], [build_imbcr_spp()]
+#' @seealso [build_gbif_spp()], [build_seinet_spp()], [build_imbcr_spp()]
 #'
 #' @examples
 #' ## Not run:
@@ -28,14 +28,14 @@
 #' sf_buff <- read_fc(lyr = "PlanArea_1kmBuffer", dsn = gdb_path, crs = "NAD83")
 #' 
 #' # Pull data from existing GBIF query
-#' gbif_dat <- get_gbif(gbif_key = '9999999-999999999999999', 
+#' gbif_dat <- get_gbif_data(gbif_key = '9999999-999999999999999', 
 #'                      t_path = file.path(t_path, "data"))
 #' 
 #' # Clip to extents
 # unit_gbif <- clip_fc(gbif_sf, sf_fs) |>
-#   gbif_spp()
+#   build_gbif_spp()
 # buff_gbif <- clip_fc(gbif_sf, sf_buff) |>
-#   gbif_spp()
+#   build_gbif_spp()
 # 
 #' # Summarize species
 #' gbif_list <- compile_spp_list(unit_gbif, buff_gbif)
@@ -85,11 +85,11 @@ view_dups <- function(spp_dat, spp_vec){
 
 #' Convert GBIF data frame to an sf object
 #' 
-#' This function converts the output from `get_gbif()` to a spatial (`sf`) 
+#' This function converts the output from `get_gbif_data()` to a spatial (`sf`) 
 #'     object using `sf::st_as_sf()`. This function will also transform the data
 #'     to a target coordinate reference system.
 #'
-#' @param gbif_dat GBIF data frame from `get_gbif()`.
+#' @param gbif_dat GBIF data frame from `get_gbif_data()`.
 #' @param crs Target coordinate reference system (CRS). Either and 
 #'                `sf::st_crs()` object or accepted input string for 
 #'                `sf::st_crs()` (e.g. "WGS84" or "NAD83"). See `sf::st_crs()`

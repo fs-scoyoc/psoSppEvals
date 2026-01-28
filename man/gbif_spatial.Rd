@@ -7,7 +7,7 @@
 gbif_spatial(gbif_dat, crs = NULL)
 }
 \arguments{
-\item{gbif_dat}{GBIF data frame from \code{get_gbif()}.}
+\item{gbif_dat}{GBIF data frame from \code{get_gbif_data()}.}
 
 \item{crs}{Target coordinate reference system (CRS). Either and
 \code{sf::st_crs()} object or accepted input string for
@@ -16,7 +16,7 @@ for more details. Default is NULL. If NULL, resulting sf
 object CRS will be WGS84.}
 }
 \description{
-This function converts the output from \code{get_gbif()} to a spatial (\code{sf})
+This function converts the output from \code{get_gbif_data()} to a spatial (\code{sf})
 object using \code{sf::st_as_sf()}. This function will also transform the data
 to a target coordinate reference system.
 }
