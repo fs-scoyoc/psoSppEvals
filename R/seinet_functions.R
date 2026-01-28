@@ -123,7 +123,7 @@ get_seinet_data <- function(dir_path, crs = NULL, correct = TRUE){
   gbif_tids = sf::st_drop_geometry(raw_dat) |>
     dplyr::select(SEINet_taxonID, scientificName) |>
     dplyr::distinct() |>
-    mpsgSE::get_taxonomies(query_field = "scientificName") |>
+    mpsgSE::get_taxonomies(query_field = "scientificName", correct = correct) |>
     dplyr::select(-scientificName)
 
   # Rename SEINet taxonomy variables that are duplicated in GBIF
@@ -136,9 +136,6 @@ get_seinet_data <- function(dir_path, crs = NULL, correct = TRUE){
   sei_data = dplyr::left_join(raw_dat, gbif_tids,
                               by = "SEINet_taxonID",
                               relationship = 'many-to-many')
-  #  Correct Taxon IDs
-  if(correct) sei_data = mpsgSE::correct_taxon_ids(sei_data, 
-                                                   query_field = "scientificName") 
   
   # Re-project CRS
   if(!is.null(crs)){
