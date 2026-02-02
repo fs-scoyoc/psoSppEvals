@@ -42,13 +42,13 @@ bcc_file <- file.path("data-raw/data", "BirdsOfConservationConcern_2024.xlsx")
 bcc_list <- readxl::read_excel(path = bcc_file, sheet = "Table001 (Page 1-4)", 
                                skip = 1, col_names = TRUE) |> 
   janitor::clean_names() |> 
-  mpsgSE::get_taxonomies('scientific_name') |> 
+  mpsgSE::get_taxonomies('scientific_name', correct = TRUE) |> 
   mpsgSE::correct_taxon_ids()
 
 
 # save ----
-readr::write_csv(bcc_list,
-                 file.path("data-raw/output/species_lists/bcc_list.csv"))
+# readr::write_csv(bcc_list,
+#                  file.path("data-raw/output/species_lists/bcc_list.csv"))
 usethis::use_data(bcc_list, overwrite = TRUE)
 
 

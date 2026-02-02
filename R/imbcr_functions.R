@@ -161,7 +161,8 @@ get_imbcr_trends <- function(bcc_region){
 #'
 #' ## End(Not run)
 build_imbcr_spp <- function(imbcr_data, dir_path = NULL){
-  # imbcr_data = targets::tar_read(imbcr_unit)
+  # imbcr_data = targets::tar_read(unit_data)
+  
   # Get location
   locale = stringr::str_c(unique(imbcr_data$locale), collapse = ", ")
 
@@ -169,6 +170,8 @@ build_imbcr_spp <- function(imbcr_data, dir_path = NULL){
   if(is.null(dir_path)){
     dir_path = file.path("T:/FS/NFS/PSO/MPSG/MPSG_Restricted/Species/IMBCR")
   }
+  
+  # Read taxonomy
   taxonomy = sf::st_drop_geometry(imbcr_data)|>
     dplyr::select(taxon_id, species) |>
     dplyr::rename("common_name" = species) |>
