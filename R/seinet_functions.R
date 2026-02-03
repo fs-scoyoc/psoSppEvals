@@ -110,10 +110,10 @@ get_seinet_data <- function(dir_path, crs = NULL, correct = TRUE){
     dplyr::filter(taxonRank %in% c('Species', 'Variety', 'Subspecies')) |>
     dplyr::filter(!is.na(decimalLatitude) | !is.na(decimalLongitude)) |>
     dplyr::mutate(
-      date = lubridate::parse_date_time(eventDate, date_formats) |> as.Date(),
-      date = ifelse(lubridate::year(date) == 9999, NA, date),
-      dayOfYear = lubridate::yday(date),
-      # year = lubridate::year(date),
+      parsed_date = lubridate::parse_date_time(eventDate, date_formats) |> as.Date(),
+      # parsed_date = ifelse(lubridate::year(parsed_date) == 9999, NA, date),
+      day_of_year = lubridate::yday(parsed_date),
+      parsed_year = lubridate::year(parsed_date),
       source = "SEINet"
       ) |>
     dplyr::rename("SEINet_taxonID" = taxonID) |>

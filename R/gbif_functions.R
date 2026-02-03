@@ -176,10 +176,10 @@ get_gbif_data <- function(gbif_key, t_path, aoa_wkt = NULL, gbif_user = NULL,
                                  scientific_name),
         scientific_name = trimws(scientific_name),
         # Parse date formats, day of year, and year
-        date = lubridate::parse_date_time(eventDate, date_formats) |> as.Date(),
-        date = ifelse(lubridate::year(date) == 9999, NA, date),
-        dayOfYear = lubridate::yday(date),
-        year = lubridate::year(date),
+        parsed_date = lubridate::parse_date_time(eventDate, date_formats) |> as.Date(),
+        # parsed_date = ifelse(lubridate::year(parsed_date) == 9999, NA, date),
+        day_of_year = lubridate::yday(parsed_date),
+        parsed_year = lubridate::year(parsed_date),
         source = "GBIF"
       ) |>
       dplyr::mutate_if(is.character, trimws) |> 
@@ -198,11 +198,11 @@ get_gbif_data <- function(gbif_key, t_path, aoa_wkt = NULL, gbif_user = NULL,
 #'
 #' This function summarizes the spatial GBIF object from `get_gbif_data()` by
 #'     species. Currently this function only works when
-#'     `get_gbif_data(..., process_data = TRUE)`. The summary includes the number of
-#'     records per species, minimum and maximum year a species is observed, and
-#'     the GBIF occurrence ID if there are less than seven (7) observations.
-#'     This function then verifies taxonomy using the `get_taxonomies()`
-#'     function.
+#'     `get_gbif_data(..., process_data = TRUE)`. The summary includes the 
+#'     number of records per species, minimum and maximum year a species is 
+#'     observed, and the GBIF occurrence ID if there are less than seven (7) 
+#'     observations. This function then verifies taxonomy using the 
+#'     `get_taxonomies()` function.
 #'
 #' @param gbif_data Spatial GBIF data from `get_gbif_data()`.
 #' @param locale Logical. Location description of data. E.g., unit acronym or "Buffer"
