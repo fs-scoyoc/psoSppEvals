@@ -19,11 +19,11 @@ A tibble.
 \description{
 This function summarizes the spatial GBIF object from \code{get_gbif_data()} by
 species. Currently this function only works when
-\code{get_gbif_data(..., process_data = TRUE)}. The summary includes the number of
-records per species, minimum and maximum year a species is observed, and
-the GBIF occurrence ID if there are less than seven (7) observations.
-This function then verifies taxonomy using the \code{get_taxonomies()}
-function.
+\code{get_gbif_data(..., process_data = TRUE)}. The summary includes the
+number of records per species, minimum and maximum year a species is
+observed, and the GBIF occurrence ID if there are less than seven (7)
+observations. This function then verifies taxonomy using the
+\code{get_taxonomies()} function.
 }
 \examples{
 ## Not run:

@@ -36,15 +36,15 @@ build_gbif_spatial_data <- function(gbif_data, spp_list) {
   var_names <- c(
     "taxon_id", "gbifID", "occurrenceID", "scientificName",
     "acceptedScientificName", "verbatimScientificName", "vernacularName",
-    "kingdom", "phylum", "class", "order", "family", "genus", "specificEpithet",
-    "infraspecificEpithet", "taxonRank",
-    "basisOfRecord", "eventDate", "countryCode", "stateProvince", "county",
-    "locality", "verticalDatum",
+    "basisOfRecord", "eventDate", "parsed_date", 
+    "countryCode", "stateProvince", "county", "locality", "verticalDatum",
     "coordinateUncertaintyInMeters", "coordinatePrecision",
     "georeferencedBy", "georeferencedDate", "georeferenceProtocol",
     "georeferenceSources", "georeferenceRemarks",
     "publisher", "institutionCode", "collectionCode", "datasetName",
-    "gbif_occ_url"
+    "gbif_occ_url",
+    "taxonRank", "kingdom", "phylum", "class", "order", "family", "genus", 
+    "specificEpithet", "infraspecificEpithet"
   )
 
   # Filter GBIF Data
@@ -232,8 +232,6 @@ build_gbif_spp <- function(gbif_data, locale = TRUE, correct = FALSE){
   # gbif_data = targets::tar_read(gbif_unit)
   
   # Date formats
-  date_formats = c("%Y-%m-%d %H:%M:%S", "%Y-%m-%d", "%Y-%m", "%Y", "ymd HMS",
-                   "ymd", "ymd HM")
   taxa_select = c("taxon_id", "scientific_name", "kingdom", "phylum", "class", 
                   "order", "family", "genus", "species", "subspecies", 
                   "variety", "form")
@@ -253,15 +251,11 @@ build_gbif_spp <- function(gbif_data, locale = TRUE, correct = FALSE){
   
   # Summarize data
   t_dates = sf::st_drop_geometry(gbif_data) |>
-    dplyr::select(taxon_id, scientific_name, eventDate)  |>
-    dplyr::mutate(
-      date = lubridate::parse_date_time(eventDate, date_formats) |> as.Date(),
-      year = lubridate::year(date)
-    ) |>
-    dplyr::filter(!is.na(year) & !(is.na(taxon_id))) |> 
+    dplyr::select(taxon_id, scientific_name, parsed_year)  |>
+    dplyr::filter(!is.na(taxon_id) | !(is.na(parsed_year))) |> 
     dplyr::group_by(taxon_id, scientific_name) |>
-    dplyr::summarize(minYear = min(year, na.rm = TRUE),
-                     maxYear = max(year, na.rm = TRUE),
+    dplyr::summarize(minYear = min(parsed_year, na.rm = TRUE),
+                     maxYear = max(parsed_year, na.rm = TRUE),
                      .groups = "drop")
   
   t_id_sum = sf::st_drop_geometry(gbif_data) |>

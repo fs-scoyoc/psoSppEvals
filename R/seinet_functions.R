@@ -38,15 +38,15 @@ build_seinet_spatial_data <- function(sei_data, spp_list) {
 
   var_names = c(
     "taxon_id", "SEINet_taxonID", "occurrenceID", "scientificName", 
-    "scientificNameAuthorship", "basisOfRecord", "eventDate", 
+    "scientificNameAuthorship", "basisOfRecord", "eventDate", "parsed_date",
     "verbatimEventDate", "institutionCode", "collectionCode", "collectionID", 
     "recordedBy", "identifiedBy", "occurrenceRemarks", "habitat",  "references",
     "country", "stateProvince", "county", "locality",
     "geodeticDatum", "coordinateUncertaintyInMeters",
     "georeferencedBy", "georeferenceProtocol", "georeferenceProtocol",
-    "georeferenceSources", "georeferenceRemarks",
+    "georeferenceSources", "georeferenceRemarks", "taxonRank",
     "kingdom", "phylum", "class", "order", "family", "genus", "specificEpithet",
-    "infraspecificEpithet", "taxonRank"
+    "infraspecificEpithet"
   )
 
   # Filter spatial data
@@ -183,8 +183,6 @@ build_seinet_spp <- function(seinet_data, locale = FALSE, correct = FALSE){
   # seinet_data = targets::tar_read(sei_unit); locale = "FIF" 
   
   # Date formats
-  date_formats = c("%Y-%m-%d %H:%M:%S", "%Y-%m-%d", "%Y-%m", "%Y", "ymd HMS",
-                   "ymd", "ymd HM")
   taxa_select = c("taxon_id", "scientificName", "kingdom", "phylum", "class", 
                   "order", "family", "genus", "species", "subspecies", 
                   "variety", "form")
@@ -204,16 +202,12 @@ build_seinet_spp <- function(seinet_data, locale = FALSE, correct = FALSE){
   
   # Summarize data
   t_dates = sf::st_drop_geometry(seinet_data) |>
-    dplyr::select(taxon_id, scientificName, eventDate) |>
-    dplyr::mutate(
-      date = lubridate::parse_date_time(eventDate, date_formats) |> as.Date(),
-      year = lubridate::year(date)
-    ) |>
-    dplyr::filter(!is.na(year) & !is.na(taxon_id)) |> 
+    dplyr::select(taxon_id, scientificName, parsed_year) |>
+    dplyr::filter(!is.na(taxon_id) | !is.na(parsed_year)) |> 
     dplyr::group_by(taxon_id, scientificName) |>
     dplyr::summarize(
-      minYear = min(year, na.rm = TRUE),
-      maxYear = max(year, na.rm = TRUE),
+      minYear = min(parsed_year, na.rm = TRUE),
+      maxYear = max(parsed_year, na.rm = TRUE),
       .groups = "drop"
     )
   
