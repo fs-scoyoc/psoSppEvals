@@ -36,26 +36,35 @@ invisible(lapply(pkgs, library, character.only = TRUE))
 #     ID's, and corrected names for the same species that will return taxon ID's 
 name_corrections = tibble::tibble(
   # Common names
-  common_name = c("Mountain Plover", "Snowy Plover", "Snowy Plover", 
-                  "American Goshawk", "Hopi Chipmunk", "Largemouth Bass", 
-                  "Westslope Cutthroat Trout", "Vargo's Furcula", 
-                  "a lepidostomatid caddisfly", "Lapland Buttercup", 
-                  "Rough Rattlesnake-root", "Open-ground Whitlow-grass", 
-                  "Diana Fritillary"),
+  common_name = c(
+    "Mountain Plover", "Snowy Plover", "Snowy Plover", "American Goshawk", 
+    "Hopi Chipmunk", "Largemouth Bass", "Westslope Cutthroat Trout", 
+    "Vargo's Furcula", "a lepidostomatid caddisfly", "Lapland Buttercup",
+    "Rough Rattlesnake-root", "Open-ground Whitlow-grass", "Diana Fritillary", 
+    "an angle moth", "Pin Lichen", "Lindberg's Plait Moss", 
+    "Tufted Evening-primrose", "Nuttals's Sandwart", "Glaucous Rattlesnakeroot",
+    "Tall Fescue"
+    ),
   # Names throwing taxon ID errors
-  errored_name = c("Anarhynchus montanus", "Anarhynchus nivosus", 
-                   "Anarhynchus nivosus nivosus", "Accipiter atricapillus", 
-                   "Neotamias rufus", "Micropterus nigricans", 
-                   "Oncorhynchus lewisi", "Furcula vargoi", 	
-                   "Lepidostoma apache", "Ranunculus lapponicus", 
-                   "Prenanthes aspera", "Draba aprica", "Argynnis diana"), 
+  errored_name = c(
+    "Anarhynchus montanus", "Anarhynchus nivosus", "Anarhynchus nivosus nivosus", 
+    "Accipiter atricapillus", "Neotamias rufus", "Micropterus nigricans",
+    "Oncorhynchus lewisi", "Furcula vargoi", "Lepidostoma apache", 
+    "Ranunculus lapponicus", "Prenanthes aspera", "Draba aprica", 
+    "Argynnis diana", "Macaria prunosata", "Calicium tigillare", 
+    "Hypnum lindbergii", "Oenothera caespitosa", "Minuartia nuttallii", 
+    "Prenanthes racemose", "Schedonorus arundinaceus"
+    ), 
   # Corrected scientific names
-  corrected_name = c("Charadrius montanus", "Charadrius nivosus", 
-                     "Charadrius nivosus", "Accipiter gentilis atricapillus", 
-                     "Tamias rufus", "Micropterus floridanus",
-                     "Oncorhynchus clarkii lewisi", "Furcula vargoi", 	
-                     "Lepidostoma apache", "Coptidium lapponicum", 
-                     "Nabalus asper", "Abdra aprica", "Speyeria diana")
+  corrected_name = c(
+    "Charadrius montanus", "Charadrius nivosus", "Charadrius nivosus", 
+    "Accipiter gentilis atricapillus", "Tamias rufus", "Micropterus floridanus",
+    "Oncorhynchus clarkii lewisi", "Furcula vargoi", "Lepidostoma apache", 
+    "Coptidium lapponicum", "Nabalus asper", "Abdra aprica", "Speyeria diana",
+    "Speranza prunosata", "Calicium tigillare", "Calliergonella lindbergii", 
+    "Oenothera cespitosa", "Sabulina nuttallii", "Nabalus racemosus", 
+    "Lolium arundinaceum"
+    )
   ) |> 
   # Pull taxon IDs from GBIF
   dplyr::mutate(
@@ -64,6 +73,7 @@ name_corrections = tibble::tibble(
     # manual corrections
     taxon_id = ifelse(errored_name == "Furcula vargoi", 10047243, taxon_id),
     taxon_id = ifelse(errored_name == "Lepidostoma apache", 125954696, taxon_id),
+    taxon_id = ifelse(errored_name == "Calicium tigillare", 7682261, taxon_id),
     taxon_id = as.numeric(taxon_id)
   )
 
@@ -73,11 +83,12 @@ name_corrections = tibble::tibble(
 #     found manually on the GBIF website.
 manual_corrections <- tibble::tibble(
   # Common names
-  common_name = c("Vargo's Furcula", "a lepidostomatid caddisfly"),
+  common_name = c("Vargo's Furcula", "a lepidostomatid caddisfly", "pin lichen"),
   # Names throwing taxon ID errors
-  scientific_name = c("Furcula vargoi", "Lepidostoma apache"), 
+  scientific_name = c("Furcula vargoi", "Lepidostoma apache", 
+                      "Calicium tigillare"), 
   # Taxon ID's
-  taxon_id = c(10047243, 125954696)
+  taxon_id = c(10047243, 125954696, 7682261)
   )
 
 
