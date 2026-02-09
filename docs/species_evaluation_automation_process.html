@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.32">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -50,19 +50,36 @@ div.csl-indent {
 <script src="species_evaluation_automation_process_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="species_evaluation_automation_process_files/libs/quarto-html/anchor.min.js"></script>
 <link href="species_evaluation_automation_process_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="species_evaluation_automation_process_files/libs/quarto-html/quarto-syntax-highlighting-2486e1f0a3ee9ee1fc393803a1361cdb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="species_evaluation_automation_process_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="species_evaluation_automation_process_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="species_evaluation_automation_process_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="species_evaluation_automation_process_files/libs/bootstrap/bootstrap-5bdc1ec511977dd36301403cf8f4f68d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="species_evaluation_automation_process_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
 
 <body>
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="species_evaluation_automation_process.md"><i class="bi bi-file-code"></i>CommonMark</a></li></ul></div></div>
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#species-evaluation-automation-process" id="toc-species-evaluation-automation-process" class="nav-link" data-scroll-target="#species-evaluation-automation-process"><span class="header-section-number">2</span> Species Evaluation Automation Process</a>
+  <ul class="collapse">
+  <li><a href="#process-preface" id="toc-process-preface" class="nav-link" data-scroll-target="#process-preface"><span class="header-section-number">2.1</span> Process Preface</a></li>
+  <li><a href="#building-the-eligible-species-list" id="toc-building-the-eligible-species-list" class="nav-link" data-scroll-target="#building-the-eligible-species-list"><span class="header-section-number">2.2</span> Building the Eligible Species List</a></li>
+  <li><a href="#retrieve-external-data-for-automating-reports" id="toc-retrieve-external-data-for-automating-reports" class="nav-link" data-scroll-target="#retrieve-external-data-for-automating-reports"><span class="header-section-number">2.3</span> Retrieve External Data for Automating Reports</a></li>
+  <li><a href="#automate-reports" id="toc-automate-reports" class="nav-link" data-scroll-target="#automate-reports"><span class="header-section-number">2.4</span> Automate Reports</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">3</span> References</a></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+</div>
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -90,186 +107,217 @@ div.csl-indent {
 </header>
 
 
-<section id="introduction" class="level1">
-<h1>Introduction</h1>
-<p>This document details the process of automating parts of the Mountain State Planning Group’s (MPSG), Species Evaluations for Species of Conservation Concern (SCC). The MPSG is tasked with helping National Forests with planning efforts. Part of the Pre-assessment portion of Forest Planning is writing Species Evaluations for SCC. Species assessments are intended to inform selection of SCC by the Regional Forester by providing the best available scientific (BASI) information on if there is “substantial concern about the species’ capability to persist over the long-term in the plan area” (36 CFR 219.9(c)). This process is detailed in draft in the “Species of Conservation Concern Identification Process” (CITE MPSG) document. This document is not intended to outline the SCC process. Rather it will focus on documenting the automation of the process outlined in the SCC process document.</p>
-<p>Automation is recommended for this process for two primary reasons: hundreds of Species Evaluations are required for any given planning unit, resulting in a substantial workload. Automation of repeatable steps decreases the workload of MPSG staff, produces more consistent and repeatable documents, and can help define, programmatically or otherwise, best sources of BASI and processes for retrieving BASI.</p>
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<p>This document details the data acquisition process and the production of automated reports for the Mountain Planning Service Group’s (MPSG) Species Evaluations for Species of Conservation Concern (SCC). The MPSG assists National Forests and Grasslands, or planning units, with land management plan revision. Part of the pre-assessment phase of the plan revision process is writing species evaluation documents in preparation for the SCC process. Species evaluations are intended to inform selection of SCC by providing the best available scientific information (BASI) on whether there is “substantial concern about the species’ capability to persist over the long-term in the plan area” (36 CFR 219.9(c)). This process is detailed in draft in the “Species of Conservation Concern Identification Process” document <span class="citation" data-cites="usdaforestservice2026">(<a href="#ref-usdaforestservice2026" role="doc-biblioref">USDA Forest Service 2026</a>)</span>. This document will focus on the data acquisition, or data pull, process and the production of automated species evaluation documents, and is not intended to outline the SCC process.</p>
 </section>
-<section id="the-process" class="level1">
-<h1>The Process</h1>
-</section>
-<section id="species-evaluation-automation-process" class="level1">
-<h1>Species Evaluation Automation Process</h1>
-<p>Broadly there are three parts to automating: 1. Develop eligible list of species for potential listing as SCC 2. Gather available relevant BASI for species on the eligible list. 3. Automate SCC species evaluation templates with as much data pre input as possible.</p>
-<section id="process-preface" class="level2">
-<h2 class="anchored" data-anchor-id="process-preface">Process Preface</h2>
-<section id="the-use-of-r-programming-language" class="level3">
-<h3 class="anchored" data-anchor-id="the-use-of-r-programming-language">The Use of R Programming Language</h3>
-<p>The MPSG uses the R programming language <span class="citation" data-cites="rcoreteamLanguageEnvironmentStatistical2023">(<a href="#ref-rcoreteamLanguageEnvironmentStatistical2023" role="doc-biblioref">R Core Team 2023</a>)</span> for much of the work we do in automation and will be referencing R code and packages in this document because it helps explain how we accomplished a lot of what we did. However, automation is not necessarily dependent on R. Many of these processes could be completed by other means and R is irrelevant to many of the data sources and structures we have developed at the MPSG.</p>
-</section>
-<section id="taxonomy" class="level3">
-<h3 class="anchored" data-anchor-id="taxonomy">Taxonomy</h3>
-<p>Automation would not be possible without first automating taxonomic classification of species names. The process developed at the MPSG to produce species evaluations relies on dozens of external resources for information. Many of those resources have their own methods for resolving taxonomy, but almost all of them differ in some way on how they define and classify species. This is problematic for automating species evaluations because almost every part of the process relies on reliably cross referencing information. For example, for occurrence records we rely on SEINet, GBIF and State EO polygons. It could be possible that for the grass blue grama (<em>Bouteloua gracilis</em>) one uses <em>Bouteloua gracilis</em> and another uses a recognized synonym <em>Chondrosum gracile</em> we need a way to recognize both as the same plant. To resolve this, we needed a way to algorithmically link like species referred to by different names. It is important that it could be done algorythmically because some unit database pulls returned hundreds of thousands of records. Manual resolution of taxonomic classification would not be possible.</p>
-<p>A variety of resources were evaluated as potential solutions taxanomic classification, but ultimately landed on using the <a href="https://github.com/ropensci/taxize"><code>taxize</code></a> <span class="citation" data-cites="scottchamberlainTaxizeTaxonomicInformation2020">(<a href="#ref-scottchamberlainTaxizeTaxonomicInformation2020" role="doc-biblioref">Scott Chamberlain et al. 2020</a>)</span> R package to access the GBIF Backbone Taxonomy. NatureServe, ITIS, and USDA plants were all tried before we ultimately decided on GBIF. GBIF was chosen because it reliably returned the correct name. ITIS was a close second, but it was routinely down and would fail when trying to resolve long lists of names. NatureServe search returned incorrect names too frequently. USDA plants was also considered but they do not provide an API for name resolution.</p>
-<p>Often when a name is searched in GBIF, the name that is returned does not match the name in the NatureServe database. The Forest Service Assessment Handbook (<span class="citation" data-cites="usdaforestserviceHandbook190912Land2015">USDA Forest Service (<a href="#ref-usdaforestserviceHandbook190912Land2015" role="doc-biblioref">2015</a>)</span>) directs the use of NatureServe in species consideration lists. Therfore, scientific names provided by Naturserve for are used for species evaluations. The taxomic process we developed is agnostic to the scientific name source. It instead relies on the a taxon_id that is associated with names associated with a variety of synonyms. When we combine lists or data sources we rely on the Taxonomic Identifier and not the names for list joining.</p>
-<p>While the system works well, it is not perfect, and occasionally many scientific names recognized by NatureServe will resolve to the same species in the GBIF Backbone Taxonomy. In this case manual resolution of names is necessary and species evaluations must be completed manually. This is necessary because without matching taxonomic identifiers we have no way of telling if we are using the correct occurrence records or federal and state rankings. It may be possible to resolve this in the future with internal identification but for now these species much be manually completed.</p>
-<p>The process for resolving taxonomy is codified in a function in the <a href="https://github.com/fs-mschmidty/mpsgSE">mpsgSE</a> package called <a href="https://github.com/fs-mschmidty/mpsgSE/blob/main/R/get_taxonomies.R"><code>get_taxonomies()</code></a>. Essentially the function takes a table of species names or spatial data and classifies each species name returning full taxonomy and a taxon_id field added on to the table that was originally input. It takes one parameter which identifies the field with the scientific name.</p>
-</section>
-<section id="mpsgse-package" class="level3">
-<h3 class="anchored" data-anchor-id="mpsgse-package">mpsgSE package</h3>
-<!-- Write stuff and consider moving higher-->
-</section>
-</section>
-<section id="build-eligible-list" class="level2">
-<h2 class="anchored" data-anchor-id="build-eligible-list">Build Eligible List</h2>
-<section id="natureserve-state-list" class="level3">
-<h3 class="anchored" data-anchor-id="natureserve-state-list">NatureServe State List</h3>
-<p>The eligible list development begins with pulling all species in NatureServe for a given unit. To do this we begin by pulling all species for the state where a unit resides. In most cases one state pull is needed, but for units that reside in multiple states each state must be pulled and then the lists should be merged, eliminating duplicates.</p>
-<p>A pull for any given state does note determine eligibility for a unit list, instead it is the total number of species tracked by NatureServe for any given state. Species found on the state list must also be determined to occupy a given unit (determined to be Native and Known) and meet other qualifying criteria <span class="citation" data-cites="usdaforestserviceHandbook190912Land2015">(<a href="#ref-usdaforestserviceHandbook190912Land2015" role="doc-biblioref">USDA Forest Service 2015</a>)</span>.</p>
-<p>Data used from the NatureServe state pull to determine eligibility are:</p>
-<ol type="a">
-<li>Scientific Name</li>
-<li>NatureServe Global Rank (G/T Rank)</li>
-<li>State Rank for given state (S/T Rank)</li>
-<li>USFWS Status (Endangered, Threatened, Candidate, or Under Review)</li>
+<section id="species-evaluation-automation-process" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Species Evaluation Automation Process</h1>
+<p>Automation is recommended for this process for two primary reasons: 1) to maintain document content and format consistency, and 2) to reduce workload. Hundreds of Species Evaluations are required for any given planning unit. Automating repeatable steps produces consistent and repeatable documents, and decreases the workload of MPSG staff.</p>
+<p>Broadly there are three parts to automating:</p>
+<ol type="1">
+<li>Develop a list of species eligible for SCC.<br>
+</li>
+<li>Gather BASI for each eligible species to assess nativity and occurrence on the planing unit.<br>
+</li>
+<li>Automate species evaluation documents for species that are native and known to occur on the planning unit.</li>
 </ol>
-<p>A function was developed for this process for pulling data from any given state called <a href="https://github.com/fs-mschmidty/mpsgSE/blob/main/R/get_ns_state_list.R"><code>get_ns_state_list()</code></a>. It relies on the <a href="https://github.com/cran/natserv">natserve</a> <span class="citation" data-cites="chamberlainNatservNatureServeInterface2024">(<a href="#ref-chamberlainNatservNatureServeInterface2024" role="doc-biblioref">Chamberlain and Tracey 2024</a>)</span> package <code>ns_export</code> function. This could also be accomplished by querying the <a href="https://explorer.natureserve.org/api-docs/?gad_source=1&amp;gclid=CjwKCAiA34S7BhAtEiwACZzv4QJvuZl31unU2neO0rDSs3JlxTfPvisTwUBKEfuogoeqspagN02w0BoCPeAQAvD_BwE#_export">NatureServe API directly</a>. It takes one input, which is the state short code (ex: “CO” for Colorado) and returns the full list of track NatureServe species for that state.</p>
-<p>After the list is aquired <a href="https://github.com/fs-mschmidty/mpsgSE/blob/main/R/get_taxonomies.R">get_taxonomies</a> is use to get the taxon_id for each species for joining with other lists.</p>
+<section id="process-preface" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="process-preface"><span class="header-section-number">2.1</span> Process Preface</h2>
+<section id="the-use-of-r-programming-language" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="the-use-of-r-programming-language"><span class="header-section-number">2.1.1</span> The Use of R Programming Language</h3>
+<p>MPSG staff uses the R programming language <span class="citation" data-cites="rcoreteam2025a">(<a href="#ref-rcoreteam2025a" role="doc-biblioref">R Core Team 2025</a>)</span> to automate much of this work for repeatability and consistency across planning units. However, automation is not necessarily dependent on R. Many of these processes could be completed by other means. Coding languages, like R, allow MPSG staff to increase efficiency by developing code, or scripted tools, for repeated processes. R code and packages will be referenced in this document to explain the work accomplished.</p>
+<section id="r-packages" class="level4" data-number="2.1.1.1">
+<h4 data-number="2.1.1.1" class="anchored" data-anchor-id="r-packages"><span class="header-section-number">2.1.1.1</span> R Packages</h4>
+<p>R packages are …</p>
+<section id="sec-mpsgse" class="level5 paragraph" data-number="2.1.1.1.1">
+<h5 class="paragraph anchored" data-number="2.1.1.1.1" data-anchor-id="sec-mpsgse"><span class="header-section-number">2.1.1.1.1</span> The <code>mpsgSE</code> Package</h5>
+<p>MPSG staff have been developing the <a href="https://github.com/fs-scoyoc/mpsgSE">mpsgSE</a> R package <span class="citation" data-cites="vanscoyoc2026a">(<a href="#ref-vanscoyoc2026a" role="doc-biblioref">Van Scoyoc and Schmidt 2026</a>)</span> that includes R code functions that conduct steps in this workflow. This section describes key functions in the <code>mpsgSE</code> R package.</p>
+<section id="sec-get-taxonid" class="level6 paragraph" data-number="2.1.1.1.1.1">
+<h6 class="paragraph anchored" data-number="2.1.1.1.1.1" data-anchor-id="sec-get-taxonid"><span class="header-section-number">2.1.1.1.1.1</span> Resolving Taxonomies</h6>
+<p>The process for resolving taxonomy is codified in a function called <a href="https://github.com/fs-scoyoc/mpsgSE/blob/main/R/get_taxonomies.R"><code>get_taxonomies()</code></a>. This function takes a table or spatial occurrence data with species names and classifies each species name returning a taxon ID and full taxonomy added to the table that was originally provided to the function. It takes one parameter which identifies the field with the scientific name.</p>
 </section>
-<section id="unit-spatial-layers-and-other-unit-relevant-spatial-layers" class="level3">
-<h3 class="anchored" data-anchor-id="unit-spatial-layers-and-other-unit-relevant-spatial-layers">Unit Spatial Layers and Other Unit Relevant Spatial Layers</h3>
-<p>Spatial administrative boundary data (S_USA.AdministrativeForest) are acquired from the Forest Service Enterprise Data Warehouse (EDW). Forest or grassland boundaries are subseted using a Definition Query for that Forest Service unit in ArcGIS Pro <span class="citation" data-cites="esriincArcGISPro332024">(<a href="#ref-esriincArcGISPro332024" role="doc-biblioref">ESRI Inc 2024</a>)</span>. The administrative boundary is used to clip (Analysis Toolbox, ArcGIS Pro, ESRI Inc.&nbsp;2024) Forest Service owned lands, or Plan Area, from the EDW basic ownership data (S_USA.BasicOwnership). The administrative boundary and plan area data are exported to a geodatabse for use through out the plan revision process. One-kilometer buffers are created around the administrative boundary and the plan area using the Buffer tool (Analysis Toolbox, ArcGIS Pro, ESRI Inc.&nbsp;2024) to capture observations immediately adjacent to the plan area.</p>
+<section id="sec-ns-state-data" class="level6 paragraph" data-number="2.1.1.1.1.2">
+<h6 class="paragraph anchored" data-number="2.1.1.1.1.2" data-anchor-id="sec-ns-state-data"><span class="header-section-number">2.1.1.1.1.2</span> Pulling NatureServe State Data</h6>
+<p>The <a href="https://github.com/fs-scoyoc/mpsgSE/blob/main/R/get_ns_state_list.R"><code>get_ns_state_list()</code></a> function uses the <a href="https://github.com/cran/natserv">natserve</a> <span class="citation" data-cites="chamberlain2026">(<a href="#ref-chamberlain2026" role="doc-biblioref">Chamberlain and Tracey 2026</a>)</span> R package to pull NatureServe data for a given state. It takes one parameter, the state short code (ex: “CO” for Colorado), and returns the full list of tracked NatureServe species for that state. This function then uses <code>get_taxonomies()</code> to get the taxon ID for each species (see <a href="#sec-get-taxonid" class="quarto-xref">Section&nbsp;2.1.1.1.1.1</a>).</p>
 </section>
-<section id="get-occurrence-data" class="level3">
-<h3 class="anchored" data-anchor-id="get-occurrence-data">Get Occurrence Data</h3>
-<p>As state in the 2012 Planning Rule species must be known to occur in the planning area. To determine if species are known to occur, open source occurrence databases are quiried for species occurrences within the planning unit. While occurrence provide the first line of evidence for known to occur we also rely on people who work on the planning unit for additional information. <!-- Matt I think it would be best if you wrote this section. --> <!-- For now these lists are just the lists have occurrence numbers and not the actual spatial data! (see section below "Load Occurrence Spatial Data") --></p>
-<p>The following datasets are assigned a taxonomic ID using the <a href="https://github.com/fs-mschmidty/mpsgSE/blob/main/R/get_taxonomies.R"><code>mpsgSE::get_taxonomies()</code></a> function and summarized to the species, subspecies, or variety level.</p>
-<section id="global-biodiversity-information-facility" class="level4">
-<h4 class="anchored" data-anchor-id="global-biodiversity-information-facility">Global Biodiversity Information Facility</h4>
-<p>Global Biodiversity Information Facility (GBIF; Global Biodiversity Information Facility 2022a) is a repository of externally sourced species occurrence records from museum collections, academic studies, and citizen science programs.</p>
-<p>GBIF records requests are staged on GBIF servers and have to be downloaded (see <a href="https://docs.ropensci.org/rgbif/articles/getting_occurrence_data.html">Getting Occurrence Data From GBIF</a> for details).</p>
-<p>An R script submits a records request using the 1-km buffer around the administrative boundary to spatially query GBIF records.</p>
-<p>The data are downloaded in <a href="https://www.gbif.org/darwin-core">Darwin Core Archive format</a> (GBIF, 2022b) for full data provenance.</p>
-<p>The data are unzipped and read in to R once the request is available using the <code>rgbif</code> package (version 3.7.8, Chamberlain et al.&nbsp;2023).</p>
-</section>
-<section id="seinet" class="level4">
-<h4 class="anchored" data-anchor-id="seinet">SEINet</h4>
-<p><a href="https://swbiodiversity.org/seinet/index.php">SEINet</a> is a data portal that provides a suite of data access tools, including species occurrence data from museums, collections, and state and federal agencies. SEINet data are available through an online data portal and are downloaded manually. A polygon box, or well-known text (WKT) footprint, is drawn around the administrative boundary to query species observations using the Taxonomic Criteria search page (<a href="https://swbiodiversity.org/seinet/collections/harvestparams.php" class="uri">https://swbiodiversity.org/seinet/collections/harvestparams.php</a>). The query results are downloaded in Darwin Core Archive format, manually unzipped, and a script reads them into R.</p>
-</section>
-<section id="eo-state-data-nhp-data" class="level4">
-<h4 class="anchored" data-anchor-id="eo-state-data-nhp-data">EO State Data (NHP Data)</h4>
-<p>State Natural Heritage Programs (NHPs) provide species occurrence data, and habitat and distribution models for federal, state, and non-governmental agencies throughout their state. Element occurrence (EO) spatial data are requested from an HNP which are often provided in a geodatabase. The EO data are read to R using an R script.</p>
-</section>
-<section id="integrated-monitoring-in-bird-conservation-regions" class="level4">
-<h4 class="anchored" data-anchor-id="integrated-monitoring-in-bird-conservation-regions">Integrated Monitoring in Bird Conservation Regions</h4>
-<p>The <a href="https://www.birdconservancy.org/what-we-do/science/monitoring/imbcr-program/">Integrated Monitoring in Bird Conservation Regions (IMBCR)</a> is a long-term avian monitoring program coordinated by the <a href="https://www.birdconservancy.org/">Birds Conservancy of the Rockies</a>, and maintains monitoring plots on public lands throughout Forest Service Regions 1-4. IMBCR data spanning 2008-2023 were obtained for Forest Service lands on 12 December, 2023, for use in these analyses. These data were received in and Excel file and an script reads them into R.</p>
-<!-- I'm not currently pulling NABat data because the process is prohibitive to do so across the MPSG footprint. -->
-<ul>
-<li>Maybe why we don’t us Idigbio anymore</li>
-</ul>
-<p>The iDigBio Project (iDigBio 2023) is a repository of digitized vouchered natural history collections including the <a href="https://lichenportal.org/portal/">Consortium of Lichen Herbaria</a>, the <a href="https://bryophyteportal.org/portal/">Consortium of Bryophyte Herbaria</a>, and <a href="https://rmh.uwyo.edu/data/search.php">Rocky Mountain Herbarium</a>. iDigBio records are available through an API and can be accessed using the <code>spocc</code> package (version <code>r packageVersion('spocc')</code>, Owens and Chamberlain 2023). An R script submits a records request using the 1-km buffer around the administrative boundary to spatially query iDigBio records, which are read directly into R.</p>
-<!--
-Do we want to a include data limitations section?
--->
-</section>
-<section id="a-note-on-limitations-of-species-occurrence-data" class="level4">
-<h4 class="anchored" data-anchor-id="a-note-on-limitations-of-species-occurrence-data">A Note on Limitations of Species Occurrence Data</h4>
-</section>
-<section id="build-summary-occurrence-dataset" class="level4">
-<h4 class="anchored" data-anchor-id="build-summary-occurrence-dataset">Build Summary Occurrence Dataset</h4>
-<p>Once all occurrence records are retrieved, each dataset is summarized with the following fields per species(or taxon_id):</p>
-<ul>
-<li>_nObs - Total number of observations within the unit</li>
-<li>_minYear - Minimum year of any record</li>
-<li>_maxYear - Max year of any occurrence record</li>
-</ul>
+<section id="sec-unit-spatail-data" class="level6 paragraph" data-number="2.1.1.1.1.3">
+<h6 class="paragraph anchored" data-number="2.1.1.1.1.3" data-anchor-id="sec-unit-spatail-data"><span class="header-section-number">2.1.1.1.1.3</span> Reading Spatail Data into R</h6>
+<p>The <a href="https://github.com/fs-scoyoc/mpsgSE/blob/main/R/get_basemap_data.R"><code>get_basemap_data()</code></a> pulls spatial base map data for North and South America, the lower 48 US states, and a given planning unit. Continental and national scale data are acquired using the <a href="https://github.com/ropensci/rnaturalearth"><code>rnaturalearth</code></a> package <span class="citation" data-cites="massicotte2026b">(<a href="#ref-massicotte2026b" role="doc-biblioref">Massicotte and South 2026</a>)</span>. Forest Service boundary data are acquired from Forest Service ArcGIS Rest Services (<a href="https://apps.fs.usda.gov/arcx/rest/services/EDW" class="uri">https://apps.fs.usda.gov/arcx/rest/services/EDW</a>) using <a href="https://r.esri.com/arcgislayers/"><code>arcgislayers</code></a> package <span class="citation" data-cites="parry2025a">(<a href="#ref-parry2025a" role="doc-biblioref">Parry 2025</a>)</span>. Open Street Map roads data are acquired using the <a href="https://github.com/ropensci/osmdata"><code>osmdata</code></a> package <span class="citation" data-cites="padgham2017">(<a href="#ref-padgham2017" role="doc-biblioref">Padgham et al. 2017</a>)</span>.</p>
 </section>
 </section>
-<section id="get-qualifying-lists" class="level3">
-<h3 class="anchored" data-anchor-id="get-qualifying-lists">Get Qualifying Lists</h3>
+<section id="the-rgbif-package" class="level5" data-number="2.1.1.1.2">
+<h5 data-number="2.1.1.1.2" class="anchored" data-anchor-id="the-rgbif-package"><span class="header-section-number">2.1.1.1.2</span> The <code>rgbif</code> Package</h5>
+<p>The <code>rgbif</code> package <span class="citation" data-cites="chamberlain2026a">Chamberlain and Boettiger (<a href="#ref-chamberlain2017a" role="doc-biblioref">2017</a>)</span>.</p>
+</section>
+</section>
+</section>
+<section id="taxonomy" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="taxonomy"><span class="header-section-number">2.1.2</span> Taxonomy</h3>
+<p>This workflow would not be possible without first addressing taxonomic classification of species names. The classification of living organisms changes frequently, as further specimens and newer techniques change our understanding of the relationships among species and even change our understanding of the boundaries between distinct taxa. This workflow relies on dozens of external resources for information that include verbatim scientific names of varying vintage. Many of those resources have their own methods for resolving taxonomy. A single scientific name might refer to completely different sets of organisms in the different systems or a group of organisms may have different scientific names applied in another systems. This is problematic for automating species evaluations because this process relies heavily on reliably cross-referencing information by species. For example, for occurrence records we rely on SEINet, GBIF, and state natural history programs. It could be possible that for the grass blue grama (<em>Bouteloua gracilis</em>) one source uses <em>Bouteloua gracilis</em> and another uses a recognized synonym <em>Chondrosum gracile</em>. We need a way to recognize both names as the same species. In other words to make use of both sources, we needed a way to link the same species referred to by different names. It is important that it could be done using an algorithm because some data sets return hundreds of thousands of records for a planning unit. Manual resolution of taxonomic classification is not possible with large dataset like these, amplified by the scale that MPSG is assisting planning units embark on plan revision.</p>
+<p>A variety of resources were evaluated as potential solutions for taxonomic classification. Ultimately, we decided to use the <a href="https://github.com/ropensci/taxize">taxize</a> R package <span class="citation" data-cites="chamberlain2020">(<a href="#ref-chamberlain2020" role="doc-biblioref">Chamberlain et al. 2020</a>)</span> because is can accesses the GBIF Backbone Taxonomy <span class="citation" data-cites="gbifsecretariat">(<a href="#ref-gbifsecretariat" role="doc-biblioref">GBIF Secretariat, n.d.</a>)</span> and is easy to use. NatureServe, ITIS, and USDA plants were candidates for taxonomic classification systems. ITIS was routinely down and would fail when trying to resolve long lists of scientific names. NatureServe frequently returned incorrect scientific names and required user input for resolution of each species. USDA plants was also considered but there is not an API for name resolution and is not usable in an automated system. <!-- re-write: The GBIF Backbone Taxonomy was chosen because it is a comprehensive taxonomic list with over four million accepted names and three million synonyms that offers flexible and repeatable tools to programmatically validate taxonomies. The GBIF Backbone Taxonomy is based on 105 taxonomic checklists including but not limited to the Catalogue of Life, Integrated Taxonomic Information System, and the International Barcode of Life project. The GBIF Backbone Taxonomy reliably returned the correct scientific name without user input and could reliably be queried in a timely manner. --></p>
+<p>Often when a scientific name is searched in GBIF, the name that is returned does not match the name in the NatureServe database. Chapter 10 - Assessments of the Forest Service Land Management Planning Handbook <span class="citation" data-cites="usdaforestserviceForestServiceHandbook2015">(<a href="#ref-usdaforestserviceForestServiceHandbook2015" role="doc-biblioref">USDA Forest Service 2015</a>)</span> directs the use of NatureServe in species consideration lists. Therefore, scientific names provided by NatureServe are used for species evaluations. The taxonomic process that was developed is agnostic to scientific names. It instead relies on the a taxonomic identification number, or taxon ID, that is tied to accepted scientific names and associated known synonyms. The taxon ID is used to join the data when combining data sets, and not the scientific names. This process allows us to efficiently use data sets that use different scientific names for the same species.</p>
+<p>While the system works well, it is not perfect, and occasionally many scientific names recognized by NatureServe will resolve to the same species in the GBIF Backbone Taxonomy. In this case manual resolution of scientific names is necessary and species evaluations must be completed manually. This is necessary because without matching taxon IDs we have no way of telling if we are using the correct occurrence records or federal and state rankings. It may be possible to resolve this in the future with internal identification but for now these species much be manually completed.</p>
+</section>
+</section>
+<section id="building-the-eligible-species-list" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="building-the-eligible-species-list"><span class="header-section-number">2.2</span> Building the Eligible Species List</h2>
+<!-- use pipeline to guide narrative -->
+<section id="planning-unit-spatial-data" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="planning-unit-spatial-data"><span class="header-section-number">2.2.1</span> Planning Unit Spatial Data</h3>
+<p>Spatial data for the planning unit are read into R from the Forest Service ArcGIS REST Services (<a href="https://apps.fs.usda.gov/arcx/rest/services/EDW" class="uri">https://apps.fs.usda.gov/arcx/rest/services/EDW</a>). Administrative boundary data are acquired from <a href="https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_ForestSystemBoundaries_01/MapServer">Forest Systems Boundaries</a> layer. Forest or grassland administrative boundaries are filtered using the Forest Service Region code and Forest Number code. <a href="https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_BasicOwnership_01/MapServer">Basic ownership</a> data are acquired and filtered using Forest Service unit name. The basic ownership data are then filtered by Forest Service owned lands to delineate the planning area. Three-mile buffers around the administrative boundary is created using the <code>st_buffer()</code> function from the <a href="https://r-spatial.github.io/sf/index.html">sf</a> R package <span class="citation" data-cites="pebesma2018">Pebesma and Bivand (<a href="#ref-pebesma2023" role="doc-biblioref">2023</a>)</span> to delineate the area of analysis. One-kilometer buffers are created around the planning area boundary using the <code>st_buffer()</code> function to capture occurrence records immediately adjacent to the plan area.</p>
+</section>
+<section id="conservaiton-lists" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="conservaiton-lists"><span class="header-section-number">2.2.2</span> Conservaiton Lists</h3>
 <p>In addition to global and state ranks provided by NatureServe, four additional sources are needed to determine if any given species is eligible for SCC evaluation:</p>
 <ul>
-<li>State Ranks: State Threatened and Endangered, and State Wildlife Action Plan (SWAP) Tier 1 Lists</li>
-<li>Regional Sensitive Species Lists</li>
-<li>Neighboring Unit SCC lists</li>
+<li>State Ranks: State Threatened and Endangered, and State Wildlife Action Plan (SWAP) Tier 1 Lists<br>
+</li>
+<li>Regional Sensitive Species Lists<br>
+</li>
+<li>Neighboring Unit SCC lists<br>
+</li>
 <li>USFWS Status (see above in NatureServe)</li>
 </ul>
-<section id="state-ranks" class="level4">
-<h4 class="anchored" data-anchor-id="state-ranks">State Ranks</h4>
-<p>States have a variety of wildlife and plant conservation lists for imperiled species. These lists are typically developed by State Natural Resource or Natural Heritage organizations. Conservation lists, most commonly come in the form of State Wildlife Actions Plans, which make states eligible for federal conservation funding, and Threatened, Endangered and Sensitive Wildlife Lists. The MPSG interprets the that from these conservation lists species with Tier 1 and Species of Greatest Conservation Need (SGCN) rankings as well as Threatened and Endangered rankings are eligible for SCC species evaluations. Some state develop rankings that do not adhere to these ranking criteria and may need to be evaluated on a case by case bases. South Dakota for example has a three number ranking system (species were given 1,2 or 3 ranks). The MPSG, based on the description of the ranking criteria, determined that just those species ranked 1 would qualify for evaluations.</p>
+<section id="natureserve-state-list" class="level4" data-number="2.2.2.1">
+<h4 data-number="2.2.2.1" class="anchored" data-anchor-id="natureserve-state-list"><span class="header-section-number">2.2.2.1</span> NatureServe State List</h4>
+<p>The development of the eligible species list begins with pulling state species lists from NatureServe. These data include global and state conservation ranks and US Fish and Wildlife (USFWS) Endangered Species Act (ESA) status. To do this, we begin by pulling all species for the state where a unit resides (see <a href="#sec-ns-state-data" class="quarto-xref">Section&nbsp;2.1.1.1.1.2</a>). In most cases one state species list is needed. But for units that overlap multiple states, each state list must be pulled and then the lists are merged so that unique taxa and species names are preserved.</p>
+<p>A data pull for any given state does note determine eligibility for a unit list, instead it is the total number of species tracked by NatureServe for any given state. To be considered an eligible species, a species on a state list must also be found to occupy a given unit (see <a href="#sec-determine-nko" class="quarto-xref">Section&nbsp;2.2.5.1</a>) and meet other qualifying criteria as outlined in Chapter 10 of the Forest Service Land Management Handbook <span class="citation" data-cites="usdaforestserviceForestServiceHandbook2015">(<a href="#ref-usdaforestserviceForestServiceHandbook2015" role="doc-biblioref">USDA Forest Service 2015</a>)</span>.</p>
+<p>Data used to determine species eligibility from the NatureServe state data pull include:</p>
+<ol type="1">
+<li>Scientific Name,</li>
+<li>NatureServe Global Rank (G/T Rank),</li>
+<li>NatureServe State Rank (S/T Rank) for a given state, and</li>
+<li>USFWS ESA Status (Endangered, Threatened, Candidate, or Under Review).</li>
+</ol>
 </section>
-<section id="regional-sensitive-species-lists" class="level4">
-<h4 class="anchored" data-anchor-id="regional-sensitive-species-lists">Regional Sensitive Species Lists</h4>
+<section id="state-wildlife-action-plans-and-other-state-status" class="level4" data-number="2.2.2.2">
+<h4 data-number="2.2.2.2" class="anchored" data-anchor-id="state-wildlife-action-plans-and-other-state-status"><span class="header-section-number">2.2.2.2</span> State Wildlife Action Plans and Other State Status</h4>
+<p>States have a variety of wildlife and plant conservation lists for imperiled species. These lists are typically developed by State Natural Resource and Natural Heritage organizations. Conservation lists, most commonly come in the form of State Wildlife Actions Plans (SWAP) and state threatened, endangered and sensitive species lists. The MPSG considers species ranked as Tier 1 or Species of Greatest Conservation Need (SGCN), as well as threatened and endangered rankings, eligible for SCC. Some states ranking systems do not adhere to these criteria and may need to be evaluated on a case by case bases. South Dakota, for example, has a three number ranking system where species were given ranks of 1, 2, or 3 and determined that those species ranked 1 would qualify as eligible for SCC.</p>
+</section>
+<section id="usfws-birds-of-conservation-concern" class="level4" data-number="2.2.2.3">
+<h4 data-number="2.2.2.3" class="anchored" data-anchor-id="usfws-birds-of-conservation-concern"><span class="header-section-number">2.2.2.3</span> USFWS Birds of Conservation Concern</h4>
+</section>
+<section id="regional-foresters-sensitive-species-lists" class="level4" data-number="2.2.2.4">
+<h4 data-number="2.2.2.4" class="anchored" data-anchor-id="regional-foresters-sensitive-species-lists"><span class="header-section-number">2.2.2.4</span> Regional Forester’s Sensitive Species Lists</h4>
 <p>If a species is ranked as sensitive by the Regional Forester in the region where the planning unit resides that species is considered eligible for ranking if it is native and known to occur on the planning unit. These lists are acquired from Forest Service websites (i.e.&nbsp;<a href="https://www.fs.usda.gov/detail/r2/landmanagement/?cid=stelprdb5390116">Region 2 Sensitive Species List</a>)</p>
 </section>
-<section id="neighboring-unit-scc-lists" class="level4">
-<h4 class="anchored" data-anchor-id="neighboring-unit-scc-lists">Neighboring Unit SCC Lists</h4>
-<p>If SCC are developed for a neighboring Forests, they should be considered eligible for SCC if they are native and known on the unit. Current SCC lists can be found here on the Forest Service planning public site. Some region make them available grouped by region and others are available at the Forest Level. A few examples:</p>
+<section id="state-bureau-of-land-managment-sensitive-species-list" class="level4" data-number="2.2.2.5">
+<h4 data-number="2.2.2.5" class="anchored" data-anchor-id="state-bureau-of-land-managment-sensitive-species-list"><span class="header-section-number">2.2.2.5</span> State Bureau of Land Managment Sensitive Species List</h4>
+</section>
+<section id="neighboring-forest-service-unit-scc-lists" class="level4" data-number="2.2.2.6">
+<h4 data-number="2.2.2.6" class="anchored" data-anchor-id="neighboring-forest-service-unit-scc-lists"><span class="header-section-number">2.2.2.6</span> Neighboring Forest Service Unit SCC Lists</h4>
+<p>If SCC are developed for a neighboring Forests, they should be considered eligible for SCC if they are native and known on the planning unit. Current SCC lists can be found on the Forest Service planning public site. Some region make them available grouped by region and others are available at the Forest Level. A few examples:</p>
 <ul>
-<li>Region 1 - <a href="https://www.fs.usda.gov/detail/r1/landmanagement/planning/?cid=fseprd500402">https://www.fs.usda.gov/detail/r1/landmanagement/planning/?cid=fseprd500402</a></li>
-<li>Region 2, GMUG NF- <a href="https://www.fs.usda.gov/detail/carson/landmanagement/planning/?cid=stelprdb5443166">https://www.fs.usda.gov/detail/carson/landmanagement/planning/?cid=stelprdb5443166</a>.</li>
-<li>Region 4, Manti La Sal NF - <a href="https://www.fs.usda.gov/main/mantilasal/landmanagement/planning">https://www.fs.usda.gov/main/mantilasal/landmanagement/planning</a></li>
+<li>Region 1 - <a href="https://www.fs.usda.gov/detail/r1/landmanagement/planning/?cid=fseprd500402" class="uri">https://www.fs.usda.gov/detail/r1/landmanagement/planning/?cid=fseprd500402</a></li>
+<li>Region 2, GMUG NF- <a href="https://www.fs.usda.gov/detail/carson/landmanagement/planning/?cid=stelprdb5443166" class="uri">https://www.fs.usda.gov/detail/carson/landmanagement/planning/?cid=stelprdb5443166</a>.</li>
+<li>Region 4, Manti La Sal NF - <a href="https://www.fs.usda.gov/main/mantilasal/landmanagement/planning" class="uri">https://www.fs.usda.gov/main/mantilasal/landmanagement/planning</a></li>
 </ul>
 </section>
-<section id="usfws-lists" class="level4">
-<h4 class="anchored" data-anchor-id="usfws-lists">USFWS Lists</h4>
-<p>The USFWS, rankings are retrieved from Nature Serve. Species that have been delisted within the last 5 years or have had a positive 90 day finding and are under review for listing are eligible.</p>
-</section>
-<section id="a-note-about-tribal-species-of-concern" class="level4">
-<h4 class="anchored" data-anchor-id="a-note-about-tribal-species-of-concern">A Note About Tribal Species of Concern</h4>
-<p>The MPSG is still developing procedures to incorporate species recognized by “federally recognized Tribes”. Those species will be included in the future.</p>
-</section>
-<section id="data-cleaning-and-incorporation" class="level4">
-<h4 class="anchored" data-anchor-id="data-cleaning-and-incorporation">Data Cleaning and Incorporation</h4>
-<p>Most commonly these lists come in PDF form but can also come in csv or Excel formats. They typically require extensive cleaning and/or conversion from their original format. To aid in the parsing of these lists the MPSG has developed standardized variables for each species based on multiple ranks. These values are as follows:</p>
-<ul>
-<li><code>status_area</code>: the area the ranking applies to (i.e.&nbsp;Colorado, North Dakota, United States)</li>
-<li><code>status_type</code>: the type of ranking (i.e.&nbsp;SWAP, State T and E, or Sensitive Species)</li>
-<li><code>status_autority</code>: who made the conservation ranking (i.e.&nbsp;USFWS, USFS, CPW, etc. )</li>
-<li><code>status_all</code>: the entire ranking with type and agency (i.e.&nbsp;USFS R2 Sensitive Species, Colorado Threatened, Colorado SWAP Tier 1, etc.)</li>
-<li><code>status_simple</code>: just the ranking itself (i.e.&nbsp;Tier 1, Sensitive Species, Threatened, etc)</li>
-</ul>
-<p>The current list can be found at the <a href="https://github.com/fs-mschmidty/mpsgSE/blob/main/R/conservation_lists.R">mpsgSE package</a>.</p>
-</section>
-</section>
-<section id="make-preliminary-eligible-list" class="level3">
-<h3 class="anchored" data-anchor-id="make-preliminary-eligible-list">Make Preliminary Eligible List</h3>
-<p>Making the preliminary eligible lists consists of combining all of the lists we have listed above. These steps are as follows.</p>
-<ul>
-<li>To the NatureServe State List, which already includes global, state and USFWS ranks, full_join (so that if species is not on one list it does not get dropped) by taxon_id:
-<ul>
-<li>State SWAP Lists</li>
+<section id="building-the-master-conservation-list" class="level4" data-number="2.2.2.7">
+<h4 data-number="2.2.2.7" class="anchored" data-anchor-id="building-the-master-conservation-list"><span class="header-section-number">2.2.2.7</span> Building the Master Conservation List</h4>
+<p>A master conservation list is constructed by combining all of the conservation data we have described above. , full_join (so that if species is not on one list it does not get dropped) by taxon ID. The data sets used are listed below:</p>
+<ol type="1">
+<li>To the NatureServe State List, which includes global (G/T), state (S/T) ranks, and USFWS ESA status,</li>
+<li>SWAP and other state status lists,</li>
 <li>State T and E list</li>
-<li>Regional Foresters List</li>
-<li>Neighboring SCC lists</li>
-</ul></li>
-<li>Then to create all potential species eligible filter the list by:
+<li>Regional Foresters Sensitive Species Lists</li>
+<li>Neighboring Forest Service Unit’s SCC lists</li>
+</ol>
+<!-- -->
+<ol start="2" type="1">
+<li>Then to create all potential species eligible filter the list by:</li>
+</ol>
 <ul>
 <li>G/T 1,2 or 3 Ranks.</li>
 <li>Any S/T 1 or 2 Ranks.</li>
 <li>State SWAP Tier 1 Ranks</li>
 <li>State T and E Ranks</li>
 <li>Regional Foresters Sensitive Species Lists</li>
-<li>Neighboring Regional SCC Designation</li>
-</ul></li>
+<li>Neighboring Forest Service Unit’s SCC lists</li>
+</ul>
+</section>
+<section id="a-note-about-tribal-species-of-concern" class="level4" data-number="2.2.2.8">
+<h4 data-number="2.2.2.8" class="anchored" data-anchor-id="a-note-about-tribal-species-of-concern"><span class="header-section-number">2.2.2.8</span> A Note About Tribal Species of Concern</h4>
+<p>The MPSG is still developing procedures to incorporate species recognized by “federally recognized Tribes”. Those species will be included in the future.</p>
+</section>
+</section>
+<section id="occurrence-data" class="level3" data-number="2.2.3">
+<h3 data-number="2.2.3" class="anchored" data-anchor-id="occurrence-data"><span class="header-section-number">2.2.3</span> Occurrence Data</h3>
+<p>As stated in the 2012 Planning Rule species must be native and known to occur in the planning area. To determine if species are known to occur, open source occurrence databases are queried for species occurrences records on the planning unit. While occurrence records provide the first line of evidence for known to occur we also rely on people who work on the planning unit for additional information. The following datasets are assigned a taxonomic ID using the <a href="https://github.com/fs-scoyoc/mpsgSE/blob/main/R/get_taxonomies.R"><code>mpsgSE::get_taxonomies()</code></a> function and summarized to the species, subspecies, or variety taxa levels.</p>
+<section id="global-biodiversity-information-facility" class="level4" data-number="2.2.3.1">
+<h4 data-number="2.2.3.1" class="anchored" data-anchor-id="global-biodiversity-information-facility"><span class="header-section-number">2.2.3.1</span> Global Biodiversity Information Facility</h4>
+<p>Global Biodiversity Information Facility (GBIF; Global Biodiversity Information Facility 2022a) is a repository of externally sourced species occurrence records from museum collections, academic studies, and citizen science programs. GBIF records requests are staged on GBIF servers and have to be downloaded (see <a href="https://docs.ropensci.org/rgbif/articles/getting_occurrence_data.html">Getting Occurrence Data From GBIF</a> for details). An R script submits a records request using the 1-km buffer around the planning area boundary to spatially query GBIF records. The data are downloaded in <a href="https://www.gbif.org/darwin-core">Darwin Core Archive format</a> (GBIF, 2022b) for full data provenance. The data are unzipped and read in to R once the request is available using the <code>rgbif</code> package (version 3.7.8, Chamberlain et al.&nbsp;2023).</p>
+</section>
+<section id="seinet" class="level4" data-number="2.2.3.2">
+<h4 data-number="2.2.3.2" class="anchored" data-anchor-id="seinet"><span class="header-section-number">2.2.3.2</span> SEINet</h4>
+<p><a href="https://swbiodiversity.org/seinet/index.php">SEINet</a> is a data portal that provides a suite of data access tools, including species occurrence data from museums, collections, and state and federal agencies. SEINet data are available through an online data portal and are downloaded manually. A polygon box, or well-known text (WKT) footprint, is drawn around the administrative boundary to query species observations using the Taxonomic Criteria search page (<a href="https://swbiodiversity.org/seinet/collections/harvestparams.php" class="uri">https://swbiodiversity.org/seinet/collections/harvestparams.php</a>). The query results are downloaded in Darwin Core Archive format, manually unzipped, and a script reads them into R.</p>
+</section>
+<section id="integrated-monitoring-in-bird-conservation-regions" class="level4" data-number="2.2.3.3">
+<h4 data-number="2.2.3.3" class="anchored" data-anchor-id="integrated-monitoring-in-bird-conservation-regions"><span class="header-section-number">2.2.3.3</span> Integrated Monitoring in Bird Conservation Regions</h4>
+<p>The <a href="https://www.birdconservancy.org/what-we-do/science/monitoring/imbcr-program/">Integrated Monitoring in Bird Conservation Regions (IMBCR)</a> is a long-term avian monitoring program coordinated by the <a href="https://www.birdconservancy.org/">Birds Conservancy of the Rockies</a>, and maintains monitoring plots on public lands throughout Forest Service Regions 1-4. IMBCR data spanning 2008-2023 were obtained for Forest Service lands on 12 December, 2023, for use in these analyses. These data were received in and Excel file and an script reads them into R.</p>
+</section>
+<section id="eo-state-data-nhp-data" class="level4" data-number="2.2.3.4">
+<h4 data-number="2.2.3.4" class="anchored" data-anchor-id="eo-state-data-nhp-data"><span class="header-section-number">2.2.3.4</span> EO State Data (NHP Data)</h4>
+<p>State Natural Heritage Programs (NHPs) provide species occurrence data, and habitat and distribution models for federal, state, and non-governmental agencies throughout their state. Element occurrence (EO) spatial data are requested from an HNP which are often provided in a geodatabase. The EO data are read to R using an R script.</p>
+</section>
+<section id="forest-service-data" class="level4" data-number="2.2.3.5">
+<h4 data-number="2.2.3.5" class="anchored" data-anchor-id="forest-service-data"><span class="header-section-number">2.2.3.5</span> Forest Service Data</h4>
+<p>Wildlife, aquatic biota, rare plant, and invasive plant data from the Forest EDW. These data were clipped to the 1-km buffer of the plan area using ArcGIS Pro (version 3.3.1; Environmental Systems Research Institute 2024) and a script reads them into R.</p>
+</section>
+<section id="a-note-on-limitations-of-species-occurrence-data" class="level4" data-number="2.2.3.6">
+<h4 data-number="2.2.3.6" class="anchored" data-anchor-id="a-note-on-limitations-of-species-occurrence-data"><span class="header-section-number">2.2.3.6</span> A Note on Limitations of Species Occurrence Data</h4>
+<!-- from data acquisition report
+
+### Occurrence Data {#sec-occurrence_data}
+
+These are occurrence, or presence-only, data and can document the presence of species in an area of interest. Probable or possible presence is not quantified, and most importantly, these data cannot determine the absence or abundance of a species. Lack of species observations is not evidence of absence: a lack of observation may be because the species is rare in that area, or because no one ever looked for it there. Similarly, the number of occurrence records is not an indicator of abundance. For example, showy flowering plants or rare birds will trigger many more occurrence records relative to their abundance than “less interesting” or common species. Lastly, the source external species occurrence datasets often lack information on collection level of effort and on species absences which is essential for estimating abundance.
+
+### Spatial Accuracy {#sec-spatial_accuracy}
+
+Species occurrence locations are not validated and may include coordinate data of varying and undocumented precision or accuracy. The occurrence records from this data pull have geographic location coordinates in longitude and latitude and may include country and state codes and location descriptors. Each observation may include an estimate of the location uncertainty, which may range from a few meters to several kilometers or may be missing. Any use of the occurrence locations should consider the location uncertainty and/or precision noted for each observation. Recent observations may be generated using GPS technology, while coordinates in older observations may have been read from a map, and very old observations usually include only verbal descriptions of the observation location. Some of the verbal descriptions may be “geo-referenced” using current maps and historic location names. Also, some source datasets may have the location coordinates deliberately fuzzed to protect the location of sensitive species.
+
+### Duplicate Records {#sec-duplicate_records}
+
+Some museums and natural history institutions share their data with state heritage programs, GBIF, and SEINet; therefore, we can assume that some observations are duplicated. These analyses do not attempt to reduce duplicated records. Instead, these analyses assemble a comprehensive list of species known to occur on the forest or grassland. It is not appropriate to use these data to estimate populations (see section 2.6.1).
+
+-->
+</section>
+<section id="build-summary-occurrence-dataset" class="level4" data-number="2.2.3.7">
+<h4 data-number="2.2.3.7" class="anchored" data-anchor-id="build-summary-occurrence-dataset"><span class="header-section-number">2.2.3.7</span> Build Summary Occurrence Dataset</h4>
+<p>Once all occurrence records are retrieved, each dataset is summarized by taxon ID with the following fields:</p>
+<ul>
+<li>“nObs”: Total number of observations on Forest Service land.</li>
+<li>“minYear”: Minimum year of observations on Forest Service land.</li>
+<li>“maxYear”: Maximum year of observations on Forest Service land.</li>
+<li>“occID”: A list of occurrence record identification codes if the total number of observations is less than or equal to six.</li>
+</ul>
+</section>
+</section>
+<section id="build-preliminary-eligible-scc-list" class="level3" data-number="2.2.4">
+<h3 data-number="2.2.4" class="anchored" data-anchor-id="build-preliminary-eligible-scc-list"><span class="header-section-number">2.2.4</span> Build Preliminary Eligible SCC List</h3>
+<ol start="3" type="1">
 <li>Join all occurrence lists to all potential species eligible filtered list</li>
 <li>Filter by those species that have one occurrence record in the planning unit.</li>
-</ul>
+</ol>
 <p>The result is a list of species with at least one occurrence record inside the planning area the meats at least one qualifying criteria for consideration as SCC. This list is preliminary because we recognize that his process does not perfectly capture all species that should be considered for SCC and that user input and manual vetting of the list could lead to the addition or subtraction of species.</p>
 </section>
-<section id="manually-check-and-automated-checks-accidental-transients-native-and-known-and-local-concern-to-produce-final-scc-eligible-list" class="level3">
-<h3 class="anchored" data-anchor-id="manually-check-and-automated-checks-accidental-transients-native-and-known-and-local-concern-to-produce-final-scc-eligible-list">Manually Check and Automated Checks: Accidental Transients, Native and Known, and Local Concern, to Produce Final SCC Eligible List</h3>
+<section id="evaluate-preliminary-eligible-scc-list" class="level3" data-number="2.2.5">
+<h3 data-number="2.2.5" class="anchored" data-anchor-id="evaluate-preliminary-eligible-scc-list"><span class="header-section-number">2.2.5</span> Evaluate Preliminary Eligible SCC List</h3>
 <!-- I think we should add into this process the Units local concern species -->
-<!-- One thing I'm unclear on is if this step leads to shorter evaluations or no evaluation at all.  -->
-<section id="transient-bird-list" class="level4">
-<h4 class="anchored" data-anchor-id="transient-bird-list">Transient Bird List</h4>
+<!-- One thing I'm unclear on is if this step leads to shorter evaluations or no evaluation at all. -->
+<section id="sec-determine-nko" class="level4 paragraph" data-number="2.2.5.1">
+<h4 class="paragraph anchored" data-number="2.2.5.1" data-anchor-id="sec-determine-nko"><span class="header-section-number">2.2.5.1</span> Determine Native and Known to Occur</h4>
+</section>
+<section id="transient-bird-list" class="level4" data-number="2.2.5.2">
+<h4 data-number="2.2.5.2" class="anchored" data-anchor-id="transient-bird-list"><span class="header-section-number">2.2.5.2</span> Transient Bird List</h4>
 <p>Per the 2012 planning rule only species that are native to a planning area and not transients or accidental are required to be considered for species evaluation for SCC consideration. As such species must be checked to determine if they are indeed native and not occurring accidentally or due to migration. For many groups of species we can assume that if they are detected and if they have a state ranking or some other ranking that they are likely not accidental nor transients on the plan area. However for migratory birds, some verification should be performed to remove birds that are accidental or transient, including those with detection during migration.</p>
 <p>Birds must overwinter or breed within a planning unit to not be considered accidental or transient. To verify that species that are on the initial species list winter or breed on the planning unit we use species distribution modeling provided by the Cornell Lab of Ornothology, through analysis of ebird data <span class="citation" data-cites="finkEBirdStatusTrends2023">(<a href="#ref-finkEBirdStatusTrends2023" role="doc-biblioref">Fink et al. 2023</a>)</span>. Species distribution models are provided through the <a href="https://doi.org/10.2173/ebirdst.2022">ebirdst</a> R package. Several datasets are available, for our analysis we relied on the 27k resolution “Smooth Range” (“range_smooth”) dataset. The dataset provides a variety of polygon spatial layers for each species queried that contain a season attribute that can be used to determine if the species should occur in the planning unit during: breeding, non breeding, pre breeding migration, and post breeding migration or if it occurs year round a single layer representing the resident range. The layers useful to us are those that are breeding, non breeding and resident.</p>
 <p>To run the check, each of the native layers (breeding, non breeding or resident) are clipped to the unit boundary. Each range is returned with a TRUE for the range type for that species. So for example if a American goshawks breeding range overlaps overlaps the planning unit goshawk is returned with a true. If any of the non-transient ranges overlaps the planning unit then the variable should_remain_eligible is returned as TRUE. If non of the non-transient ranges overlaps the planning unit then the variable is returned false. These automated checks can be manually verified by an individual if necessary.</p>
 <p>This product is stored and read into to inform the final eligible list. Those species with non-transient ranges are kept while those with no resident ranges are removed.</p>
 </section>
-<section id="filter-those-species-that-need-native-and-known-checks" class="level4">
-<h4 class="anchored" data-anchor-id="filter-those-species-that-need-native-and-known-checks">Filter those species that need native and known checks</h4>
+<section id="filter-those-species-that-need-native-and-known-checks" class="level4" data-number="2.2.5.3">
+<h4 data-number="2.2.5.3" class="anchored" data-anchor-id="filter-those-species-that-need-native-and-known-checks"><span class="header-section-number">2.2.5.3</span> Filter those species that need native and known checks</h4>
 <p>For species with with occurrence records on the unit that could be eligible it must be verified that they are native and known to occur on the planning unit. For many species, there are dozens of records on the planning unit. In these cases we assume that they are native an known to occur on the planning unit (unless they are a bird species that migrates over the area, for instance, and is removed in the previous step). For species with very few occurrence records or with records that are very old we manually check to verify that the occurrence records completely occur on the unit or that that least one record is less than 40 years old.</p>
 <p>These checks are run manually. To provide specialists a list of potential checks that need to be conducted we output a spreadsheet with species that have less than 6 occurrence records on the unit or were recorded more than 40 years ago.</p>
 <p>Native and known determinations are made and recorded for each species with the following categories with the options:</p>
@@ -286,18 +334,18 @@ Do we want to a include data limitations section?
 </ul>
 <p>The checker also writes notes on their determination under “<em>What is the rationale and supporting BASI for recommending that an observation does not meet the requirements of native to, and known to occur in the plan area?</em>”. Species that are not not Native an Known will remain on the list be will get short species evaluations that only include taxonomic information, eligibility ranking information and a section noting that they are not native and known and why.</p>
 </section>
-<section id="species-with-uncertain-taxonomic-determinations" class="level4">
-<h4 class="anchored" data-anchor-id="species-with-uncertain-taxonomic-determinations">Species with uncertain taxonomic determinations</h4>
+<section id="species-with-uncertain-taxonomic-determinations" class="level4" data-number="2.2.5.4">
+<h4 data-number="2.2.5.4" class="anchored" data-anchor-id="species-with-uncertain-taxonomic-determinations"><span class="header-section-number">2.2.5.4</span> Species with uncertain taxonomic determinations</h4>
 <p>Multiple species may be taxonomically identified as the same species with <code>get_taxonomies()</code>. Because we cannot determine the taxonomic status programatically, we cannot join them to occurrence lists or status lists. Therefore they must be manually vetted. Additionally, for those species with ambiguous taxonomy we cannot produce automated evaluations.</p>
-<p>An example of a species or group of species with ambiguous taxonomic status is the eastern woodrat (<em>Neotoma floridana”). Natureserve recognizes three subspecies of eastern woodrat: </em>Neotoma floridana attwateri<em>, </em>Neotoma floridana baileyi<em>, and </em>Neotoma floridana campestris<em>. Neither GBIF nor ITIS recognize any of these subspecies but they both recognize the speices </em>Neotoma floridana*. Because we use the scientific name, varieity or subspecies that NatureServe recognizes, we must recognize all three of these subspecies. However, if we were to link other qualifying lists and occurrence records with the taxon_id provided by GBIF we would use the same ID for occurrence records of all three subspecies and the species. Additionally, if we have no automated way to link the species or subspecies together there is no way to build an automated report as all steps are automated by referencing the <code>taxon_id</code>.</p>
+<p>An example of a species or group of species with ambiguous taxonomic status is the eastern woodrat (<em>Neotoma floridana</em>). Natureserve recognizes three subspecies of eastern woodrat: <em>Neotoma floridana attwateri</em>, <em>Neotoma floridana baileyi</em>, and <em>Neotoma floridana campestris</em>. Neither GBIF nor ITIS recognize any of these subspecies but they both recognize the speices <em>Neotoma floridana</em>. Because we use the scientific name, varieity or subspecies that NatureServe recognizes, we must recognize all three of these subspecies. However, if we were to link other qualifying lists and occurrence records with the taxon_id provided by GBIF we would use the same ID for occurrence records of all three subspecies and the species. Additionally, if we have no automated way to link the species or subspecies together there is no way to build an automated report as all steps are automated by referencing the <code>taxon_id</code>.</p>
 </section>
-<section id="add-in-species-with-local-concern" class="level4">
-<h4 class="anchored" data-anchor-id="add-in-species-with-local-concern">Add in Species with Local Concern</h4>
+<section id="add-in-species-with-local-concern" class="level4" data-number="2.2.5.5">
+<h4 data-number="2.2.5.5" class="anchored" data-anchor-id="add-in-species-with-local-concern"><span class="header-section-number">2.2.5.5</span> Add in Species with Local Concern</h4>
 <p>Unit specialists may have species that they are locally concerned about. Species with local concern are eligible for SCC evaluation if they are native and known to occur on the unit. These species should be added to the eligible list prior to running any further steps. As with every other species species taxonomies should be acquired using the get_taxonomies() function.</p>
 <p>One unfortunate part of this step is that it requires that some steps above be rerun. Species do not need any of the rankings above to be considered for this step but all steps should be run to get the status of each local concern species. These steps can rely on the same functionality as those above, but they should be appended prior to running any automated reporting steps.</p>
 </section>
-<section id="use-user-feedback-to-refine-list" class="level4">
-<h4 class="anchored" data-anchor-id="use-user-feedback-to-refine-list">Use user feedback to refine list</h4>
+<section id="use-user-feedback-to-refine-list" class="level4" data-number="2.2.5.6">
+<h4 data-number="2.2.5.6" class="anchored" data-anchor-id="use-user-feedback-to-refine-list"><span class="header-section-number">2.2.5.6</span> Use user feedback to refine list</h4>
 <p>Based on manual checks remove species that are:</p>
 <ul>
 <li>Determined to not be native and known to occur within the unit.</li>
@@ -307,26 +355,26 @@ Do we want to a include data limitations section?
 </section>
 </section>
 </section>
-<section id="retrieve-external-data-for-automating-reports" class="level2">
-<h2 class="anchored" data-anchor-id="retrieve-external-data-for-automating-reports">Retrieve External Data for Automating Reports</h2>
-<section id="get-synonyms" class="level3">
-<h3 class="anchored" data-anchor-id="get-synonyms">Get Synonyms</h3>
+<section id="retrieve-external-data-for-automating-reports" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="retrieve-external-data-for-automating-reports"><span class="header-section-number">2.3</span> Retrieve External Data for Automating Reports</h2>
+<section id="get-synonyms" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="get-synonyms"><span class="header-section-number">2.3.1</span> Get Synonyms</h3>
 <p>For each species we retrieve all recognized synonyms from GBIF for any given taxon_id. We use the function <code>mpsgSO::get_synonyms()</code> to query the GBIF Taxonomic Backbone for synonyms. The function takes a vector of taxon_ids and returns a table with all synonmyms associated with each taxon_id. The function relies on the function <code>rbgif::name_usage(..., data="synonyms")</code>. This dataset is a stand alone table.</p>
 </section>
-<section id="get-data-for-making-automated-maps" class="level3">
-<h3 class="anchored" data-anchor-id="get-data-for-making-automated-maps">Get Data for Making Automated Maps</h3>
-<section id="subset-occurrence-spatial-data-to-include-on-unit-and-eligible-species" class="level4">
-<h4 class="anchored" data-anchor-id="subset-occurrence-spatial-data-to-include-on-unit-and-eligible-species">Subset Occurrence Spatial Data to Include on Unit and Eligible Species</h4>
+<section id="get-data-for-making-automated-maps" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="get-data-for-making-automated-maps"><span class="header-section-number">2.3.2</span> Get Data for Making Automated Maps</h3>
+<section id="subset-occurrence-spatial-data-to-include-on-unit-and-eligible-species" class="level4" data-number="2.3.2.1">
+<h4 data-number="2.3.2.1" class="anchored" data-anchor-id="subset-occurrence-spatial-data-to-include-on-unit-and-eligible-species"><span class="header-section-number">2.3.2.1</span> Subset Occurrence Spatial Data to Include on Unit and Eligible Species</h4>
 <p>Occurrence datasets are typically quite large. So that they can more efficiently be loaded into automated reports it is helpful to take the eligible list and subset it to just those species that are on the eligible list and those records that occur on the unit. This step simply filters any given list to those species on the eligible list and then clips the occurrence records to the unit. At the moment it returns a list of two objects, one with all eligible and one with all eligible on the unit identified as <code>eligible</code> and <code>eligible_unit</code>.</p>
 </section>
-<section id="load-species-distribution-models" class="level4">
-<h4 class="anchored" data-anchor-id="load-species-distribution-models">Load Species Distribution Models</h4>
+<section id="load-species-distribution-models" class="level4" data-number="2.3.2.2">
+<h4 data-number="2.3.2.2" class="anchored" data-anchor-id="load-species-distribution-models"><span class="header-section-number">2.3.2.2</span> Load Species Distribution Models</h4>
 <p>Species distribution models are needed to understand the context of a species range to any given planning units location. We use a variety of sources of species distribution models to get this information.</p>
-<section id="iucn" class="level5">
-<h5 class="anchored" data-anchor-id="iucn">IUCN</h5>
+<section id="iucn" class="level5" data-number="2.3.2.2.1">
+<h5 data-number="2.3.2.2.1" class="anchored" data-anchor-id="iucn"><span class="header-section-number">2.3.2.2.1</span> IUCN</h5>
 <p>The IUCN provides a variety of species distribution maps for a variety of groups. These maps must be downloaded as shapefiles and then queried for species by taxonomic group (i.e Mammals, Amphibians, Fish, etc). At the moment we use IUCN for all Taxa groups except Birds and Plants. Of all the data sources used for species distribution maps, this is the least efficient source. At the moment, the steps for using these data are:</p>
 <ul>
-<li>download the data for each taxa group from the IUCN data website <a href="https://www.iucnredlist.org/resources/spatial-data-download">https://www.iucnredlist.org/resources/spatial-data-download</a></li>
+<li>download the data for each taxa group from the IUCN data website <a href="https://www.iucnredlist.org/resources/spatial-data-download" class="uri">https://www.iucnredlist.org/resources/spatial-data-download</a></li>
 <li>then get the taxonomies off all species in the shapefile with <code>mpsgSE::get_taxonomies()</code>.</li>
 <li>filter the shapefile converted to a table by the species on the eligible lists comparing the taxon_id from each source. We complete this step because filtering a shapefile takes a lot longer (we may want to revise this step).</li>
 <li>return a list of species with available maps from that data source.</li>
@@ -337,63 +385,88 @@ Do we want to a include data limitations section?
 </ul>
 </section>
 </section>
-<section id="get-other-base-map-information" class="level4">
-<h4 class="anchored" data-anchor-id="get-other-base-map-information">Get Other Base Map Information</h4>
+<section id="get-other-base-map-information" class="level4" data-number="2.3.2.3">
+<h4 data-number="2.3.2.3" class="anchored" data-anchor-id="get-other-base-map-information"><span class="header-section-number">2.3.2.3</span> Get Other Base Map Information</h4>
 <ul>
 <li>State Boundaries</li>
 <li>United States - lower 48</li>
 <li>North America</li>
 <li>The Americas (North and South America)</li>
-<li>Get Open Street Map Highways (“highway”)
-<ul>
+<li>Get Open Street Map Highways (“highway”)</li>
 <li>motorway</li>
 <li>trunk</li>
 <li>primary</li>
-</ul></li>
 <li>Clean Unit Names</li>
 </ul>
 </section>
-<section id="get-natureserve-habitats-from-the-natureserve-api-and-manually-crosswalk-to-ecology" class="level4">
-<h4 class="anchored" data-anchor-id="get-natureserve-habitats-from-the-natureserve-api-and-manually-crosswalk-to-ecology">Get NatureServe Habitats From the NatureServe API and Manually Crosswalk to Ecology</h4>
+<section id="get-natureserve-habitats-from-the-natureserve-api-and-manually-crosswalk-to-ecology" class="level4" data-number="2.3.2.4">
+<h4 data-number="2.3.2.4" class="anchored" data-anchor-id="get-natureserve-habitats-from-the-natureserve-api-and-manually-crosswalk-to-ecology"><span class="header-section-number">2.3.2.4</span> Get NatureServe Habitats From the NatureServe API and Manually Crosswalk to Ecology</h4>
 </section>
-<section id="retrieve-clean-and-build-narratives-for-imbcr-trend-information" class="level4">
-<h4 class="anchored" data-anchor-id="retrieve-clean-and-build-narratives-for-imbcr-trend-information">Retrieve, Clean, and Build Narratives for IMBCR Trend Information</h4>
+<section id="retrieve-clean-and-build-narratives-for-imbcr-trend-information" class="level4" data-number="2.3.2.5">
+<h4 data-number="2.3.2.5" class="anchored" data-anchor-id="retrieve-clean-and-build-narratives-for-imbcr-trend-information"><span class="header-section-number">2.3.2.5</span> Retrieve, Clean, and Build Narratives for IMBCR Trend Information</h4>
 </section>
-<section id="retrieve-clean-and-build-narratives-for-breeding-bird-survey" class="level4">
-<h4 class="anchored" data-anchor-id="retrieve-clean-and-build-narratives-for-breeding-bird-survey">Retrieve, Clean, and Build Narratives for Breeding Bird Survey</h4>
-</section>
-</section>
-</section>
-<section id="automate-reports" class="level2">
-<h2 class="anchored" data-anchor-id="automate-reports">Automate Reports</h2>
-<!-- Look at the qmd and write out each section.  (Maybe should wait until we finish revamping the reports) -->
+<section id="retrieve-clean-and-build-narratives-for-breeding-bird-survey" class="level4" data-number="2.3.2.6">
+<h4 data-number="2.3.2.6" class="anchored" data-anchor-id="retrieve-clean-and-build-narratives-for-breeding-bird-survey"><span class="header-section-number">2.3.2.6</span> Retrieve, Clean, and Build Narratives for Breeding Bird Survey</h4>
 </section>
 </section>
-<section id="references" class="level1 unnumbered">
-
-
 </section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-chamberlainNatservNatureServeInterface2024" class="csl-entry" role="listitem">
-Chamberlain, Scott, and Christopher Tracey. 2024. <span>“Natserv: ’NatureServe’ Interface.”</span> <a href="https://docs.ropensci.org/natserv/">https://docs.ropensci.org/natserv/</a>.
+<section id="automate-reports" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="automate-reports"><span class="header-section-number">2.4</span> Automate Reports</h2>
+<!-- Look at the qmd and write out each section. (Maybe should wait until we finish revamping the reports) -->
+</section>
+</section>
+<section id="references" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-chamberlain2026a" class="csl-entry" role="listitem">
+Chamberlain, Scott, Vijay Barve, Dan Mcglinn, Damiano Oldoni, Peter Desmet, Laurens Geffert, and Karthik Ram. 2026. <em>Rgbif: Interface to the Global Biodiversity Information Facility API</em>. <a href="https://CRAN.R-project.org/package=rgbif">https://CRAN.R-project.org/package=rgbif</a>.
 </div>
-<div id="ref-esriincArcGISPro332024" class="csl-entry" role="listitem">
-ESRI Inc. 2024. <span>“ArcGIS Pro 3.3.”</span>
+<div id="ref-chamberlain2017a" class="csl-entry" role="listitem">
+Chamberlain, Scott, and Carl Boettiger. 2017. <span>“R Python, and Ruby Clients for GBIF Species Occurrence Data.”</span> <em>PeerJ PrePrints</em>. <a href="https://doi.org/10.7287/peerj.preprints.3304v1">https://doi.org/10.7287/peerj.preprints.3304v1</a>.
+</div>
+<div id="ref-chamberlain2020" class="csl-entry" role="listitem">
+Chamberlain, Scott, Eduard Szoecs, Zachary Foster, Zebulun Arendsee, Carl Boettiger, Karthik Ram, Ignasi Bartomeus, et al. 2020. <em>Taxize: Taxonomic Information from Around the Web</em>. <a href="https://github.com/ropensci/taxize">https://github.com/ropensci/taxize</a>.
+</div>
+<div id="ref-chamberlain2026" class="csl-entry" role="listitem">
+Chamberlain, Scott, and Christopher Tracey. 2026. <em>Natserv: ’NatureServe’ Interface</em>. <a href="https://docs.ropensci.org/natserv/">https://docs.ropensci.org/natserv/</a>.
 </div>
 <div id="ref-finkEBirdStatusTrends2023" class="csl-entry" role="listitem">
 Fink, D, T Auer, A Johnston, M Strimas-Mackey, S Ligocki, O Robinson, W Hochachka, et al. 2023. <span>“eBird Status and Trends.”</span> <a href="https://doi.org/10.2173/ebirdst.2022">https://doi.org/10.2173/ebirdst.2022</a>.
 </div>
-<div id="ref-rcoreteamLanguageEnvironmentStatistical2023" class="csl-entry" role="listitem">
-R Core Team. 2023. <span>“R: A Language and Environment for Statistical Computing.”</span> <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
+<div id="ref-gbifsecretariat" class="csl-entry" role="listitem">
+GBIF Secretariat. n.d. <span>“GBIF Backbone Taxonomy.”</span> https://doi.org/<a href="https://doi.org/10.15468/39omei">https://doi.org/10.15468/39omei</a>.
 </div>
-<div id="ref-scottchamberlainTaxizeTaxonomicInformation2020" class="csl-entry" role="listitem">
-Scott Chamberlain, Zachary Foster, Zebulun Arendsee, Eduard Szoecs, Carl Boettiger, Karthik Ram, Ignasi Bartomeus, et al. 2020. <span>“Taxize: Taxonomic Information from Around the Web.”</span> <a href="https://github.com/ropensci/taxize">https://github.com/ropensci/taxize</a>.
+<div id="ref-massicotte2026b" class="csl-entry" role="listitem">
+Massicotte, Philippe, and Andy South. 2026. <em>Rnaturalearth: World Map Data from Natural Earth</em>. <a href="https://doi.org/10.32614/CRAN.package.rnaturalearth">https://doi.org/10.32614/CRAN.package.rnaturalearth</a>.
 </div>
-<div id="ref-usdaforestserviceHandbook190912Land2015" class="csl-entry" role="listitem">
-USDA Forest Service. 2015. <span>“Handbook 1909.12. Land Management Planning Handbook. Chapter 10 - the Assessments.”</span>
+<div id="ref-padgham2017" class="csl-entry" role="listitem">
+Padgham, Mark, Bob Rudis, Robin Lovelace, and Maëlle Salmon. 2017. <span>“Osmdata.”</span> <em>Journal of Open Source Software</em> 2 (14): 305. <a href="https://doi.org/10.21105/joss.00305">https://doi.org/10.21105/joss.00305</a>.
 </div>
-</div></section></div></main>
+<div id="ref-parry2025a" class="csl-entry" role="listitem">
+Parry, Josiah. 2025. <em>Arcgislayers: Harness ArcGIS Data Services</em>. <a href="https://doi.org/10.32614/CRAN.package.arcgislayers">https://doi.org/10.32614/CRAN.package.arcgislayers</a>.
+</div>
+<div id="ref-pebesma2018" class="csl-entry" role="listitem">
+Pebesma, Edzer. 2018. <span>“Simple Features for r: Standardized Support for Spatial Vector Data.”</span> <em>The R Journal</em> 10 (1): 439446. <a href="https://doi.org/10.32614/RJ-2018-009">https://doi.org/10.32614/RJ-2018-009</a>.
+</div>
+<div id="ref-pebesma2023" class="csl-entry" role="listitem">
+Pebesma, Edzer, and Roger Bivand. 2023. <em>Spatial Data Science: With Applications in r</em>. Chapman; Hall/CRC. <a href="https://doi.org/10.1201/9780429459016">https://doi.org/10.1201/9780429459016</a>.
+</div>
+<div id="ref-rcoreteam2025a" class="csl-entry" role="listitem">
+R Core Team. 2025. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
+</div>
+<div id="ref-usdaforestserviceForestServiceHandbook2015" class="csl-entry" role="listitem">
+USDA Forest Service. 2015. <span>“Forest Service Handbook 1909.12. Land Management Planning Handbook. Chapter 10 - Assessments,”</span> January.
+</div>
+<div id="ref-usdaforestservice2026" class="csl-entry" role="listitem">
+———. 2026. <span>“Draft Species of Conservation Concern Identification Process.”</span>
+</div>
+<div id="ref-vanscoyoc2026a" class="csl-entry" role="listitem">
+Van Scoyoc, Matthew, and Mike Schmidt. 2026. <em>mpsgSE: Functions for Creating Species Evalutaions for the Mountain Planning Service Group</em>. Fort Collins, CO, USA: USDA Forest Service. <a href="https://github.com/fs-scoyoc/mpsgSE">https://github.com/fs-scoyoc/mpsgSE</a>.
+</div>
+</div>
+</section>
+
+</main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -501,6 +574,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         if (link.dataset.originalHref !== undefined) {
           link.href = link.dataset.originalHref;
         }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
       }
     }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
