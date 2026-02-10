@@ -3,7 +3,7 @@
 \docType{data}
 \name{bcc_list}
 \alias{bcc_list}
-\title{2024 US Fish & Wildlife Birds of Conservation Concern List}
+\title{2024 US Fish & Wildlife Service Birds of Conservation Concern List}
 \format{
 A data frame of 333 observations and 17 variables.
 \describe{
@@ -33,6 +33,6 @@ https://www.fws.gov/media/usfws-bird-species-concern
 bcc_list
 }
 \description{
-2024 US Fish & Wildlife Birds of Conservation Concern List
+2024 US Fish & Wildlife Service Birds of Conservation Concern List
 }
 \keyword{datasets}

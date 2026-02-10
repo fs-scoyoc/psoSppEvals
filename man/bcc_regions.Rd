@@ -3,7 +3,7 @@
 \docType{data}
 \name{bcc_regions}
 \alias{bcc_regions}
-\title{North American Bird Conservation Initiative Birds Conservation Regions}
+\title{North American Bird Conservation Initiative Bird Conservation Regions}
 \format{
 An \code{sf} object (polygon) of 4414 observations and 9 variables.
 \describe{
@@ -25,6 +25,6 @@ https://www.birdscanada.org/bird-science/nabci-bird-conservation-regions
 bcc_regions
 }
 \description{
-North American Bird Conservation Initiative Birds Conservation Regions
+North American Bird Conservation Initiative Bird Conservation Regions
 }
 \keyword{datasets}

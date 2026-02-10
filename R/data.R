@@ -1,4 +1,4 @@
-#' 2024 US Fish & Wildlife Birds of Conservation Concern List
+#' 2024 US Fish & Wildlife Service Birds of Conservation Concern List
 #'
 #' @format A data frame of 333 observations and 17 variables.
 #' \describe{
@@ -24,7 +24,7 @@
 "bcc_list"
 
 
-#' North American Bird Conservation Initiative Birds Conservation Regions
+#' North American Bird Conservation Initiative Bird Conservation Regions
 #'
 #' @format An `sf` object (polygon) of 4414 observations and 9 variables.
 #' \describe{

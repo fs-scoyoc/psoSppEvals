@@ -4,7 +4,7 @@
 #'
 #' @param spp_list A data frame with taxon ID's from `get_taxonomies()`.
 #' @param query_field Field holding scientific names
-#' @param scientific_names Optional. TRUE/FALSE. Update query field scientific 
+#' @param update_scientific_names Optional. TRUE/FALSE. Update query field scientific 
 #'     names with corrected scientific names. Default is FALSE.
 #'
 #' @returns A [tibble::tibble()] with corrected taxon ID's and scientific names.
@@ -34,7 +34,7 @@
 #'    dplyr::distinct()
 #'  correct_taxon_ids(spp_list)
 correct_taxon_ids <- function(spp_list, query_field = "scientific_name", 
-                              scientific_names = FALSE){
+                              update_scientific_names = FALSE){
   # Read corrected names data frame
   dat = mpsgSE::name_corrections
 
@@ -45,7 +45,7 @@ correct_taxon_ids <- function(spp_list, query_field = "scientific_name",
   # Correct taxon ID's
   spp_list$taxon_id[!is.na(mat_nam)] = dat$taxon_id[mat_nam[!is.na(mat_nam)]]
   
-  if(scientific_names){
+  if(update_scientific_names){
     # Correct scientific names
     cor_sci_names = spp_list_sci_names
     cor_sci_names[!is.na(mat_nam)] = dat$corrected_name[mat_nam[!is.na(mat_nam)]]

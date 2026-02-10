@@ -7,7 +7,7 @@
 correct_taxon_ids(
   spp_list,
   query_field = "scientific_name",
-  scientific_names = FALSE
+  update_scientific_names = FALSE
 )
 }
 \arguments{
@@ -15,7 +15,7 @@ correct_taxon_ids(
 
 \item{query_field}{Field holding scientific names}
 
-\item{scientific_names}{Optional. TRUE/FALSE. Update query field scientific
+\item{update_scientific_names}{Optional. TRUE/FALSE. Update query field scientific
 names with corrected scientific names. Default is FALSE.}
 }
 \value{
