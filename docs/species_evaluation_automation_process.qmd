@@ -3,14 +3,14 @@ title: "Species Evaluation Automation Process"
 author: "Matthew Van Scoyoc"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 format:
- html:
-     theme: cosmo
-     toc: true
-     toc-title: Contents
-     toc-depth: 2
-     toc-location: left
-     number-sections: true
-     link-external-newwindow: true
+ # html:
+ #     theme: cosmo
+ #     toc: true
+ #     toc-title: Contents
+ #     toc-depth: 3
+ #     toc-location: left
+ #     number-sections: true
+ #     link-external-newwindow: true
  # md: default
  # pdf:
  #     documentclass: report
@@ -19,20 +19,20 @@ format:
  #     monofont: Calibri
  #     toc: true
  #     toc-title: Contents
- #     toc-depth: 2
+ #     toc-depth: 3
  #     number-sections: true
  #     colorlinks: true
- # docx:
- #     reference-doc: 'style_reference.docx'
- #     mainfont: Arial
- #     monofont: Calibri
- #     toc: true
- #     toc-title: Contents
- #     toc-depth: 2
- #     number-sections: true
+ docx:
+     reference-doc: 'style_reference.docx'
+     mainfont: Arial
+     monofont: Calibri
+     toc: true
+     toc-title: Contents
+     toc-depth: 3
+     number-sections: true
 bibliography: references.bib
 execute:
- echo: true
+ echo: false
  message: false
  warning: false
  class-output: 'r'
@@ -48,8 +48,8 @@ Automation is recommended for this process for two primary reasons: 1) to mainta
 
 Broadly there are three parts to automating:
 
-1.  Develop a list of species eligible for SCC.\
-2.  Gather BASI for each eligible species to assess nativity and occurrence on the planing unit.\
+1.  Develop a list of species eligible for SCC.
+2.  Gather BASI for each eligible species to assess nativity and occurrence on the planing unit.
 3.  Automate species evaluation documents for species that are native and known to occur on the planning unit.
 
 ## Process Preface
@@ -114,7 +114,7 @@ In some cases, spatial data for administrative boundaries, basic ownership, plan
 
 Chapter 10 - Assessments of the Forest Service Land Management Planning Handbook [@usdaforestserviceForestServiceHandbook2015b] directs the use of NatureServe in species consideration lists. Therefore, scientific names provided by NatureServe are used for species evaluations. The following data are used to construct a master conservation list for the planning unit to help determine species eligibility for SCC:
 
--   NatureServe data including Global (G-ranks) and State ranks (S-ranks) and US Fish and Wildife Service (USFWS) Endangered Species Act (ESA) Status,
+-   NatureServe data,
 -   Forest Service Regional Forester's Sensitive Species Lists,
 -   USFWS Birds of Conservation Concern List,
 -   State Wildlife Action Plans (SWAP),
@@ -126,7 +126,7 @@ Chapter 10 - Assessments of the Forest Service Land Management Planning Handbook
 
 The development of the eligible species list begins with pulling state species lists from NatureServe. These data include, species scientific and common names, global and state conservation ranks and USFWS ESA status. To do this, we begin by pulling all species for the state where a unit resides (see [The mpsgSE Package, Pulling NatureServe State Data](@sec-ns-state-data)). In most cases one state species list is needed. But for units that overlap multiple states, each state list must be pulled and then the lists are merged so that unique taxa and species names are preserved.
 
-A data pull for any given state does note determine species eligibility for SCC. Instead it is the total number of species tracked by NatureServe for a given state. To be considered eligible for SCC, a species on a state list must also be found to occupy a given unit (see [Determine Native and Known to Occur](@sec-determine-nko)) and meet the qualifying criteria listed below and outlined in Chapter 10 of the Forest Service Land Management Handbook \[@usdaforestserviceForestServiceHandbook2015\].
+A data pull for any given state does note determine species eligibility for SCC. Instead it is the total number of species tracked by NatureServe for a given state. To be considered eligible for SCC, a species on a state list must also be found to occupy a given unit (see [Determine Native and Known to Occur](@sec-determine-nko)) and meet the qualifying criteria listed below and outlined in Chapter 10 of the Forest Service Land Management Handbook [@usdaforestserviceForestServiceHandbook2015].
 
 Data used from the NatureServe state data pull include:
 
@@ -139,7 +139,7 @@ Data used from the NatureServe state data pull include:
 
 ```{r}
 rfs_path <- file.path('data-raw/data', '2025_National_RFSS_list.xlsx')
-rfs_date <- file.info(bcc_path)$mtime |> as.Date() |> format('%d %B, %Y')
+rfs_date <- file.info(rfs_path)$mtime |> as.Date() |> format('%d %B, %Y')
 if(is.na(rfs_date)) rfs_date <- "12 January 2026"
 ```
 
@@ -173,20 +173,20 @@ If SCC are developed for a neighboring Forests, they should be considered eligib
 
 #### Building the Master Conservation List
 
-A master conservation list is constructed by combining all of the conservation data we have described above using the taxon ID.These data sets are combined using a "full-join" procedure so that species are not dropped from the list during the process. Eligibility in the master conservation list is determined if a species is:
+A master conservation list is constructed by combining all of the conservation data we have described above using the taxon ID. Forest Service Land Management Planning Handbook, Chapter 10 - Assessments directs the use of NatureServe in species consideration lists. Therefore, scientific names provided by NatureServe are used for species evaluations. The subsequent data sets are combined using a "full-join" procedure so that species are not dropped from the list during the process. Eligibility in the master conservation list is determined if a species is:
 
--   G/T 1,2 or 3 ranks,
--   Any S/T 1 or 2 ranks,
--   is on the Regional Foresters Sensitive Species List,
--   is on the USFWS Birds of Conservation Concern list,
--   State SWAP Tier 1 or SGCN ranks,
--   State Threatened or Endangered status,
--   if applicable, is on the State BLM Sensitive Species List, and
+-   NatureServe global (G/T) rank 1,2 or 3, or
+-   NatureServe state (S/T) rank 1 or 2, or
+-   is on the Regional Foresters Sensitive Species List, or
+-   is on the USFWS Birds of Conservation Concern list, or
+-   state SWAP Tier 1 or SGCN ranks, or
+-   has a state Threatened or Endangered status, or
+-   if applicable, is on the State BLM Sensitive Species List, or
 -   if applicable, is on the neighboring Forest Service Unit's SCC lists.
 
 #### A Note About Tribal Species of Concern
 
-The MPSG is still developing procedures to incorporate species recognized by "federally recognized Tribes". Those species will be included in the future.
+The MPSG is still developing procedures to incorporate species recognized by federally recognized Tribes. Those species will be included in the future.
 
 ### Occurrence Data
 
@@ -232,7 +232,7 @@ Some museums and natural history institutions share their data with state herita
 -->
 ```
 
-#### Build Summary Occurrence Dataset
+#### Summarize Species Occurrence Data
 
 Once all occurrence records are retrieved, each dataset is summarized by taxon ID with the following fields:
 

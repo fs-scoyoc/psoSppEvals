@@ -15,6 +15,7 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
+    arcgisbinding,
     arcgislayers,
     BIEN,
     devtools, 
@@ -27,6 +28,7 @@ Imports:
     lubridate,
     natserv,
     osmdata,
+    purrr,
     readr,
     readxl,
     remotes,
@@ -40,6 +42,7 @@ Imports:
     tibble,
     tidyr,
     tidyselect, 
+    units,
     writexl
 Depends: 
     R (>= 4.1.0)

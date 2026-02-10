@@ -6,7 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2024-12-05">
+<meta name="author" content="Matthew Van Scoyoc">
+<meta name="dcterms.date" content="2026-02-10">
 
 <title>Species Evaluation Automation Process</title>
 <style>
@@ -91,11 +92,17 @@ div.csl-indent {
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Matthew Van Scoyoc </p>
+          </div>
+  </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 5, 2024</p>
+      <p class="date">February 10, 2026</p>
     </div>
   </div>
   
@@ -116,10 +123,8 @@ div.csl-indent {
 <p>Automation is recommended for this process for two primary reasons: 1) to maintain document content and format consistency, and 2) to reduce workload. Hundreds of Species Evaluations are required for any given planning unit. Automating repeatable steps produces consistent and repeatable documents, and decreases the workload of MPSG staff.</p>
 <p>Broadly there are three parts to automating:</p>
 <ol type="1">
-<li>Develop a list of species eligible for SCC.<br>
-</li>
-<li>Gather BASI for each eligible species to assess nativity and occurrence on the planing unit.<br>
-</li>
+<li>Develop a list of species eligible for SCC.</li>
+<li>Gather BASI for each eligible species to assess nativity and occurrence on the planing unit.</li>
 <li>Automate species evaluation documents for species that are native and known to occur on the planning unit.</li>
 </ol>
 <section id="process-preface" class="level2" data-number="2.1">
@@ -129,35 +134,40 @@ div.csl-indent {
 <p>MPSG staff uses the R programming language <span class="citation" data-cites="rcoreteam2025a">(<a href="#ref-rcoreteam2025a" role="doc-biblioref">R Core Team 2025</a>)</span> to automate much of this work for repeatability and consistency across planning units. However, automation is not necessarily dependent on R. Many of these processes could be completed by other means. Coding languages, like R, allow MPSG staff to increase efficiency by developing code, or scripted tools, for repeated processes. R code and packages will be referenced in this document to explain the work accomplished.</p>
 <section id="r-packages" class="level4" data-number="2.1.1.1">
 <h4 data-number="2.1.1.1" class="anchored" data-anchor-id="r-packages"><span class="header-section-number">2.1.1.1</span> R Packages</h4>
-<p>R packages are …</p>
-<section id="sec-mpsgse" class="level5 paragraph" data-number="2.1.1.1.1">
-<h5 class="paragraph anchored" data-number="2.1.1.1.1" data-anchor-id="sec-mpsgse"><span class="header-section-number">2.1.1.1.1</span> The <code>mpsgSE</code> Package</h5>
+<p>R packages are … <!-- finish paragraph --></p>
+<section id="sec-mpsgse" class="level5" data-number="2.1.1.1.1">
+<h5 data-number="2.1.1.1.1" class="anchored" data-anchor-id="sec-mpsgse"><span class="header-section-number">2.1.1.1.1</span> The <code>mpsgSE</code> Package</h5>
 <p>MPSG staff have been developing the <a href="https://github.com/fs-scoyoc/mpsgSE">mpsgSE</a> R package <span class="citation" data-cites="vanscoyoc2026a">(<a href="#ref-vanscoyoc2026a" role="doc-biblioref">Van Scoyoc and Schmidt 2026</a>)</span> that includes R code functions that conduct steps in this workflow. This section describes key functions in the <code>mpsgSE</code> R package.</p>
-<section id="sec-get-taxonid" class="level6 paragraph" data-number="2.1.1.1.1.1">
-<h6 class="paragraph anchored" data-number="2.1.1.1.1.1" data-anchor-id="sec-get-taxonid"><span class="header-section-number">2.1.1.1.1.1</span> Resolving Taxonomies</h6>
-<p>The process for resolving taxonomy is codified in a function called <a href="https://github.com/fs-scoyoc/mpsgSE/blob/main/R/get_taxonomies.R"><code>get_taxonomies()</code></a>. This function takes a table or spatial occurrence data with species names and classifies each species name returning a taxon ID and full taxonomy added to the table that was originally provided to the function. It takes one parameter which identifies the field with the scientific name.</p>
+<section id="sec-get-taxonid" class="level6" data-number="2.1.1.1.1.1">
+<h6 data-number="2.1.1.1.1.1" class="anchored" data-anchor-id="sec-get-taxonid"><span class="header-section-number">2.1.1.1.1.1</span> Resolving Taxonomies</h6>
+<p>The <a href="https://github.com/fs-scoyoc/mpsgSE/blob/main/R/get_taxonomies.R"><code>get_taxonomies()</code></a> function takes tabular or spatial data with scientific names and returns the data with a taxon ID and full taxonomy added to the origial data provided to the function. It takes one parameter that identifies the variable with the scientific name.</p>
 </section>
-<section id="sec-ns-state-data" class="level6 paragraph" data-number="2.1.1.1.1.2">
-<h6 class="paragraph anchored" data-number="2.1.1.1.1.2" data-anchor-id="sec-ns-state-data"><span class="header-section-number">2.1.1.1.1.2</span> Pulling NatureServe State Data</h6>
-<p>The <a href="https://github.com/fs-scoyoc/mpsgSE/blob/main/R/get_ns_state_list.R"><code>get_ns_state_list()</code></a> function uses the <a href="https://github.com/cran/natserv">natserve</a> <span class="citation" data-cites="chamberlain2026">(<a href="#ref-chamberlain2026" role="doc-biblioref">Chamberlain and Tracey 2026</a>)</span> R package to pull NatureServe data for a given state. It takes one parameter, the state short code (ex: “CO” for Colorado), and returns the full list of tracked NatureServe species for that state. This function then uses <code>get_taxonomies()</code> to get the taxon ID for each species (see <a href="#sec-get-taxonid" class="quarto-xref">Section&nbsp;2.1.1.1.1.1</a>).</p>
+<section id="sec-ns-state-data" class="level6" data-number="2.1.1.1.1.2">
+<h6 data-number="2.1.1.1.1.2" class="anchored" data-anchor-id="sec-ns-state-data"><span class="header-section-number">2.1.1.1.1.2</span> Pulling NatureServe State Data</h6>
+<p>The <a href="https://github.com/fs-scoyoc/mpsgSE/blob/main/R/get_ns_state_list.R"><code>get_ns_state_list()</code></a> function uses the <a href="https://github.com/cran/natserv">natserve</a> R package <span class="citation" data-cites="chamberlain2026">(<a href="#ref-chamberlain2026" role="doc-biblioref">Chamberlain and Tracey 2026</a>)</span> to pull data from the NatureServe API for a given state. It takes one parameter, the two-character state short code (e.g., “CO” for Colorado) and returns the full list of tracked NatureServe species for that state. This function then uses <code>get_taxonomies()</code> to get taxon IDs for each species.</p>
 </section>
-<section id="sec-unit-spatail-data" class="level6 paragraph" data-number="2.1.1.1.1.3">
-<h6 class="paragraph anchored" data-number="2.1.1.1.1.3" data-anchor-id="sec-unit-spatail-data"><span class="header-section-number">2.1.1.1.1.3</span> Reading Spatail Data into R</h6>
-<p>The <a href="https://github.com/fs-scoyoc/mpsgSE/blob/main/R/get_basemap_data.R"><code>get_basemap_data()</code></a> pulls spatial base map data for North and South America, the lower 48 US states, and a given planning unit. Continental and national scale data are acquired using the <a href="https://github.com/ropensci/rnaturalearth"><code>rnaturalearth</code></a> package <span class="citation" data-cites="massicotte2026b">(<a href="#ref-massicotte2026b" role="doc-biblioref">Massicotte and South 2026</a>)</span>. Forest Service boundary data are acquired from Forest Service ArcGIS Rest Services (<a href="https://apps.fs.usda.gov/arcx/rest/services/EDW" class="uri">https://apps.fs.usda.gov/arcx/rest/services/EDW</a>) using <a href="https://r.esri.com/arcgislayers/"><code>arcgislayers</code></a> package <span class="citation" data-cites="parry2025a">(<a href="#ref-parry2025a" role="doc-biblioref">Parry 2025</a>)</span>. Open Street Map roads data are acquired using the <a href="https://github.com/ropensci/osmdata"><code>osmdata</code></a> package <span class="citation" data-cites="padgham2017">(<a href="#ref-padgham2017" role="doc-biblioref">Padgham et al. 2017</a>)</span>.</p>
+<section id="sec-unit-spatail-data" class="level6" data-number="2.1.1.1.1.3">
+<h6 data-number="2.1.1.1.1.3" class="anchored" data-anchor-id="sec-unit-spatail-data"><span class="header-section-number">2.1.1.1.1.3</span> Reading Spatial Data into R</h6>
+<p>The <a href="https://github.com/fs-scoyoc/mpsgSE/blob/main/R/get_basemap_data.R"><code>get_basemap_data()</code></a> function pulls base map data for North and South America, the lower 48 US states, and a given planning unit. Continental and national scale data are acquired using the <a href="https://github.com/ropensci/rnaturalearth"><code>rnaturalearth</code></a> package <span class="citation" data-cites="massicotte2026b">(<a href="#ref-massicotte2026b" role="doc-biblioref">Massicotte and South 2026</a>)</span>. Forest Service boundary data are acquired from Forest Service ArcGIS Rest Services (<a href="https://apps.fs.usda.gov/arcx/rest/services/EDW" class="uri">https://apps.fs.usda.gov/arcx/rest/services/EDW</a>) using <a href="https://r.esri.com/arcgislayers/"><code>arcgislayers</code></a> package <span class="citation" data-cites="parry2025a">(<a href="#ref-parry2025a" role="doc-biblioref">Parry 2025</a>)</span>. Open Street Map roads data are acquired using the <a href="https://github.com/ropensci/osmdata"><code>osmdata</code></a> package <span class="citation" data-cites="padgham2017">(<a href="#ref-padgham2017" role="doc-biblioref">Padgham et al. 2017</a>)</span>.</p>
 </section>
-</section>
-<section id="the-rgbif-package" class="level5" data-number="2.1.1.1.2">
-<h5 data-number="2.1.1.1.2" class="anchored" data-anchor-id="the-rgbif-package"><span class="header-section-number">2.1.1.1.2</span> The <code>rgbif</code> Package</h5>
-<p>The <code>rgbif</code> package <span class="citation" data-cites="chamberlain2026a">Chamberlain and Boettiger (<a href="#ref-chamberlain2017a" role="doc-biblioref">2017</a>)</span>.</p>
-</section>
+<section id="sec-usfws-bcc-list" class="level6" data-number="2.1.1.1.1.4">
+<h6 data-number="2.1.1.1.1.4" class="anchored" data-anchor-id="sec-usfws-bcc-list"><span class="header-section-number">2.1.1.1.1.4</span> USFWS Birds of Conservation Concern List</h6>
+<p>This function returns a data frame of bird species that occur in the Birds of Conservation Regions a National Forest or Grassland overlaps.</p>
 </section>
 </section>
-<section id="taxonomy" class="level3" data-number="2.1.2">
-<h3 data-number="2.1.2" class="anchored" data-anchor-id="taxonomy"><span class="header-section-number">2.1.2</span> Taxonomy</h3>
-<p>This workflow would not be possible without first addressing taxonomic classification of species names. The classification of living organisms changes frequently, as further specimens and newer techniques change our understanding of the relationships among species and even change our understanding of the boundaries between distinct taxa. This workflow relies on dozens of external resources for information that include verbatim scientific names of varying vintage. Many of those resources have their own methods for resolving taxonomy. A single scientific name might refer to completely different sets of organisms in the different systems or a group of organisms may have different scientific names applied in another systems. This is problematic for automating species evaluations because this process relies heavily on reliably cross-referencing information by species. For example, for occurrence records we rely on SEINet, GBIF, and state natural history programs. It could be possible that for the grass blue grama (<em>Bouteloua gracilis</em>) one source uses <em>Bouteloua gracilis</em> and another uses a recognized synonym <em>Chondrosum gracile</em>. We need a way to recognize both names as the same species. In other words to make use of both sources, we needed a way to link the same species referred to by different names. It is important that it could be done using an algorithm because some data sets return hundreds of thousands of records for a planning unit. Manual resolution of taxonomic classification is not possible with large dataset like these, amplified by the scale that MPSG is assisting planning units embark on plan revision.</p>
-<p>A variety of resources were evaluated as potential solutions for taxonomic classification. Ultimately, we decided to use the <a href="https://github.com/ropensci/taxize">taxize</a> R package <span class="citation" data-cites="chamberlain2020">(<a href="#ref-chamberlain2020" role="doc-biblioref">Chamberlain et al. 2020</a>)</span> because is can accesses the GBIF Backbone Taxonomy <span class="citation" data-cites="gbifsecretariat">(<a href="#ref-gbifsecretariat" role="doc-biblioref">GBIF Secretariat, n.d.</a>)</span> and is easy to use. NatureServe, ITIS, and USDA plants were candidates for taxonomic classification systems. ITIS was routinely down and would fail when trying to resolve long lists of scientific names. NatureServe frequently returned incorrect scientific names and required user input for resolution of each species. USDA plants was also considered but there is not an API for name resolution and is not usable in an automated system. <!-- re-write: The GBIF Backbone Taxonomy was chosen because it is a comprehensive taxonomic list with over four million accepted names and three million synonyms that offers flexible and repeatable tools to programmatically validate taxonomies. The GBIF Backbone Taxonomy is based on 105 taxonomic checklists including but not limited to the Catalogue of Life, Integrated Taxonomic Information System, and the International Barcode of Life project. The GBIF Backbone Taxonomy reliably returned the correct scientific name without user input and could reliably be queried in a timely manner. --></p>
-<p>Often when a scientific name is searched in GBIF, the name that is returned does not match the name in the NatureServe database. Chapter 10 - Assessments of the Forest Service Land Management Planning Handbook <span class="citation" data-cites="usdaforestserviceForestServiceHandbook2015">(<a href="#ref-usdaforestserviceForestServiceHandbook2015" role="doc-biblioref">USDA Forest Service 2015</a>)</span> directs the use of NatureServe in species consideration lists. Therefore, scientific names provided by NatureServe are used for species evaluations. The taxonomic process that was developed is agnostic to scientific names. It instead relies on the a taxonomic identification number, or taxon ID, that is tied to accepted scientific names and associated known synonyms. The taxon ID is used to join the data when combining data sets, and not the scientific names. This process allows us to efficiently use data sets that use different scientific names for the same species.</p>
-<p>While the system works well, it is not perfect, and occasionally many scientific names recognized by NatureServe will resolve to the same species in the GBIF Backbone Taxonomy. In this case manual resolution of scientific names is necessary and species evaluations must be completed manually. This is necessary because without matching taxon IDs we have no way of telling if we are using the correct occurrence records or federal and state rankings. It may be possible to resolve this in the future with internal identification but for now these species much be manually completed.</p>
+<section id="sec-rgbif" class="level5" data-number="2.1.1.1.2">
+<h5 data-number="2.1.1.1.2" class="anchored" data-anchor-id="sec-rgbif"><span class="header-section-number">2.1.1.1.2</span> The <code>rgbif</code> Package</h5>
+<p>The <code>rgbif</code> package <span class="citation" data-cites="chamberlain2026b chamberlain2017b">(<a href="#ref-chamberlain2026b" role="doc-biblioref">Chamberlain et al. 2026</a>; <a href="#ref-chamberlain2017b" role="doc-biblioref">Chamberlain and Boettiger 2017</a>)</span>… <!-- finish paragraph --></p>
+</section>
+</section>
+</section>
+<section id="sec-taxonomy" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="sec-taxonomy"><span class="header-section-number">2.1.2</span> Taxonomy</h3>
+<p>This workflow would not be possible without addressing taxonomic classification of species names. The classification of living organisms changes frequently as our understanding of the relationships between the boundaries of distinct taxa evolves. This workflow relies on dozens of resources for information that include verbatim scientific names of varying vintage. Many of those resources have their own methods for resolving taxonomy. A single scientific name in one system might refer to completely different sets of organisms in the another system or a group of organisms may have different scientific names applied in a yet another system. This is problematic for automating species evaluations because this process relies heavily on reliably cross-referencing information by species. For example, we use SEINet, Global Biodiversity Information System (GBIF), and state natural heritage programs as sources of species occurrence records. It could be possible that for the grass blue grama (<em>Bouteloua gracilis</em>), one source uses the scientific name <em>Bouteloua gracilis</em> and another uses a recognized synonym <em>Chondrosum gracile</em>. We need a way to recognize both names as the same species. In other words, to make use of both sources, we needed a way to link the same species referred to by different names. It is important that this is done using an algorithm because some data sets return hundreds of thousands of records on a planning unit and manual resolution of taxonomic classification is not possible with large dataset like these.</p>
+<p>A variety of resources were evaluated as potential solutions for taxonomic classification. Ultimately, we decided to use the <a href="https://github.com/ropensci/taxize">taxize</a> R package <span class="citation" data-cites="chamberlain2020">(<a href="#ref-chamberlain2020" role="doc-biblioref">Chamberlain et al. 2020</a>)</span> because it accesses the GBIF Backbone Taxonomy <span class="citation" data-cites="gbifsecretariat">(<a href="#ref-gbifsecretariat" role="doc-biblioref">GBIF Secretariat, n.d.a</a>)</span> and is easy to use. NatureServe, ITIS, and USDA Plants were candidates for taxonomic classification systems. The ITIS application programming interface (API) was routinely not availble and would fail when trying to resolve long lists of scientific names. NatureServe’s API would frequently returned incorrect scientific names and required user input for resolution of each species. USDA Plants was also considered, but is not usable in an automated systems because USDA Plants does not have an API.</p>
+<p>The GBIF Backbone Taxonomy <span class="citation" data-cites="gbifsecretariata">(<a href="#ref-gbifsecretariata" role="doc-biblioref">GBIF Secretariat, n.d.b</a>)</span> was chosen because it is a comprehensive taxonomic list with over four million accepted names and three million synonyms that offers flexible and repeatable tools to programmatically validate taxonomies. The GBIF Backbone Taxonomy is based on 105 taxonomic checklists including but not limited to the Catalogue of Life, Integrated Taxonomic Information System, and the International Barcode of Life project. The GBIF Backbone Taxonomy reliably returned the correct scientific name without user input and could reliably be queried in a timely manner.</p>
+<p>The process for resolving taxonomy is codified in a function called <a href="https://github.com/fs-scoyoc/mpsgSE/blob/main/R/get_taxonomies.R"><code>get_taxonomies()</code></a> in the <code>mpsgSE</code> R package (see <a href="@sec-get-taxonid">The mpsgSE Package, Resolving Taxonomies</a>). Often when a scientific name is searched in the GBIF Backbone Taxonomy, the name that is returned might not match the name provided by NatureServe. The taxonomic resolution process developed by MPSG staff is agnostic to scientific names. It instead relies on the a taxonomic identification number, or taxon ID, that is tied to accepted scientific names and associated known synonyms. The taxon ID is used to join the data when combining data sets, and not the scientific names. This process allows us to efficiently use data sets that use different scientific names for the same species.</p>
+<p>While the system works well, it is not perfect. Occasionally, scientific names recognized by NatureServe will resolve to the same species in the GBIF Backbone Taxonomy. In this case species are identified with duplicated taxon IDs. Additionally, some species names are not recognized in the GBIF Backbone Taxonomy at all and return invalid taxon IDs. In these cases, manual resolution of scientific name taxonomy will necessary. The <code>mpsgSE</code> package maintains a list of species with known taxonomic issues and holds a function to correct known taxonomic problems called</p>
 </section>
 </section>
 <section id="building-the-eligible-species-list" class="level2" data-number="2.2">
@@ -165,49 +175,53 @@ div.csl-indent {
 <!-- use pipeline to guide narrative -->
 <section id="planning-unit-spatial-data" class="level3" data-number="2.2.1">
 <h3 data-number="2.2.1" class="anchored" data-anchor-id="planning-unit-spatial-data"><span class="header-section-number">2.2.1</span> Planning Unit Spatial Data</h3>
-<p>Spatial data for the planning unit are read into R from the Forest Service ArcGIS REST Services (<a href="https://apps.fs.usda.gov/arcx/rest/services/EDW" class="uri">https://apps.fs.usda.gov/arcx/rest/services/EDW</a>). Administrative boundary data are acquired from <a href="https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_ForestSystemBoundaries_01/MapServer">Forest Systems Boundaries</a> layer. Forest or grassland administrative boundaries are filtered using the Forest Service Region code and Forest Number code. <a href="https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_BasicOwnership_01/MapServer">Basic ownership</a> data are acquired and filtered using Forest Service unit name. The basic ownership data are then filtered by Forest Service owned lands to delineate the planning area. Three-mile buffers around the administrative boundary is created using the <code>st_buffer()</code> function from the <a href="https://r-spatial.github.io/sf/index.html">sf</a> R package <span class="citation" data-cites="pebesma2018">Pebesma and Bivand (<a href="#ref-pebesma2023" role="doc-biblioref">2023</a>)</span> to delineate the area of analysis. One-kilometer buffers are created around the planning area boundary using the <code>st_buffer()</code> function to capture occurrence records immediately adjacent to the plan area.</p>
+<p>Generally, spatial data for the planning unit are read into R from the Forest Service ArcGIS REST Services (<a href="https://apps.fs.usda.gov/arcx/rest/services/EDW" class="uri">https://apps.fs.usda.gov/arcx/rest/services/EDW</a>, see <a href="#sec-unit-spatail-data" class="quarto-xref">Section&nbsp;2.1.1.1.1.3</a>). Administrative boundary data are acquired from <a href="https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_ForestSystemBoundaries_01/MapServer">Forest Systems Boundaries</a> layer. Forest or grassland administrative boundaries are filtered using the Forest Service Region code and Forest Number code. <a href="https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_BasicOwnership_01/MapServer">Basic ownership</a> data are acquired and filtered using Forest Service unit name. The basic ownership data are then filtered by Forest Service-owned lands to delineate the planning area. Three-mile buffers around the administrative boundary is created using the <code>st_buffer()</code> function from the <a href="https://r-spatial.github.io/sf/index.html">sf</a> R package <span class="citation" data-cites="pebesma2018 pebesma2023">(<a href="#ref-pebesma2018" role="doc-biblioref">Pebesma 2018</a>; <a href="#ref-pebesma2023" role="doc-biblioref">Pebesma and Bivand 2023</a>)</span> to delineate the area of analysis. One-kilometer buffers are created around the planning area boundary using the <code>st_buffer()</code> function to capture occurrence records immediately adjacent to the plan area.</p>
+<p>In some cases, spatial data for administrative boundaries, basic ownership, plan areas, and buffers are created using ArcGIS Pro <span class="citation" data-cites="esriinc.2025">(<a href="#ref-esriinc.2025" role="doc-biblioref">Esri Inc. 2025</a>)</span>. The administrative boundaries and basic ownership layers are read into ArcGIS Pro from the Forest Service Enterprise Data Warehouse, the corporate spatial data server for the Forest Service. The data are filtered using a <a href="https://pro.arcgis.com/en/pro-app/latest/help/mapping/layer-properties/definition-query.htm">Definition Query</a> on the “FORESTNAME” field using the name of planning unit to delineate the administrative boundary and basic ownership for the planning unit respectively. The planning area is then delineated using a Definition Query for Forest Service-owned lands from the basic ownership data. Lastly the three-mile and one-kilometer buffers are then created using the <a href="https://pro.arcgis.com/en/pro-app/latest/tool-reference/analysis/pairwise-buffer.htm">Pairwise Buffer</a> tool.</p>
 </section>
-<section id="conservaiton-lists" class="level3" data-number="2.2.2">
-<h3 data-number="2.2.2" class="anchored" data-anchor-id="conservaiton-lists"><span class="header-section-number">2.2.2</span> Conservaiton Lists</h3>
-<p>In addition to global and state ranks provided by NatureServe, four additional sources are needed to determine if any given species is eligible for SCC evaluation:</p>
+<section id="conservation-lists" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="conservation-lists"><span class="header-section-number">2.2.2</span> Conservation Lists</h3>
+<!-- update/rewrite -->
+<p>Chapter 10 - Assessments of the Forest Service Land Management Planning Handbook <span class="citation" data-cites="usdaforestserviceForestServiceHandbook2015b">(<a href="#ref-usdaforestserviceForestServiceHandbook2015b" role="doc-biblioref">USDA Forest Service 2015a</a>)</span> directs the use of NatureServe in species consideration lists. Therefore, scientific names provided by NatureServe are used for species evaluations. The following data are used to construct a master conservation list for the planning unit to help determine species eligibility for SCC:</p>
 <ul>
-<li>State Ranks: State Threatened and Endangered, and State Wildlife Action Plan (SWAP) Tier 1 Lists<br>
-</li>
-<li>Regional Sensitive Species Lists<br>
-</li>
-<li>Neighboring Unit SCC lists<br>
-</li>
-<li>USFWS Status (see above in NatureServe)</li>
+<li>NatureServe data,</li>
+<li>Forest Service Regional Forester’s Sensitive Species Lists,</li>
+<li>USFWS Birds of Conservation Concern List,</li>
+<li>State Wildlife Action Plans (SWAP),</li>
+<li>State Threatened and Endangered Species Lists,</li>
+<li>Bureau of Land Management (BLM) State Sensitive Species Lists, and</li>
+<li>Neighboring Forest Service Unit SCC Lists.</li>
 </ul>
 <section id="natureserve-state-list" class="level4" data-number="2.2.2.1">
 <h4 data-number="2.2.2.1" class="anchored" data-anchor-id="natureserve-state-list"><span class="header-section-number">2.2.2.1</span> NatureServe State List</h4>
-<p>The development of the eligible species list begins with pulling state species lists from NatureServe. These data include global and state conservation ranks and US Fish and Wildlife (USFWS) Endangered Species Act (ESA) status. To do this, we begin by pulling all species for the state where a unit resides (see <a href="#sec-ns-state-data" class="quarto-xref">Section&nbsp;2.1.1.1.1.2</a>). In most cases one state species list is needed. But for units that overlap multiple states, each state list must be pulled and then the lists are merged so that unique taxa and species names are preserved.</p>
-<p>A data pull for any given state does note determine eligibility for a unit list, instead it is the total number of species tracked by NatureServe for any given state. To be considered an eligible species, a species on a state list must also be found to occupy a given unit (see <a href="#sec-determine-nko" class="quarto-xref">Section&nbsp;2.2.5.1</a>) and meet other qualifying criteria as outlined in Chapter 10 of the Forest Service Land Management Handbook <span class="citation" data-cites="usdaforestserviceForestServiceHandbook2015">(<a href="#ref-usdaforestserviceForestServiceHandbook2015" role="doc-biblioref">USDA Forest Service 2015</a>)</span>.</p>
-<p>Data used to determine species eligibility from the NatureServe state data pull include:</p>
+<p>The development of the eligible species list begins with pulling state species lists from NatureServe. These data include, species scientific and common names, global and state conservation ranks and USFWS ESA status. To do this, we begin by pulling all species for the state where a unit resides (see <a href="@sec-ns-state-data">The mpsgSE Package, Pulling NatureServe State Data</a>). In most cases one state species list is needed. But for units that overlap multiple states, each state list must be pulled and then the lists are merged so that unique taxa and species names are preserved.</p>
+<p>A data pull for any given state does note determine species eligibility for SCC. Instead it is the total number of species tracked by NatureServe for a given state. To be considered eligible for SCC, a species on a state list must also be found to occupy a given unit (see <a href="@sec-determine-nko">Determine Native and Known to Occur</a>) and meet the qualifying criteria listed below and outlined in Chapter 10 of the Forest Service Land Management Handbook <span class="citation" data-cites="usdaforestserviceForestServiceHandbook2015">(<a href="#ref-usdaforestserviceForestServiceHandbook2015" role="doc-biblioref">USDA Forest Service 2015b</a>)</span>.</p>
+<p>Data used from the NatureServe state data pull include:</p>
 <ol type="1">
-<li>Scientific Name,</li>
+<li>Scientific and common names,</li>
 <li>NatureServe Global Rank (G/T Rank),</li>
 <li>NatureServe State Rank (S/T Rank) for a given state, and</li>
 <li>USFWS ESA Status (Endangered, Threatened, Candidate, or Under Review).</li>
 </ol>
 </section>
-<section id="state-wildlife-action-plans-and-other-state-status" class="level4" data-number="2.2.2.2">
-<h4 data-number="2.2.2.2" class="anchored" data-anchor-id="state-wildlife-action-plans-and-other-state-status"><span class="header-section-number">2.2.2.2</span> State Wildlife Action Plans and Other State Status</h4>
-<p>States have a variety of wildlife and plant conservation lists for imperiled species. These lists are typically developed by State Natural Resource and Natural Heritage organizations. Conservation lists, most commonly come in the form of State Wildlife Actions Plans (SWAP) and state threatened, endangered and sensitive species lists. The MPSG considers species ranked as Tier 1 or Species of Greatest Conservation Need (SGCN), as well as threatened and endangered rankings, eligible for SCC. Some states ranking systems do not adhere to these criteria and may need to be evaluated on a case by case bases. South Dakota, for example, has a three number ranking system where species were given ranks of 1, 2, or 3 and determined that those species ranked 1 would qualify as eligible for SCC.</p>
+<section id="regional-foresters-sensitive-species-lists" class="level4" data-number="2.2.2.2">
+<h4 data-number="2.2.2.2" class="anchored" data-anchor-id="regional-foresters-sensitive-species-lists"><span class="header-section-number">2.2.2.2</span> Regional Forester’s Sensitive Species Lists</h4>
+<p>If a species is ranked as sensitive on the Regional Forester’s Sensitive Species List in the region where the planning unit resides that species is considered eligible if it is determined to be native and known to occur on the planning unit (see <a href="@sec-determine-nko">Determine Native and Known to Occur</a>). Regional Forester’s Sensitive Species Lists were acquired from Forest Service Ecosystem Management Coordination staff for every Forest Service Region on 12 January 2026 (personal communication).</p>
 </section>
 <section id="usfws-birds-of-conservation-concern" class="level4" data-number="2.2.2.3">
 <h4 data-number="2.2.2.3" class="anchored" data-anchor-id="usfws-birds-of-conservation-concern"><span class="header-section-number">2.2.2.3</span> USFWS Birds of Conservation Concern</h4>
+<p>A bird species is considered eligible for SCC if that species is listed as breeding on the on the USFWS Birds of Conservation Concern List for Bird Conservation Region where a planning unit resides (see <a href="@sec-usfws-bcc-list">The mpsgSE Package, USFWS Birds of Conservation Concern List</a>). These data were acquired from the USFWS Birds of Conservation Concern website (<a href="https://www.fws.gov/media/usfws-bird-species-concern" class="uri">https://www.fws.gov/media/usfws-bird-species-concern</a>) on 16 December 2025.</p>
 </section>
-<section id="regional-foresters-sensitive-species-lists" class="level4" data-number="2.2.2.4">
-<h4 data-number="2.2.2.4" class="anchored" data-anchor-id="regional-foresters-sensitive-species-lists"><span class="header-section-number">2.2.2.4</span> Regional Forester’s Sensitive Species Lists</h4>
-<p>If a species is ranked as sensitive by the Regional Forester in the region where the planning unit resides that species is considered eligible for ranking if it is native and known to occur on the planning unit. These lists are acquired from Forest Service websites (i.e.&nbsp;<a href="https://www.fs.usda.gov/detail/r2/landmanagement/?cid=stelprdb5390116">Region 2 Sensitive Species List</a>)</p>
+<section id="state-wildlife-action-plans-and-other-state-status" class="level4" data-number="2.2.2.4">
+<h4 data-number="2.2.2.4" class="anchored" data-anchor-id="state-wildlife-action-plans-and-other-state-status"><span class="header-section-number">2.2.2.4</span> State Wildlife Action Plans and Other State Status</h4>
+<p>States have a variety of wildlife and plant conservation lists for imperiled species. These lists are typically developed by State Natural Resource and Natural Heritage organizations. These conservation lists most commonly come in the form of State Wildlife Actions Plans (SWAP) and state threatened, endangered, and sensitive species lists. The MPSG considers species ranked as Tier 1, Species of Greatest Conservation Need (SGCN), or ranked threatened and endangered eligible for SCC. Some states ranking systems do not adhere to these criteria and may need to be evaluated on a case by case bases. South Dakota, for example, has a three number ranking system where species were given ranks of 1, 2, or 3 and determined that those species ranked 1 would qualify as eligible for SCC. These data are acquired form state natural resource websites or personal communication with state natural resource or natural heritage program staff at the beginning of the SCC process.</p>
 </section>
-<section id="state-bureau-of-land-managment-sensitive-species-list" class="level4" data-number="2.2.2.5">
-<h4 data-number="2.2.2.5" class="anchored" data-anchor-id="state-bureau-of-land-managment-sensitive-species-list"><span class="header-section-number">2.2.2.5</span> State Bureau of Land Managment Sensitive Species List</h4>
+<section id="blm-state-sensitive-species-list" class="level4" data-number="2.2.2.5">
+<h4 data-number="2.2.2.5" class="anchored" data-anchor-id="blm-state-sensitive-species-list"><span class="header-section-number">2.2.2.5</span> BLM State Sensitive Species List</h4>
+<p>The sensitive species list for the state BLM office is acquired if there is BLM land adjacent to the planning unit. Any species that is listed on the state BLM sensitive specieis list will be eligible for SCC if it is determined to be native and known to occur on the planning unit (see <a href="@sec-determine-nko">Determine Native and Known to Occur</a>). These lists are acquired from the BLM website or direct communication with BLM staff.</p>
 </section>
 <section id="neighboring-forest-service-unit-scc-lists" class="level4" data-number="2.2.2.6">
 <h4 data-number="2.2.2.6" class="anchored" data-anchor-id="neighboring-forest-service-unit-scc-lists"><span class="header-section-number">2.2.2.6</span> Neighboring Forest Service Unit SCC Lists</h4>
-<p>If SCC are developed for a neighboring Forests, they should be considered eligible for SCC if they are native and known on the planning unit. Current SCC lists can be found on the Forest Service planning public site. Some region make them available grouped by region and others are available at the Forest Level. A few examples:</p>
+<p>If SCC are developed for a neighboring Forests, they should be considered eligible for SCC if they are native and known on the planning unit. Current SCC lists can be found on the Forest Service planning public site. Some regions make them available grouped by region and others are available at the Forest Level. Below are a few examples:</p>
 <ul>
 <li>Region 1 - <a href="https://www.fs.usda.gov/detail/r1/landmanagement/planning/?cid=fseprd500402" class="uri">https://www.fs.usda.gov/detail/r1/landmanagement/planning/?cid=fseprd500402</a></li>
 <li>Region 2, GMUG NF- <a href="https://www.fs.usda.gov/detail/carson/landmanagement/planning/?cid=stelprdb5443166" class="uri">https://www.fs.usda.gov/detail/carson/landmanagement/planning/?cid=stelprdb5443166</a>.</li>
@@ -216,30 +230,21 @@ div.csl-indent {
 </section>
 <section id="building-the-master-conservation-list" class="level4" data-number="2.2.2.7">
 <h4 data-number="2.2.2.7" class="anchored" data-anchor-id="building-the-master-conservation-list"><span class="header-section-number">2.2.2.7</span> Building the Master Conservation List</h4>
-<p>A master conservation list is constructed by combining all of the conservation data we have described above. , full_join (so that if species is not on one list it does not get dropped) by taxon ID. The data sets used are listed below:</p>
-<ol type="1">
-<li>To the NatureServe State List, which includes global (G/T), state (S/T) ranks, and USFWS ESA status,</li>
-<li>SWAP and other state status lists,</li>
-<li>State T and E list</li>
-<li>Regional Foresters Sensitive Species Lists</li>
-<li>Neighboring Forest Service Unit’s SCC lists</li>
-</ol>
-<!-- -->
-<ol start="2" type="1">
-<li>Then to create all potential species eligible filter the list by:</li>
-</ol>
+<p>A master conservation list is constructed by combining all of the conservation data we have described above using the taxon ID. Forest Service Land Management Planning Handbook, Chapter 10 - Assessments directs the use of NatureServe in species consideration lists. Therefore, scientific names provided by NatureServe are used for species evaluations. The subsequent data sets are combined using a “full-join” procedure so that species are not dropped from the list during the process. Eligibility in the master conservation list is determined if a species is:</p>
 <ul>
-<li>G/T 1,2 or 3 Ranks.</li>
-<li>Any S/T 1 or 2 Ranks.</li>
-<li>State SWAP Tier 1 Ranks</li>
-<li>State T and E Ranks</li>
-<li>Regional Foresters Sensitive Species Lists</li>
-<li>Neighboring Forest Service Unit’s SCC lists</li>
+<li>NatureServe global (G/T) rank 1,2 or 3, or</li>
+<li>NatureServe state (S/T) rank 1 or 2, or</li>
+<li>is on the Regional Foresters Sensitive Species List, or</li>
+<li>is on the USFWS Birds of Conservation Concern list, or</li>
+<li>state SWAP Tier 1 or SGCN ranks, or</li>
+<li>has a state Threatened or Endangered status, or</li>
+<li>if applicable, is on the State BLM Sensitive Species List, or</li>
+<li>if applicable, is on the neighboring Forest Service Unit’s SCC lists.</li>
 </ul>
 </section>
 <section id="a-note-about-tribal-species-of-concern" class="level4" data-number="2.2.2.8">
 <h4 data-number="2.2.2.8" class="anchored" data-anchor-id="a-note-about-tribal-species-of-concern"><span class="header-section-number">2.2.2.8</span> A Note About Tribal Species of Concern</h4>
-<p>The MPSG is still developing procedures to incorporate species recognized by “federally recognized Tribes”. Those species will be included in the future.</p>
+<p>The MPSG is still developing procedures to incorporate species recognized by federally recognized Tribes. Those species will be included in the future.</p>
 </section>
 </section>
 <section id="occurrence-data" class="level3" data-number="2.2.3">
@@ -283,8 +288,8 @@ Some museums and natural history institutions share their data with state herita
 
 -->
 </section>
-<section id="build-summary-occurrence-dataset" class="level4" data-number="2.2.3.7">
-<h4 data-number="2.2.3.7" class="anchored" data-anchor-id="build-summary-occurrence-dataset"><span class="header-section-number">2.2.3.7</span> Build Summary Occurrence Dataset</h4>
+<section id="summarize-species-occurrence-data" class="level4" data-number="2.2.3.7">
+<h4 data-number="2.2.3.7" class="anchored" data-anchor-id="summarize-species-occurrence-data"><span class="header-section-number">2.2.3.7</span> Summarize Species Occurrence Data</h4>
 <p>Once all occurrence records are retrieved, each dataset is summarized by taxon ID with the following fields:</p>
 <ul>
 <li>“nObs”: Total number of observations on Forest Service land.</li>
@@ -418,10 +423,10 @@ Some museums and natural history institutions share their data with state herita
 <section id="references" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> References</h1>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-chamberlain2026a" class="csl-entry" role="listitem">
+<div id="ref-chamberlain2026b" class="csl-entry" role="listitem">
 Chamberlain, Scott, Vijay Barve, Dan Mcglinn, Damiano Oldoni, Peter Desmet, Laurens Geffert, and Karthik Ram. 2026. <em>Rgbif: Interface to the Global Biodiversity Information Facility API</em>. <a href="https://CRAN.R-project.org/package=rgbif">https://CRAN.R-project.org/package=rgbif</a>.
 </div>
-<div id="ref-chamberlain2017a" class="csl-entry" role="listitem">
+<div id="ref-chamberlain2017b" class="csl-entry" role="listitem">
 Chamberlain, Scott, and Carl Boettiger. 2017. <span>“R Python, and Ruby Clients for GBIF Species Occurrence Data.”</span> <em>PeerJ PrePrints</em>. <a href="https://doi.org/10.7287/peerj.preprints.3304v1">https://doi.org/10.7287/peerj.preprints.3304v1</a>.
 </div>
 <div id="ref-chamberlain2020" class="csl-entry" role="listitem">
@@ -430,11 +435,17 @@ Chamberlain, Scott, Eduard Szoecs, Zachary Foster, Zebulun Arendsee, Carl Boetti
 <div id="ref-chamberlain2026" class="csl-entry" role="listitem">
 Chamberlain, Scott, and Christopher Tracey. 2026. <em>Natserv: ’NatureServe’ Interface</em>. <a href="https://docs.ropensci.org/natserv/">https://docs.ropensci.org/natserv/</a>.
 </div>
+<div id="ref-esriinc.2025" class="csl-entry" role="listitem">
+Esri Inc. 2025. <em>ArcGIS Pro</em>. Redlands, CA: Environmental Systems Research Institute.
+</div>
 <div id="ref-finkEBirdStatusTrends2023" class="csl-entry" role="listitem">
 Fink, D, T Auer, A Johnston, M Strimas-Mackey, S Ligocki, O Robinson, W Hochachka, et al. 2023. <span>“eBird Status and Trends.”</span> <a href="https://doi.org/10.2173/ebirdst.2022">https://doi.org/10.2173/ebirdst.2022</a>.
 </div>
 <div id="ref-gbifsecretariat" class="csl-entry" role="listitem">
-GBIF Secretariat. n.d. <span>“GBIF Backbone Taxonomy.”</span> https://doi.org/<a href="https://doi.org/10.15468/39omei">https://doi.org/10.15468/39omei</a>.
+GBIF Secretariat. n.d.a. <span>“GBIF Backbone Taxonomy.”</span> https://doi.org/<a href="https://doi.org/10.15468/39omei">https://doi.org/10.15468/39omei</a>.
+</div>
+<div id="ref-gbifsecretariata" class="csl-entry" role="listitem">
+———. n.d.b. <span>“GBIF Backbone Taxonomy.”</span> https://doi.org/<a href="https://doi.org/10.15468/39omei">https://doi.org/10.15468/39omei</a>.
 </div>
 <div id="ref-massicotte2026b" class="csl-entry" role="listitem">
 Massicotte, Philippe, and Andy South. 2026. <em>Rnaturalearth: World Map Data from Natural Earth</em>. <a href="https://doi.org/10.32614/CRAN.package.rnaturalearth">https://doi.org/10.32614/CRAN.package.rnaturalearth</a>.
@@ -455,7 +466,10 @@ Pebesma, Edzer, and Roger Bivand. 2023. <em>Spatial Data Science: With Applicati
 R Core Team. 2025. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
 </div>
 <div id="ref-usdaforestserviceForestServiceHandbook2015" class="csl-entry" role="listitem">
-USDA Forest Service. 2015. <span>“Forest Service Handbook 1909.12. Land Management Planning Handbook. Chapter 10 - Assessments,”</span> January.
+USDA Forest Service. 2015b. <span>“Forest Service Handbook 1909.12. Land Management Planning Handbook. Chapter 10 - Assessments,”</span> January.
+</div>
+<div id="ref-usdaforestserviceForestServiceHandbook2015b" class="csl-entry" role="listitem">
+———. 2015a. <span>“Forest Service Handbook 1909.12. Land Management Planning Handbook. Chapter 10 - Assessments,”</span> January.
 </div>
 <div id="ref-usdaforestservice2026" class="csl-entry" role="listitem">
 ———. 2026. <span>“Draft Species of Conservation Concern Identification Process.”</span>

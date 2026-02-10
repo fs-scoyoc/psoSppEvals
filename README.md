@@ -2,44 +2,23 @@
 
 ## Overview
 
-Welcome to the Mountain Planning Service Group (MPSG; USDA Forest Service) 
-Species Evaluation R package.
-This package has been developed by MPSG staff to standardize species data and 
-produce template species evaluation documents that are part of the 
-[Species of Conservation Concern (SCC)](https://www.fs.usda.gov/naturalresources/programs/scc.shtml) process. This package hosts several utilities that standardize species observation data from repositories like the Global Biodiversity Information Facility (GBIF; <https://www.gbif.org/>) and SEINet <https://swbiodiversity.org/seinet/index.php>), query species range data from eBird <https://science.ebird.org/en/status-and-trends>) and the Botanical Information and Ecological Network (<https://bien.nceas.ucsb.edu/bien/>), 
-and produces template species evaluation documents in Microsoft Word format 
-using a `Quarto` scrip.
+Welcome to the Mountain Planning Service Group (MPSG; USDA Forest Service) Species Evaluation R package. This package has been developed by MPSG staff to standardize species data and produce template species evaluation documents that are part of the [Species of Conservation Concern (SCC)](https://www.fs.usda.gov/naturalresources/programs/scc.shtml) process. This package hosts several utilities that standardize species observation data from repositories like the Global Biodiversity Information Facility (GBIF; <https://www.gbif.org/>) and SEINet <https://swbiodiversity.org/seinet/index.php>), query species range data from eBird <https://science.ebird.org/en/status-and-trends>) and the Botanical Information and Ecological Network (<https://bien.nceas.ucsb.edu/bien/>), and produces template species evaluation documents in Microsoft Word format using a `Quarto` scrip.
 
-**Note:** Some functions access publicly available data sources like GBIF, 
-eBird, and BIEN. Other functions access data on internal Forest Service servers 
-and will not work unless you are on the Forest Service network with the servers 
-mapped to your computer.
-We have tired to note which functions access Forest Service servers in the man 
-pages. 
-Please let us know if we missed anything by submitting an 
-[Issue](https://github.com/fs-scoyoc/mpsgSE/issues).
+**Note:** Some functions access publicly available data sources like GBIF, eBird, and BIEN. Other functions access data on internal Forest Service servers and will not work unless you are on the Forest Service network with the servers mapped to your computer. We have tired to note which functions access Forest Service servers in the man pages. Please let us know if we missed anything by submitting an [Issue](https://github.com/fs-scoyoc/mpsgSE/issues).
 
-**Authors:** [Matt Van Scoyoc](https://github.com/fs-scoyoc) and 
-[Michael Schmidt](https://github.com/fs-mschmidty)
+**Authors:** [Matt Van Scoyoc](https://github.com/fs-scoyoc) and [Michael Schmidt](https://github.com/fs-mschmidty)
 
 **Maintainer:** [Matt Van Scoyoc](https://github.com/fs-scoyoc)
 
 **Version:** 0.3.0
 
-**License:** Mit + file 
-[LICENSE](https://github.com/fs-scoyoc/mpsgSE/blob/main/LICENSE.md)
+**License:** Mit + file [LICENSE](https://github.com/fs-scoyoc/mpsgSE/blob/main/LICENSE.md)
 
 **Depends:** R (\>= 4.1.0)
 
-**Imports:** arcgislayers, BIEN, devtools, dplyr, ebirdst, foreign, glue, httr2, 
-janitor, lubridate, natserv, osmdata, readr, readxl, remotes, rgbif, 
-rlandfire, rnaturalearth, sf, stringr, taxize, terra, tibble, tidyr, tidyselect, 
-writexl
+**Imports:** arcgisbinding, arcgislayers, BIEN, devtools, dplyr, ebirdst, foreign, glue, httr2, janitor, lubridate, natserv, osmdata, purrr, readr, readxl, remotes, rgbif, rlandfire, rnaturalearth, sf, stringr, taxize, terra, tibble, tidyr, tidyselect, units, writexl
 
-**Issues:** This package is under active development and changes often with out 
-warning. Functions may experience breaking changes at any time.
-If you find a bugs or have an idea for a feature, please submit an 
-[Issue](https://github.com/fs-scoyoc/mpsgSE/issues).
+**Issues:** This package is under active development and changes often with out warning. Functions may experience breaking changes at any time. If you find a bugs or have an idea for a feature, please submit an [Issue](https://github.com/fs-scoyoc/mpsgSE/issues).
 
 **Documentation:** Just man pages for now.
 
@@ -51,13 +30,7 @@ remotes::install_github("fs-scoyoc/mpsgSE")
 
 ## Template Species Evaluation Documents
 
-[Here](https://github.com/fs-scoyoc/mpsgSE/blob/main/docs/Example_Olive-sided_Flycatcher_Contopus_cooperi.pdf) 
-is an example of a template species evaluation document for Olive-sided 
-Flycatcher on the Bitterroot National Forest.
-These documents are templates that are customized for each land management 
-revision project (i.e., a National Forest or Grassland) and MPSG biologists will 
-add, revise, or remove information using their best professional judgment before 
-this document becomes part of the project record.
+[Here](https://github.com/fs-scoyoc/mpsgSE/blob/main/docs/Example_Olive-sided_Flycatcher_Contopus_cooperi.pdf) is an example of a template species evaluation document for Olive-sided Flycatcher on the Bitterroot National Forest. These documents are templates that are customized for each land management revision project (i.e., a National Forest or Grassland) and MPSG biologists will add, revise, or remove information using their best professional judgment before this document becomes part of the project record.
 
 ## List of Functions
 
@@ -155,9 +128,7 @@ this document becomes part of the project record.
 
 ## List of Data Sets
 
-The data sets listed below are used in the MPSG species evaluation process and 
-not intended for distribution. Recommended best practice is to obtain these data 
-from their sources.
+The data sets listed below are used in the MPSG species evaluation process and not intended for distribution. Recommended best practice is to obtain these data from their sources.
 
 -   `bcc_list`: 2024 US Fish & Wildlife Birds of Conservation Concern List.
 
@@ -167,7 +138,7 @@ from their sources.
 
 -   `imbcr_mgmt_units`: List of National Forests and Grasslands IMBCR conducts surveys on.
 
--   `manual_corrections`: List of species that do not return taxon  ID's. Corrected taxon ID's for the same species have been manually queried in GBIF.
+-   `manual_corrections`: List of species that do not return taxon ID's. Corrected taxon ID's for the same species have been manually queried in GBIF.
 
 -   `name_corrections`: This data frame has common names, scientific names that do not return taxon ID's, and corrected names for the same species that will return taxon ID's.
 
