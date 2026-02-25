@@ -4,12 +4,16 @@
 \alias{read_edw_lyr}
 \title{Read spatial data from Forest Service ArcGIS REST Services}
 \usage{
-read_edw_lyr(map_name, layer = 0, target_crs = "EPSG:4326")
+read_edw_lyr(map_name, layer = 0, service = "arcx", crs = "EPSG:4326")
 }
 \arguments{
 \item{map_name}{Character. Name of map layer.}
 
 \item{layer}{Integer. Number of layer to read. Default is  zero (0).}
+
+\item{service}{Character. The public ("arcx") or internal ("arcn") ArcGIS
+REST Service code. Default is "arcx". You must be on a Forest Service
+network for "arcn" to work.}
 
 \item{target_crs}{Coordinate reference system (crs). Default is EPSG:4326
 (WGS 84).}
@@ -18,9 +22,12 @@ read_edw_lyr(map_name, layer = 0, target_crs = "EPSG:4326")
 An \link[sf:sf]{sf::sf} object or \link[terra:SpatRaster-class]{terra::SpatRaster}.
 }
 \description{
-read_edw_lyr reads features from the Forest Service ArcGIS REST Services
-Directory, https://apps.fs.usda.gov/arcx/rest/services/EDW, using the
-\code{arcgislayers} package.
+This function reads spatial features from the Forest Service ArcGIS REST
+Services. Either the public ArcGIS REST Service,
+https://apps.fs.usda.gov/arcx/rest/services/EDW, or the internal ArcGIS
+REST Service, https://apps.fs.usda.gov/arcn/rest/services/EDW, using the
+\code{arcgislayers} package. You must be on a Forest Service network to access
+data from the interal ArcGIS REST Service.
 }
 \examples{
 library(mpsgSE)
