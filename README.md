@@ -4,7 +4,10 @@
 
 Welcome to the Mountain Planning Service Group (MPSG; USDA Forest Service) Species Evaluation R package. This package has been developed by MPSG staff to standardize species data and produce template species evaluation documents that are part of the [Species of Conservation Concern (SCC)](https://www.fs.usda.gov/naturalresources/programs/scc.shtml) process. This package hosts several utilities that standardize species observation data from repositories like the Global Biodiversity Information Facility (GBIF; <https://www.gbif.org/>) and SEINet <https://swbiodiversity.org/seinet/index.php>), query species range data from eBird <https://science.ebird.org/en/status-and-trends>) and the Botanical Information and Ecological Network (<https://bien.nceas.ucsb.edu/bien/>), and produces template species evaluation documents in Microsoft Word format using a `Quarto` scrip.
 
-**Note:** Some functions access publicly available data sources like GBIF, eBird, and BIEN. Other functions access data on internal Forest Service servers and will not work unless you are on the Forest Service network with the servers mapped to your computer. We have tired to note which functions access Forest Service servers in the man pages. Please let us know if we missed anything by submitting an [Issue](https://github.com/fs-scoyoc/mpsgSE/issues).
+**Notes:**
+
+1.  Some functions access publicly available data sources like GBIF, eBird, and BIEN. Other functions access data on internal Forest Service servers and will not work unless you are on the Forest Service network with the servers mapped to your computer. We have tired to note which functions access Forest Service servers in the man pages. Please let us know if we missed anything by submitting an [Issue](https://github.com/fs-scoyoc/mpsgSE/issues).
+2.  This package is moving the spatial function `clip_fc()`, `read_edw_lyr()`, and `read_fc()` to the `psoGIStools` package. The functions included in this package are no longer maintained and will eventually be removed.
 
 **Authors:** [Matt Van Scoyoc](https://github.com/fs-scoyoc) and [Michael Schmidt](https://github.com/fs-mschmidty)
 
@@ -16,7 +19,7 @@ Welcome to the Mountain Planning Service Group (MPSG; USDA Forest Service) Speci
 
 **Depends:** R (\>= 4.1.0)
 
-**Imports:** arcgisbinding, arcgislayers, BIEN, devtools, dplyr, ebirdst, foreign, glue, httr2, janitor, lubridate, natserv, osmdata, purrr, readr, readxl, remotes, rgbif, rlandfire, rnaturalearth, sf, stringr, taxize, terra, tibble, tidyr, tidyselect, units, writexl
+**Imports:** arcgisbinding, arcgislayers, BIEN, devtools, dplyr, ebirdst, foreign, glue, httr2, janitor, lubridate, natserv, osmdata, purrr, psoGIStools, readr, readxl, remotes, rgbif, rlandfire, rnaturalearth, sf, stringr, taxize, terra, tibble, tidyr, tidyselect, units, writexl
 
 **Issues:** This package is under active development and changes often with out warning. Functions may experience breaking changes at any time. If you find a bugs or have an idea for a feature, please submit an [Issue](https://github.com/fs-scoyoc/mpsgSE/issues).
 
@@ -52,7 +55,7 @@ remotes::install_github("fs-scoyoc/mpsgSE")
 
 -   `build_seinet_spp`: Summarize SEINet data by species.
 
--   `clip_fc`: Clip an `sf` object to polygon.
+-   `clip_fc`: Deprecated. Use the `psoGIStools` package moving forward. Clip an `sf` object to polygon.
 
 -   `combine_natureserve_data`: Combine NatureServe data from `get_ns_state_list()`.
 
@@ -114,11 +117,9 @@ remotes::install_github("fs-scoyoc/mpsgSE")
 
 -   `pull_landfire`: Pull LANDFIRE data for an area of interest using the `rlandfire` package.
 
--   `pull_nwi_data`: Pull USGS National Wetland Inventory (NWI) from the NWI ArcGIS REST services.
+-   `read_edw_lyr`: Deprecated. Use the `psoGIStools` package moving forward. Read spatial data from Forest Service ArcGIS REST Services into R.
 
--   `read_edw_lyr`: Read spatial data from Forest Service ArcGIS REST Services into R.
-
--   `read_fc`: Read feature class from a geodatabase into R.
+-   `read_fc`: Deprecated. Use the `psoGIStools` package moving forward. Read feature class from a geodatabase into R.
 
 -   `wkt_string`: Create a well-known text string from an `sf` polygon object for `get_gbif()`.
 

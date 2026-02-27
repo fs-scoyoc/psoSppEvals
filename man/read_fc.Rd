@@ -2,7 +2,7 @@
 % Please edit documentation in R/spatial_functions.R
 \name{read_fc}
 \alias{read_fc}
-\title{Read feature class into R.}
+\title{Depricated: Read feature class into R.}
 \usage{
 read_fc(lyr, dsn, target_crs = NULL)
 }
@@ -20,10 +20,12 @@ If NULL, resulting \link[sf:sf]{sf::sf} object will not be transformed.}
 sf object
 }
 \description{
-This function uses the \code{sf} package to read a feature class into R from a
-geodatabase (*.gdb) using the \code{sf::read_sf()} function. It then checks that
-the feature class is in the target coordinate reference system (CRS) and
-will transform the feature to the target CRS if it is not.
+This function is not maintained, but remains here for now. Use the
+\code{psoGIStools} package. This function uses the \code{sf} package to read a
+feature class into R from a geodatabase (*.gdb) using the \code{sf::read_sf()}
+function. It then checks that the feature class is in the target
+coordinate reference system (CRS) and will transform the feature to the
+target CRS if it is not.
 }
 \examples{
 ## Not run:

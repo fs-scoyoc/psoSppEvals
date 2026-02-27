@@ -1,10 +1,12 @@
-#' Clip feature class to polygon
+#' Deprecated: Clip feature class to polygon
 #' 
-#' This function clips a `sf` object using `sf::st_intersection()`. First, this 
-#'   function checks that the coordinate reference system (CRS) of the input 
-#'   object is the same as the clipping object. If it is not, this function
-#'   transforms the clipping object to CRS of the input object using
-#'   `sf::st_transform()`before clipping. The output CRS is not changed.
+#' This function is not maintained, but remains here for now. Use the 
+#'     `psoGIStools` package. This function clips a `sf` object using
+#'     `sf::st_intersection()`. First, this function checks that the coordinate
+#'     reference system (CRS) of the input object is the same as the clipping
+#'     object. If it is not, this function transforms the clipping object to CRS
+#'     of the input object using `sf::st_transform()`before clipping. The output
+#'     CRS is not changed.
 #'
 #' @param sf_lyr  Spatial (`sf`) object to be clipped.
 #' @param sf_clip Polygon (`sf`) object used to clip.
@@ -228,14 +230,15 @@ get_basemap_data = function(states, region_number, forest_number, forest_name,
 }
 
 
-#' Read spatial data from Forest Service ArcGIS REST Services
+#' Deprecated: Read spatial data from Forest Service ArcGIS REST Services
 #' 
-#' This function reads spatial features from the Forest Service ArcGIS REST 
-#'     Services. Either the public ArcGIS REST Service, 
-#'     https://apps.fs.usda.gov/arcx/rest/services/EDW, or the internal ArcGIS 
-#'     REST Service, https://apps.fs.usda.gov/arcn/rest/services/EDW, using the 
-#'     `arcgislayers` package. You must be on a Forest Service network to access 
-#'     data from the interal ArcGIS REST Service.
+#' This function is not maintained, but remains here for now. Use the 
+#'     `psoGIStools` package. This function reads spatial features from the 
+#'     Forest Service ArcGIS REST Services. Either the public ArcGIS REST 
+#'     Service, https://apps.fs.usda.gov/arcx/rest/services/EDW, or the internal 
+#'     ArcGIS REST Service, https://apps.fs.usda.gov/arcn/rest/services/EDW, 
+#'     using the `arcgislayers` package. You must be on a Forest Service network 
+#'     to access data from the internal ArcGIS REST Service.
 #'
 #' @param map_name Character. Name of map layer.
 #' @param layer Integer. Number of layer to read. Default is  zero (0).
@@ -273,12 +276,14 @@ read_edw_lyr <- function(map_name, layer = 0, service = "arcx",
 }
 
 
-#' Read feature class into R.
+#' Depricated: Read feature class into R.
 #' 
-#' This function uses the `sf` package to read a feature class into R from a 
-#'   geodatabase (*.gdb) using the `sf::read_sf()` function. It then checks that 
-#'   the feature class is in the target coordinate reference system (CRS) and 
-#'   will transform the feature to the target CRS if it is not.
+#' This function is not maintained, but remains here for now. Use the 
+#'     `psoGIStools` package. This function uses the `sf` package to read a 
+#'     feature class into R from a geodatabase (*.gdb) using the `sf::read_sf()` 
+#'     function. It then checks that the feature class is in the target 
+#'     coordinate reference system (CRS) and will transform the feature to the 
+#'     target CRS if it is not.
 #'
 #' @param lyr Feature class name.
 #' @param dsn Path to geodatabase that holds `lyr`.

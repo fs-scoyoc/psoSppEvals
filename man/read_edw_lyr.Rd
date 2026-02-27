@@ -2,7 +2,7 @@
 % Please edit documentation in R/spatial_functions.R
 \name{read_edw_lyr}
 \alias{read_edw_lyr}
-\title{Read spatial data from Forest Service ArcGIS REST Services}
+\title{Deprecated: Read spatial data from Forest Service ArcGIS REST Services}
 \usage{
 read_edw_lyr(map_name, layer = 0, service = "arcx", crs = "EPSG:4326")
 }
@@ -22,12 +22,13 @@ network for "arcn" to work.}
 An \link[sf:sf]{sf::sf} object or \link[terra:SpatRaster-class]{terra::SpatRaster}.
 }
 \description{
-This function reads spatial features from the Forest Service ArcGIS REST
-Services. Either the public ArcGIS REST Service,
-https://apps.fs.usda.gov/arcx/rest/services/EDW, or the internal ArcGIS
-REST Service, https://apps.fs.usda.gov/arcn/rest/services/EDW, using the
-\code{arcgislayers} package. You must be on a Forest Service network to access
-data from the interal ArcGIS REST Service.
+This function is not maintained, but remains here for now. Use the
+\code{psoGIStools} package. This function reads spatial features from the
+Forest Service ArcGIS REST Services. Either the public ArcGIS REST
+Service, https://apps.fs.usda.gov/arcx/rest/services/EDW, or the internal
+ArcGIS REST Service, https://apps.fs.usda.gov/arcn/rest/services/EDW,
+using the \code{arcgislayers} package. You must be on a Forest Service network
+to access data from the internal ArcGIS REST Service.
 }
 \examples{
 library(mpsgSE)

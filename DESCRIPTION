@@ -29,6 +29,7 @@ Imports:
     natserv,
     osmdata,
     purrr,
+    psoGIStools,
     readr,
     readxl,
     remotes,

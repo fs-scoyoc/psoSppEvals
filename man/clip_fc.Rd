@@ -2,7 +2,7 @@
 % Please edit documentation in R/spatial_functions.R
 \name{clip_fc}
 \alias{clip_fc}
-\title{Clip feature class to polygon}
+\title{Deprecated: Clip feature class to polygon}
 \usage{
 clip_fc(sf_lyr, sf_clip, locale = NULL)
 }
@@ -18,11 +18,13 @@ location (e.g., forest acronym or "Buffer").}
 An \link[sf:sf]{sf::sf} object
 }
 \description{
-This function clips a \code{sf} object using \code{sf::st_intersection()}. First, this
-function checks that the coordinate reference system (CRS) of the input
-object is the same as the clipping object. If it is not, this function
-transforms the clipping object to CRS of the input object using
-\code{sf::st_transform()}before clipping. The output CRS is not changed.
+This function is not maintained, but remains here for now. Use the
+\code{psoGIStools} package. This function clips a \code{sf} object using
+\code{sf::st_intersection()}. First, this function checks that the coordinate
+reference system (CRS) of the input object is the same as the clipping
+object. If it is not, this function transforms the clipping object to CRS
+of the input object using \code{sf::st_transform()}before clipping. The output
+CRS is not changed.
 }
 \examples{
 ## Not run:

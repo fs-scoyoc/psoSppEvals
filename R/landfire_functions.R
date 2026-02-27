@@ -60,12 +60,11 @@ pull_landfire <- function(plan_area_sf, lf_dir, email_address, res = 30){
   evt_data = terra::extract(lf_aoa, aoa_sf) |> 
     janitor::clean_names() |> 
     dplyr::group_by(evt_name) |> 
-    dplyr::summarise(count = dplyr::n()) |> 
+    dplyr::summarise(count = dplyr::n(), .groups = 'drop') |> 
     dplyr::left_join(attr_table, by = "evt_name") |> 
     dplyr::mutate(area_m2 = count * prod(terra::res(lf_aoa)), 
                   acres = area_m2 / 4046.86, 
-                  pct_area = (area_m2 / sum(plan_area_proj$area_m2) * 100), 
-                  .groups = 'drop')
+                  pct_area = (area_m2 / sum(plan_area_proj$area_m2) * 100))
   phys_data = evt_data |> 
     dplyr::group_by(evt_phys, evt_gp_n, evt_sbcls, evt_name) |> 
     dplyr::summarise(count = sum(count), 
