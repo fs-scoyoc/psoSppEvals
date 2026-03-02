@@ -11,7 +11,7 @@
 #'     is FALSE.
 #'
 #' @returns A list of `sf` objects including BIEN, eBird, and IUCN range data.
-#' @seealso [download_ebird_range_maps()], [download_bien_range_maps()], [build_iucn_maps()]
+#' @seealso [download_bien_maps()], [download_ebird_range_maps()], [build_iucn_maps()]
 #' @export
 #' 
 #' @examples

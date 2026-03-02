@@ -2,7 +2,7 @@
 % Please edit documentation in R/landfire_functions.R
 \name{extract_landfire_evt}
 \alias{extract_landfire_evt}
-\title{Extract EVT Data to Points}
+\title{Extract EVT Data to Points and Summarize by Taxa}
 \usage{
 extract_landfire_evt(spp_list, spp_pts_sf, lf_dir)
 }
@@ -18,7 +18,8 @@ from \code{get_taxonomies()}.}
 A list.
 }
 \description{
-Extract EVT Data to Points
+This function extracts LANDFIRE EVT data to species occurrence data and then
+summarizes the EVT data by taxa.
 }
 \examples{
 library(mpsgSE)

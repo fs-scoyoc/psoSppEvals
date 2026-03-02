@@ -2,7 +2,7 @@
 % Please edit documentation in R/spatial_functions.R
 \name{read_fc}
 \alias{read_fc}
-\title{Depricated: Read feature class into R.}
+\title{\strong{Deprecated}. Read feature class into R.}
 \usage{
 read_fc(lyr, dsn, target_crs = NULL)
 }

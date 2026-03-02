@@ -72,12 +72,23 @@ of 'plan_area' with 'plan_area' erased using \code{\link[sf:geos_binary_ops]{sf:
 These data are returned in the coordinate reference system provided by
 the \code{crs} parameter.
 
-Roads data include 'roads'. These data are acquired using the \link[osmdata:osmdata]{osmdata::osmdata}
-package, primarily \code{\link[osmdata:getbb]{osmdata::getbb()}}, \code{\link[osmdata:opq]{osmdata::opq()}}, and
-\code{\link[osmdata:osmdata_sf]{osmdata::osmdata_sf()}}. These data are returned in the coordinate
-reference system provided by the \code{crs} parameter.
+Pulling roads data from OpenStreetMap has not been working lately. This part
+of the function is  currently commented out. Roads data include 'roads'.
+These data are acquired using the \link[osmdata:osmdata]{osmdata::osmdata} package, primarily
+\code{\link[osmdata:getbb]{osmdata::getbb()}}, \code{\link[osmdata:opq]{osmdata::opq()}}, and \code{\link[osmdata:osmdata_sf]{osmdata::osmdata_sf()}}. These
+data are returned in the coordinate reference system provided by the
+\code{crs} parameter.
 }
 \note{
+The basic ownership layer (\emph{EDW_BasicOwnership_02}) has not been reading into
+R from the Forest Service REST Service lately. Use a user-defined plan
+area spatial feature in the \code{plan_area} parameter for this function to
+work properly.
+
+Pulling roads data from OpenStreetMap has not been working lately. This part
+of the function is  currently commented out and the roads data are not
+returned.
+
 Sometimes the connection to the Forest Service REST Service or \link[osmdata:osmdata]{osmdata::osmdata}
 fails. This will throw the following error message: "\strong{Error:}
 tar_make() Status code: 500. Error: json". In most instances, the

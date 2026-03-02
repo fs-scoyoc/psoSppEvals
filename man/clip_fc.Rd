@@ -2,7 +2,7 @@
 % Please edit documentation in R/spatial_functions.R
 \name{clip_fc}
 \alias{clip_fc}
-\title{Deprecated: Clip feature class to polygon}
+\title{\strong{Deprecated}. Clip feature class to polygon}
 \usage{
 clip_fc(sf_lyr, sf_clip, locale = NULL)
 }

@@ -27,10 +27,10 @@ pull_landfire <- function(plan_area_sf, lf_dir, email_address, res = 30){
   # Generate AoA wkt string
   lf_aoi = rlandfire::getAOI(aoa_sf)
   # Pull EVT data from LANDFIRE API
-  resp = rlandfire::landfireAPIv2(products = "250EVT", aoi = lf_aoi, 
-                                   email_address, resolution = res, 
-                                   path = tempfile(fileext = ".zip"), 
-                                   method = 'auto', verbose = FALSE)
+  resp = rlandfire::landfireAPIv2(products = "250EVT", aoi = lf_aoi,
+                                  email_address, resolution = res,
+                                  path = tempfile(fileext = ".zip"),
+                                  method = 'auto', verbose = FALSE)
   # Unzip raster and save to lf_dir
   utils::unzip(resp$path, exdir = lf_dir)
   # Read raster into R
@@ -77,7 +77,10 @@ pull_landfire <- function(plan_area_sf, lf_dir, email_address, res = 30){
 }
 
 
-#' Extract EVT Data to Points
+#' Extract EVT Data to Points and Summarize by Taxa
+#' 
+#' This function extracts LANDFIRE EVT data to species occurrence data and then 
+#'     summarizes the EVT data by taxa.
 #'
 #' @param spp_list List of species with taxon ID's from `get_taxonomies()`.
 #' @param spp_pts_sf [sf] points object of species occurrences with taxon ID's 

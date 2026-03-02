@@ -2,7 +2,7 @@
 % Please edit documentation in R/spatial_functions.R
 \name{read_edw_lyr}
 \alias{read_edw_lyr}
-\title{Deprecated: Read spatial data from Forest Service ArcGIS REST Services}
+\title{\strong{Deprecated}. Read spatial data from Forest Service ArcGIS REST Services}
 \usage{
 read_edw_lyr(map_name, layer = 0, service = "arcx", crs = "EPSG:4326")
 }

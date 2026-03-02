@@ -37,5 +37,5 @@ message("Stay tuned.")
 
 }
 \seealso{
-\code{\link[=download_ebird_range_maps]{download_ebird_range_maps()}}, \code{\link[=download_bien_range_maps]{download_bien_range_maps()}}, \code{\link[=build_iucn_maps]{build_iucn_maps()}}
+\code{\link[=download_bien_maps]{download_bien_maps()}}, \code{\link[=download_ebird_range_maps]{download_ebird_range_maps()}}, \code{\link[=build_iucn_maps]{build_iucn_maps()}}
 }

@@ -1,63 +1,3 @@
-#' Deprecated: Clip feature class to polygon
-#' 
-#' This function is not maintained, but remains here for now. Use the 
-#'     `psoGIStools` package. This function clips a `sf` object using
-#'     `sf::st_intersection()`. First, this function checks that the coordinate
-#'     reference system (CRS) of the input object is the same as the clipping
-#'     object. If it is not, this function transforms the clipping object to CRS
-#'     of the input object using `sf::st_transform()`before clipping. The output
-#'     CRS is not changed.
-#'
-#' @param sf_lyr  Spatial (`sf`) object to be clipped.
-#' @param sf_clip Polygon (`sf`) object used to clip.
-#' @param locale  Optional. Short description of clipped layer, usually the 
-#'                    location (e.g., forest acronym or "Buffer").
-#'
-#' @return An [sf] object
-#' @seealso [sf::st_intersection()], [sf::st_transform()]
-#' @export
-#' 
-#' @examples
-#' ## Not run:
-#' 
-#' library("mpsgSE")
-#' 
-#' # Read spatial data into R
-#' t_path <- file.path("T:/path/to/project/directory")
-#' gdb_path <- file.path(t_path, "GIS_Data.gdb")
-#' sf_plan_area <- read_fc(lyr = "PlanArea", dsn = gdb_path, crs = "NAD83")
-#' 
-#' # Pull data from existing GBIF query
-#' gbif_dat <- get_gbif(gbif_key = '9999999-999999999999999', 
-#'                      t_path = file.path(t_path, "data"))
-#' 
-#' # Convert to spatial object
-#' gbif_sf <- gbif_spatial(gbif_dat, "NAD83")
-#' 
-#' # Clip to extents
-#' unit_gbif <- clip_fc(gbif_sf, sf_plan_area)
-#' 
-#' ## End (Not run)
-clip_fc <- function(sf_lyr, sf_clip, locale = NULL){
-  
-  # Transform clipping layer
-  if(sf::st_crs(sf_lyr) != sf::st_crs(sf_clip)){
-    sf_clip = sf::st_transform(sf_clip, crs = sf::st_crs(sf_lyr))
-  }
-  
-  # Clip input layer
-  sf_lyr = sf::st_intersection(sf_lyr, sf_clip) |> 
-    dplyr::select(-tidyselect::any_of(colnames(sf_clip)))
-  
-  # Add locale
-  if(!is.null(locale)){
-    sf_lyr = dplyr::mutate(sf_lyr, locale = locale)
-  }
-  
-  return(sf_lyr)
-}
-
-
 #' Get base map data
 #' 
 #' @description
@@ -67,6 +7,15 @@ clip_fc <- function(sf_lyr, sf_clip, locale = NULL){
 #'     Service data are acquired from Forest Service ArcGIS Rest Services
 #'     (https://apps.fs.usda.gov/arcx/rest/services/EDW) using `arcgislayers` 
 #'     package. Roads data are acquired using the `osmdata` package.
+#' @note
+#' The basic ownership layer (*EDW_BasicOwnership_02*) has not been reading into 
+#'     R from the Forest Service REST Service lately. Use a user-defined plan 
+#'     area spatial feature in the `plan_area` parameter for this function to 
+#'     work properly.
+#' @note
+#' Pulling roads data from OpenStreetMap has not been working lately. This part 
+#'     of the function is  currently commented out and the roads data are not 
+#'     returned.
 #'
 #' @param states A list of state names or abbreviations.
 #' @param region_number The Forest Service Region number
@@ -106,10 +55,12 @@ clip_fc <- function(sf_lyr, sf_clip, locale = NULL){
 #'     These data are returned in the coordinate reference system provided by 
 #'     the `crs` parameter.
 #' @details
-#' Roads data include 'roads'. These data are acquired using the [osmdata] 
-#'     package, primarily [osmdata::getbb()], [osmdata::opq()], and 
-#'     [osmdata::osmdata_sf()]. These data are returned in the coordinate 
-#'     reference system provided by the `crs` parameter.
+#' Pulling roads data from OpenStreetMap has not been working lately. This part 
+#'     of the function is  currently commented out. Roads data include 'roads'. 
+#'     These data are acquired using the [osmdata] package, primarily 
+#'     [osmdata::getbb()], [osmdata::opq()], and [osmdata::osmdata_sf()]. These 
+#'     data are returned in the coordinate reference system provided by the 
+#'     `crs` parameter.
 #' @note
 #' Sometimes the connection to the Forest Service REST Service or [osmdata] 
 #'     fails. This will throw the following error message: "**Error:** 
@@ -206,31 +157,93 @@ get_basemap_data = function(states, region_number, forest_number, forest_name,
     suppressWarnings()
 
   #-- Roads
-  message("Roads")
-  # Area of Analysis
-  roads_aoa = sf::st_buffer(admin_bndry, 1000000) |> sf::st_bbox()
-  # Roads
-  roads = lapply(states, function(state){
-    osm_dat = osmdata::getbb(state) |> 
-      osmdata::opq() |>
-      osmdata::add_osm_feature("highway", 
-                               value = c("motorway", "trunk", "primary")) |>
-      osmdata::osmdata_sf()
-    return(osm_dat$osm_lines)
-  }) |> 
-    dplyr::bind_rows() |>
-    sf::st_transform(crs) |> 
-    sf::st_crop(roads_aoa) |> 
-    suppressWarnings()
+  # message("Roads")
+  # # Area of Analysis
+  # roads_aoa = sf::st_buffer(admin_bndry, 1000000) |> sf::st_bbox()
+  # # Roads
+  # roads = lapply(states, function(state){
+  #   osm_dat = osmdata::getbb(state) |> 
+  #     osmdata::opq() |>
+  #     osmdata::add_osm_feature("highway", 
+  #                              value = c("motorway", "trunk", "primary")) |>
+  #     osmdata::osmdata_sf()
+  #   return(osm_dat$osm_lines)
+  # }) |> 
+  #   dplyr::bind_rows() |>
+  #   sf::st_transform(crs) |> 
+  #   sf::st_crop(roads_aoa) |> 
+  #   suppressWarnings()
   
   dat = tibble::lst(americas, north_america, l_48, aoa, 
                     "admin_bndry" = ad_bdy, "plan_area" = pl_ar, 
-                    "districts" = dists, plan_area_doughnut, roads)
+                    "districts" = dists, plan_area_doughnut)
   return(dat)
 }
 
 
-#' Deprecated: Read spatial data from Forest Service ArcGIS REST Services
+# Deprecated Functions ----
+
+#' **Deprecated**. Clip feature class to polygon
+#' 
+#' This function is not maintained, but remains here for now. Use the 
+#'     `psoGIStools` package. This function clips a `sf` object using
+#'     `sf::st_intersection()`. First, this function checks that the coordinate
+#'     reference system (CRS) of the input object is the same as the clipping
+#'     object. If it is not, this function transforms the clipping object to CRS
+#'     of the input object using `sf::st_transform()`before clipping. The output
+#'     CRS is not changed.
+#'
+#' @param sf_lyr  Spatial (`sf`) object to be clipped.
+#' @param sf_clip Polygon (`sf`) object used to clip.
+#' @param locale  Optional. Short description of clipped layer, usually the 
+#'                    location (e.g., forest acronym or "Buffer").
+#'
+#' @return An [sf] object
+#' @seealso [sf::st_intersection()], [sf::st_transform()]
+#' @export
+#' 
+#' @examples
+#' ## Not run:
+#' 
+#' library("mpsgSE")
+#' 
+#' # Read spatial data into R
+#' t_path <- file.path("T:/path/to/project/directory")
+#' gdb_path <- file.path(t_path, "GIS_Data.gdb")
+#' sf_plan_area <- read_fc(lyr = "PlanArea", dsn = gdb_path, crs = "NAD83")
+#' 
+#' # Pull data from existing GBIF query
+#' gbif_dat <- get_gbif(gbif_key = '9999999-999999999999999', 
+#'                      t_path = file.path(t_path, "data"))
+#' 
+#' # Convert to spatial object
+#' gbif_sf <- gbif_spatial(gbif_dat, "NAD83")
+#' 
+#' # Clip to extents
+#' unit_gbif <- clip_fc(gbif_sf, sf_plan_area)
+#' 
+#' ## End (Not run)
+clip_fc <- function(sf_lyr, sf_clip, locale = NULL){
+  
+  # Transform clipping layer
+  if(sf::st_crs(sf_lyr) != sf::st_crs(sf_clip)){
+    sf_clip = sf::st_transform(sf_clip, crs = sf::st_crs(sf_lyr))
+  }
+  
+  # Clip input layer
+  sf_lyr = sf::st_intersection(sf_lyr, sf_clip) |> 
+    dplyr::select(-tidyselect::any_of(colnames(sf_clip)))
+  
+  # Add locale
+  if(!is.null(locale)){
+    sf_lyr = dplyr::mutate(sf_lyr, locale = locale)
+  }
+  
+  return(sf_lyr)
+}
+
+
+#' **Deprecated**. Read spatial data from Forest Service ArcGIS REST Services
 #' 
 #' This function is not maintained, but remains here for now. Use the 
 #'     `psoGIStools` package. This function reads spatial features from the 
@@ -276,7 +289,7 @@ read_edw_lyr <- function(map_name, layer = 0, service = "arcx",
 }
 
 
-#' Depricated: Read feature class into R.
+#' **Deprecated**. Read feature class into R.
 #' 
 #' This function is not maintained, but remains here for now. Use the 
 #'     `psoGIStools` package. This function uses the `sf` package to read a 

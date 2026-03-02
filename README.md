@@ -7,7 +7,7 @@ Welcome to the Mountain Planning Service Group (MPSG; USDA Forest Service) Speci
 **Notes:**
 
 1.  Some functions access publicly available data sources like GBIF, eBird, and BIEN. Other functions access data on internal Forest Service servers and will not work unless you are on the Forest Service network with the servers mapped to your computer. We have tired to note which functions access Forest Service servers in the man pages. Please let us know if we missed anything by submitting an [Issue](https://github.com/fs-scoyoc/mpsgSE/issues).
-2.  This package is moving the spatial function `clip_fc()`, `read_edw_lyr()`, and `read_fc()` to the `psoGIStools` package. The functions included in this package are no longer maintained and will eventually be removed.
+2.  I am moving the spatial functions `clip_fc()`, `read_edw_lyr()`, and `read_fc()` to the `psoGIStools` package. The functions included in this package will no longer be maintained and will eventually be removed.
 
 **Authors:** [Matt Van Scoyoc](https://github.com/fs-scoyoc) and [Michael Schmidt](https://github.com/fs-mschmidty)
 
@@ -69,7 +69,7 @@ remotes::install_github("fs-scoyoc/mpsgSE")
 
 -   `count_spp_by_hab`: Count species by NatureServe habitat type.
 
--   `download_bien_range_maps`: Download BIEN range map data and read them into R.
+-   `download_bien_maps`: Download BIEN range map data and read them into R.
 
 -   `download_ebird_range_maps`: Download eBird range map data and read them into R.
 
