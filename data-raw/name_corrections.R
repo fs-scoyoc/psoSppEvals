@@ -43,7 +43,8 @@ name_corrections = tibble::tibble(
     "Rough Rattlesnake-root", "Open-ground Whitlow-grass", "Diana Fritillary", 
     "an angle moth", "Pin Lichen", "Lindberg's Plait Moss", 
     "Tufted Evening-primrose", "Nuttals's Sandwart", "Glaucous Rattlesnakeroot",
-    "Tall Fescue"
+    "Tall Fescue", "Colorado River Cutthroat Trout", 
+    "Bonneville Cutthroat Trout"
     ),
   # Names throwing taxon ID errors
   errored_name = c(
@@ -53,7 +54,8 @@ name_corrections = tibble::tibble(
     "Ranunculus lapponicus", "Prenanthes aspera", "Draba aprica", 
     "Argynnis diana", "Macaria prunosata", "Calicium tigillare", 
     "Hypnum lindbergii", "Oenothera caespitosa", "Minuartia nuttallii", 
-    "Prenanthes racemose", "Schedonorus arundinaceus"
+    "Prenanthes racemose", "Schedonorus arundinaceus", 
+    "Oncorhynchus virginalis pleuriticus", "Oncorhynchus virginalis utah"
     ), 
   # Corrected scientific names
   corrected_name = c(
@@ -63,19 +65,22 @@ name_corrections = tibble::tibble(
     "Coptidium lapponicum", "Nabalus asper", "Abdra aprica", "Speyeria diana",
     "Speranza prunosata", "Calicium tigillare", "Calliergonella lindbergii", 
     "Oenothera cespitosa", "Sabulina nuttallii", "Nabalus racemosus", 
-    "Lolium arundinaceum"
+    "Lolium arundinaceum", "Oncorhynchus clarkii pleuriticus", 
+    "Oncorhynchus clarkii utah"
     )
   ) |> 
   # Pull taxon IDs from GBIF
+  mpsgSE::get_taxonomies("corrected_name") |> 
   dplyr::mutate(
-    taxon_id = taxize::get_gbifid(corrected_name, ask = FALSE, rows = 1, 
-                                  messages = FALSE),
+    # taxon_id = taxize::get_gbifid(corrected_name, ask = FALSE, rows = 1, 
+    #                               messages = FALSE),
     # manual corrections
     taxon_id = ifelse(errored_name == "Furcula vargoi", 10047243, taxon_id),
     taxon_id = ifelse(errored_name == "Lepidostoma apache", 125954696, taxon_id),
     taxon_id = ifelse(errored_name == "Calicium tigillare", 7682261, taxon_id),
     taxon_id = as.numeric(taxon_id)
-  )
+  ) |> 
+  dplyr::arrange(kingdom, phylum, class, order, family, genus, species, corrected_name)
 
 
 # manual corrections ----
