@@ -43,7 +43,7 @@ name_corrections = tibble::tibble(
     "an angle moth", "Pin Lichen", "Lindberg's Plait Moss", 
     "Tufted Evening-primrose", "Nuttals's Sandwart", "Glaucous Rattlesnakeroot",
     "Tall Fescue", "Colorado River Cutthroat Trout", 
-    "Bonneville Cutthroat Trout", "Lewis's Trinity"
+    "Bonneville Cutthroat Trout", "Trinity Lewisia"
     ),
   # Names throwing taxon ID errors
   errored_name = c(
@@ -91,7 +91,7 @@ manual_corrections <- tibble::tibble(
   # Common names
   common_name = c(
     "Vargo's Furcula", "a lepidostomatid caddisfly", "pin lichen", 
-    "Lewis's Trinity"
+    "Trinity Lewisia"
     ),
   # Names throwing taxon ID errors
   scientific_name = c(
