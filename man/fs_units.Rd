@@ -12,7 +12,7 @@ A data frame of 114 observations and 6 variables.
 \item{forestnumber}{Forest number.}
 \item{forestorgcode}{Forest org code.}
 \item{forestname}{Forest name.}
-\item{gis_acres}{Fores acres calsulated by ESRI ArcGIS.}
+\item{gis_acres}{Acres calsulated by ESRI ArcGIS.}
 }
 }
 \source{

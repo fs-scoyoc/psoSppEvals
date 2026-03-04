@@ -7,7 +7,7 @@
 build_iucn_maps(iucn_paths)
 }
 \arguments{
-\item{iucn_paths}{}
+\item{iucn_paths}{File paths to IUCN shapefiles.}
 }
 \value{
 An \link[sf:sf]{sf::sf} object.
@@ -16,20 +16,17 @@ An \link[sf:sf]{sf::sf} object.
 This function reads spatial (polygon) range data from International Union for
 Conservation of Nature (IUCN) into R. These shapefiles were downloaded
 from IUCN (\url{https://www.iucnredlist.org/resources/spatial-data-download}),
-and saved on the MPSG T-drive. This function will this function will fail
-if you are not on a FS network or in the FS VDI. Use
-\code{get_iucn_shp_paths()} to get the shapefile paths prior to running this
-function.
+and saved on the MPSG T-drive. This function will fail if you are not on
+a FS network or in the FS VDI. Use \code{get_iucn_shp_paths()} to get the
+shapefile paths prior to running this function.
 }
 \examples{
-## Not run:
-
+\dontrun{
 library(mpsgSE)
 spp_list <- get_taxonomies(sp_list_ex)
 map_paths <- get_iucn_shp_paths(spp_list)
 iucn_maps <- build_iucn_maps(map_paths)
-
-## End(Not run)                     
+}
 }
 \seealso{
 \code{\link[=get_taxonomies]{get_taxonomies()}}, \code{\link[=get_iucn_shp_paths]{get_iucn_shp_paths()}}

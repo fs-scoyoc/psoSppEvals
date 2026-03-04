@@ -22,8 +22,7 @@ Subset eligible species from SEINet data and reduce variables.
 Additional details...
 }
 \examples{
-## Not run:
-
+\dontrun{
 library("mpsgSE")
 
 # Path to data folder
@@ -37,8 +36,7 @@ spp_list <- sei_spp(sei_dat)
 birds <- dplyr::filter(class == "Aves")
 # Subset spatial SEINet data
 sei_birds <- build_seinet_spatial_data(sei_dat, birds)
-
-## End(Not run)
+}
 }
 \seealso{
 \code{\link[=get_seinet_data]{get_seinet_data()}}, \code{\link[=build_seinet_spp]{build_seinet_spp()}}, \code{\link[=get_taxonomies]{get_taxonomies()}}

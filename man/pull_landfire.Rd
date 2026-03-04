@@ -24,5 +24,10 @@ raster data and then summarizes the data by EVT Name and EVT Physiognomy
 for the Plan Area (FS lands).
 }
 \examples{
+\dontrun{
 library(mpsgSE)
+
+message("Example coming soon. To a theater near you.")
+
+}
 }

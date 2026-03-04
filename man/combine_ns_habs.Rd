@@ -19,8 +19,7 @@ This function combines two habitat data frames returned from
 \code{get_ns_habitat()}.
 }
 \examples{
-## Not run:
-
+\dontrun{
 library("mpsgSE")
 
 # Colorado
@@ -33,8 +32,7 @@ hab_wy <- get_ns_habitat(ns_wy)
 
 # Combine CO and WY
 habitats <- combine_ns_habs(hab_co, hab_wy)
-
-## End(Not run)
+}
 }
 \seealso{
 \code{\link[=get_ns_habitat]{get_ns_habitat()}}

@@ -24,8 +24,7 @@ MPSG T-drive and will fail if the user is not on a Forest Service network
 or the VDI and does not have access to the restricted data folder.
 }
 \examples{
-## Not run:
-
+\dontrun{
 library("mpsgSE")
 
 # Read IMBCR data into R
@@ -34,8 +33,7 @@ imbcr_dat <- get_imbcr_data(mgmt_units)
 
 # Summarize data by species
 build_imbcr_spp(imbcr_dat)
-
-## End(Not run)
+}
 }
 \seealso{
 \code{\link[=get_imbcr_data]{get_imbcr_data()}}, \code{\link[=get_taxonomies]{get_taxonomies()}}

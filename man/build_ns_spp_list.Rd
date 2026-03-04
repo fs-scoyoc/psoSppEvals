@@ -17,13 +17,11 @@ This function builds a species list with global and state NatureServe
 rankings using data returned from \code{get_ns_state_list()}.
 }
 \examples{
-## Not run:
-
+\dontrun{
 library("mpsgSE")
 ns_co <- get_ns_state_list("CO", taxonomy = FALSE)
 spp_list <- build_ns_spp_list(ns_co)
-
-## End(Not run)
+}
 }
 \seealso{
 \code{\link[=get_ns_state_list]{get_ns_state_list()}}

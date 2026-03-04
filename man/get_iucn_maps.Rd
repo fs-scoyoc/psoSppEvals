@@ -20,12 +20,11 @@ and saved on the MPSG T-drive. This function will this function will fail
 if you are not on a FS network.
 }
 \examples{
+\dontrun{
 library('mpsgSE')
-
 spp_list <- get_taxonomies(mpsgSE::sp_list_ex, correct = TRUE)
-
 iucn_maps <- get_iucn_maps(spp_list)
-
+}
 }
 \seealso{
 \code{\link[=get_taxonomies]{get_taxonomies()}}

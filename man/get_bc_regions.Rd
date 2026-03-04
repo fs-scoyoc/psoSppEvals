@@ -17,14 +17,10 @@ This function clips the Birds of Conservation Regions \link[sf:sf]{sf::sf} objec
 polygon.
 }
 \examples{
-## Not run:
-
 library("mpsgSE")
 
 # Pull the Administrative Boundary for the Dixie National Forest
-adm_bdy <- mpsgSE::read_edw_lyr("EDW_ForestSystemBoundaries_01", layer = 1) |> 
+adm_bdy <- psoGIStools::read_edw_lyr("EDW_ForestSystemBoundaries_01", 1) |> 
   dplyr::filter(region == "04" & forestnumber == "07")
 get_bc_regions(adm_bdy)
- 
-## End(Not run)                     
 }

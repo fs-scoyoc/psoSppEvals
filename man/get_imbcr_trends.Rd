@@ -17,12 +17,9 @@ This function read an *.RDS file into R and filters it by Birds of
 Conservation Consern (BCC) region.
 }
 \examples{
-## Not run:
-
+\dontrun{
 library("mpsgSE")
-
 regions <- c("UT-BCR9", "UT-BCR16", "UT")
 imbcr_trends <- get_imbcr_trends(regions)
-
-## End(Not run)
+}
 }

@@ -18,6 +18,6 @@ saved as the \code{rfss} dataset in the \code{mpsgSE} package to a specified For
 Service Region.
 }
 \examples{
-install.packages(mpsgSE)
+library(mpsgSE)
 r1_ssl <- get_rfss_list("R1")
 }

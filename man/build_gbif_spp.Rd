@@ -26,8 +26,7 @@ observations. This function then verifies taxonomy using the
 \code{get_taxonomies()} function.
 }
 \examples{
-## Not run:
-
+\dontrun{
 library("mpsgSE")
 
 # Project directory path
@@ -39,8 +38,7 @@ gbif_dat <- get_gbif_data(gbif_key = '9999999-999999999999999',
 
 # Summarize species
 gbif_list <- build_gbif_spp(gbif_dat)
-
-## End(Not run)
+}
 }
 \seealso{
 \code{\link[=get_gbif_data]{get_gbif_data()}}, \code{\link[=get_taxonomies]{get_taxonomies()}}, \code{\link[=correct_taxon_ids]{correct_taxon_ids()}}

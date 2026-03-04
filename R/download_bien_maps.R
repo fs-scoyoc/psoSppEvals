@@ -13,13 +13,11 @@
 #' @export
 #' 
 #' @examples
-#' ## Not run:
-#' 
+#' \dontrun{
 #' library(mpsgSE)
 #' spp_list <- get_taxonomies(sp_list_ex)
 #' bien_range_maps <- download_bien_range_maps(spp_list, file.path("data", "bien_maps"))
-#' 
-#' ## End(Not run)                     
+#' }
 download_bien_maps <- function(spp_list, output_path) {
   # spp_list = targets::tar_read(elig_list)
   # output_path = file.path("data", "bien_maps")

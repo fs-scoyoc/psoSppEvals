@@ -21,13 +21,11 @@ identified as eligible for Species of Conservation Concern and returns a
 spatial (\code{sf}) object.
 }
 \examples{
-## Not run:
-
+\dontrun{
 library(mpsgSE)
 spp_list <- get_taxonomies(sp_list_ex)
 bien_range_maps <- download_bien_range_maps(spp_list, file.path("data", "bien_maps"))
-
-## End(Not run)                     
+}
 }
 \seealso{
 \code{\link[=get_taxonomies]{get_taxonomies()}}

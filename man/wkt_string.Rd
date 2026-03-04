@@ -17,6 +17,7 @@ Creates a well-known text string from a polygon (\code{sf} object). This functio
 transforms the input polygon to WGS84 prior to calculating the wkt string.
 }
 \examples{
+\dontrun{
 library("mpsgSE")
 
 # Read spatial data into R
@@ -26,4 +27,5 @@ sf_aoa <- read_fc(lyr = "AdminBdy_1kmBuffer", dsn = gdb_path, crs = "NAD83")
 
 # Create WKT string
 wkt_string(sf_aoa)
+}
 }

@@ -27,8 +27,7 @@ of the input object using \code{sf::st_transform()}before clipping. The output
 CRS is not changed.
 }
 \examples{
-## Not run:
-
+\dontrun{
 library("mpsgSE")
 
 # Read spatial data into R
@@ -45,8 +44,7 @@ gbif_sf <- gbif_spatial(gbif_dat, "NAD83")
 
 # Clip to extents
 unit_gbif <- clip_fc(gbif_sf, sf_plan_area)
-
-## End (Not run)
+}
 }
 \seealso{
 \code{\link[sf:geos_binary_ops]{sf::st_intersection()}}, \code{\link[sf:st_transform]{sf::st_transform()}}

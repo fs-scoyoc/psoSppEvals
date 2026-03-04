@@ -11,6 +11,15 @@ A data frame of 7 observations and 4 variables.
 \item{errored_name}{Name that is not being queried in GBIF.}
 \item{corrected_name}{A scientific name for the same speces in the GBIF backbome taxononmy.}
 \item{taxon_id}{Taxon ID.}
+\item{gbif_taxonID}{Taxon ID from GBIF.}
+\item{kingdom}{Taxonomic Kingdom}
+\item{phylum}{Taxonomic Phylum}
+\item{class}{Taxonomic Class}
+\item{order}{Taxonomic Order}
+\item{family}{Taxonomic Family}
+\item{genus}{Taxonomic Genus}
+\item{species}{Taxonomic Species}
+\item{subspecies}{Taxonomic Subspecies}
 }
 }
 \usage{

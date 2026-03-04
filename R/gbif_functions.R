@@ -14,8 +14,7 @@
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#'
+#' \dontrun{
 #' library("mpsgSE")
 #'
 #' # Project directory path
@@ -29,8 +28,7 @@
 #' birds <- dplyr::filter(gbif_list, class == "Aves")
 #' # Subset spatial data
 #' gbif_birds <- build_gbif_spatial_data(gbif_dat, birds)
-#'
-#' ## End(Not run)
+#' }
 build_gbif_spatial_data <- function(gbif_data, spp_list) {
   # Variable names to reduce data frame
   var_names <- c(
@@ -106,6 +104,7 @@ build_gbif_spatial_data <- function(gbif_data, spp_list) {
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' library("mpsgSE")
 #'
 #' # Read spatial data into R
@@ -126,6 +125,7 @@ build_gbif_spatial_data <- function(gbif_data, spp_list) {
 #' gbif_dat <- get_gbif_data(gbif_key = '9999999-999999999999999',
 #'                           t_path = file.path(t_path, "data"),
 #'                           crs = 'NAD83')
+#' }
 get_gbif_data <- function(gbif_key, t_path, aoa_wkt = NULL, gbif_user = NULL,
                      gbif_pwd = NULL, gbif_email = NULL, gbif_format = "DWCA",
                      crs = NULL, process_data = TRUE, correct = TRUE){
@@ -213,8 +213,7 @@ get_gbif_data <- function(gbif_key, t_path, aoa_wkt = NULL, gbif_user = NULL,
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#'
+#' \dontrun{
 #' library("mpsgSE")
 #'
 #' # Project directory path
@@ -226,8 +225,7 @@ get_gbif_data <- function(gbif_key, t_path, aoa_wkt = NULL, gbif_user = NULL,
 #'
 #' # Summarize species
 #' gbif_list <- build_gbif_spp(gbif_dat)
-#'
-#' ## End(Not run)
+#' }
 build_gbif_spp <- function(gbif_data, locale = TRUE, correct = FALSE){
   # gbif_data = targets::tar_read(gbif_unit)
   
@@ -306,6 +304,7 @@ build_gbif_spp <- function(gbif_data, locale = TRUE, correct = FALSE){
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' library("mpsgSE")
 #'
 #' # Read spatial data into R
@@ -315,6 +314,7 @@ build_gbif_spp <- function(gbif_data, locale = TRUE, correct = FALSE){
 #'
 #' # Create WKT string
 #' wkt_string(sf_aoa)
+#' }
 wkt_string <- function(my_polygon){
   fc = sf::st_transform(my_polygon, crs ="WGS84" )
   wkt = sf::st_bbox(fc) |>
@@ -322,3 +322,25 @@ wkt_string <- function(my_polygon){
     sf::st_as_text()
   return(wkt)
 }
+
+
+#' Internal Function: Convert GBIF data frame to an sf object
+#' 
+#' This internal function converts the output from `get_gbif_data()` to a 
+#'     spatial (`sf`) object using `sf::st_as_sf()`. This function will also 
+#'     transform the data to a target coordinate reference system.
+#'
+#' @param gbif_dat GBIF data frame from `get_gbif_data()`.
+#' @param crs Target coordinate reference system (CRS). Either and 
+#'                `sf::st_crs()` object or accepted input string for 
+#'                `sf::st_crs()` (e.g. "WGS84" or "NAD83"). See `sf::st_crs()`
+#'                for more details. Default is NULL. If NULL, resulting sf 
+#'                object CRS will be WGS84.
+gbif_spatial <- function(gbif_dat, crs = NULL){
+  fc = sf::st_as_sf(gbif_dat, coords = c("decimalLongitude", "decimalLatitude"),
+                    crs = "WGS84")
+  if(!is.null(crs)){
+    if(sf::st_crs(fc) != crs) fc = sf::st_transform(fc, crs = crs)
+  }
+  return(fc)
+} 

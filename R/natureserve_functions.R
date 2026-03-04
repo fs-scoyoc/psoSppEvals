@@ -12,13 +12,11 @@
 #' @export
 #' 
 #' @examples
-#' ## Not run:
-#'
+#' \dontrun{
 #' library("mpsgSE")
 #' ns_co <- get_ns_state_list("CO", taxonomy = FALSE)
 #' spp_list <- build_ns_spp_list(ns_co)
-#'
-#' ## End(Not run)
+#' }
 build_ns_spp_list <- function(ns_data){
   # ns_data = ns_co
   
@@ -65,8 +63,7 @@ build_ns_spp_list <- function(ns_data){
 #' @export
 #' 
 #' @examples
-#' ## Not run:
-#'
+#' \dontrun{
 #' library("mpsgSE")
 #'
 #' # Colorado
@@ -79,8 +76,7 @@ build_ns_spp_list <- function(ns_data){
 #'
 #' # Combine CO and WY
 #' habitats <- combine_ns_habs(hab_co, hab_wy)
-#'
-#' ## End(Not run)
+#' }
 combine_ns_habs <- function(state_a_habitats, state_b_habitats){
   ns_habitats = dplyr::full_join(state_a_habitats, state_b_habitats,
                              by = c("habitat_category", "ns_habitat_type"),
@@ -108,8 +104,7 @@ combine_ns_habs <- function(state_a_habitats, state_b_habitats){
 #' @export
 #' 
 #' @examples
-#' ## Not run:
-#'
+#' \dontrun{
 #' library("mpsgSE")
 #'
 #' # Colorado
@@ -122,8 +117,7 @@ combine_ns_habs <- function(state_a_habitats, state_b_habitats){
 #'
 #' # Combine CO and WY
 #' spp_list <- combine_ns_spp_lists(spp_co, spp_wy)
-#'
-#' ## End(Not run)
+#' }
 combine_ns_spp_lists <- function(ns_spp_1, ns_spp_2){
   # ns_spp_1 = targets::tar_read(co_ns_spp)
   # ns_spp_2 = targets::tar_read(ks_ns_spp)
@@ -165,11 +159,13 @@ combine_ns_spp_lists <- function(ns_spp_1, ns_spp_2){
 #' @seealso [get_ns_state_list()]
 #' @export
 #' @examples
+#' \dontrun{
 #' library("mpsgSE")
 #'
 #' ns_co <- get_ns_state_list("CO")
 #' ns_ks <- get_ns_state_list("KS")
 #' ns_data <- combine_natureserve_data(ns_co, ns_ks)
+#' }
 combine_ns_state_lists <- function(ns_list_1, ns_list_2){
   # Function to pull species list from NatureServe List
   pull_spp_list = function(ns_list){
@@ -228,14 +224,12 @@ combine_ns_state_lists <- function(ns_list_1, ns_list_2){
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#'
+#' \dontrun{
 #' library("mpsgSE")
 #' ns_co <- get_ns_state_list("CO")
 #' habitats <- get_ns_habitat(ns_co)
 #' habitat_xwalk <- count_spp_by_hab(habitats)
-#'
-#' ## End(Not run)
+#' }
 count_spp_by_hab <- function(ns_habitats){
   df = ns_habitats |>
     dplyr::filter(!habitat_category == "comments") |>
@@ -263,9 +257,11 @@ count_spp_by_hab <- function(ns_habitats){
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' library("mpsgSE")
 #' co_ns_data_no_taxonid <- get_ns_state_list("CO", taxonomy = FALSE)
 #' co_ns_data <- get_ns_state_list("CO")
+#' }
 get_ns_state_list <- function(state, taxonomy = TRUE, correct = FALSE) {
   # state = "CO"; taxonomy = TRUE
 
@@ -329,13 +325,11 @@ get_ns_state_list <- function(state, taxonomy = TRUE, correct = FALSE) {
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#'
+#' \dontrun{
 #' library("mpsgSE")
 #' ns_co <- get_ns_state_list("CO")
 #' habitats <- get_ns_habitat(ns_co)
-#'
-#' ## End(Not run)
+#' }
 get_ns_habitat <- function(ns_state_list, spp_list) {
   # ns_state_list = targets::tar_read(ns_list)
   # spp_list = targets::tar_read(elig_list)

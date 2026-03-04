@@ -19,16 +19,12 @@ This function returns a data frame of bird species that occur in the Birds of
 Conservation Regions a National Forest or Grassland overlaps.
 }
 \examples{
-## Not run:
-
 library("mpsgSE")
 
 # Pull the Administrative Boundary for the Dixie National Forest
-adm_bdy = mpsgSE::read_edw_lyr("EDW_ForestSystemBoundaries_01", layer = 1) |>
+adm_bdy = psoGIStools::read_edw_lyr("EDW_ForestSystemBoundaries_01", 1) |>
   dplyr::filter(region == "04" & forestnumber == "07")
 
 # Get list of birds of conservation concern
-mpsgSE::get_bcr_list(adm_bdy)
- 
-## End(Not run)                     
+get_bcr_list(adm_bdy)
 }

@@ -14,20 +14,20 @@
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#'
+#' \dontrun{
 #' library("mpsgSE")
 #'
 #' # Read IMBCR data into R
 #' mgmt_units <- c("Cimarron National Grassland", "Comanche National Grassland")
 #' imbcr_dat <- get_imbcr_data(mgmt_units)
+#' 
 #' # Summarize data by species
 #' spp_list <- build_imbcr_spp(imbcr_dat)
 #' birds <- dplyr::filter(spp_list, family == "Corvidae")
+#' 
 #' # Subset spatial data
 #' corvids <- build_imbcr_spatial_data(imbcr_dat, birds)
-#'
-#' ## End(Not run)
+#' }
 build_imbcr_spatial_data <- function(imbcr_data, spp_list){
 
   # imbcr_data = targets::tar_read(imbcr_unit)
@@ -66,14 +66,11 @@ build_imbcr_spatial_data <- function(imbcr_data, spp_list){
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#'
+#' \dontrun{
 #' library("mpsgSE")
-#'
 #' mgmt_units <- c("Cimarron National Grassland", "Comanche National Grassland")
 #' get_imbcr_data(mgmt_units)
-#'
-#' ## End(Not run)
+#' }
 get_imbcr_data <- function(fs_unit, crs = NULL, dir_path = NULL){
   # library('sf')
   # fs_unit = "Medicine Bow-Routt National Forests"
@@ -111,14 +108,11 @@ get_imbcr_data <- function(fs_unit, crs = NULL, dir_path = NULL){
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#'
+#' \dontrun{
 #' library("mpsgSE")
-#'
 #' regions <- c("UT-BCR9", "UT-BCR16", "UT")
 #' imbcr_trends <- get_imbcr_trends(regions)
-#'
-#' ## End(Not run)
+#' }
 get_imbcr_trends <- function(bcc_region){
 
   imbcr_trends = readRDS(file = file.path("T:/FS/NFS/PSO/MPSG/MPSG_Restricted",
@@ -148,8 +142,7 @@ get_imbcr_trends <- function(bcc_region){
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#'
+#' \dontrun{
 #' library("mpsgSE")
 #'
 #' # Read IMBCR data into R
@@ -158,8 +151,7 @@ get_imbcr_trends <- function(bcc_region){
 #'
 #' # Summarize data by species
 #' build_imbcr_spp(imbcr_dat)
-#'
-#' ## End(Not run)
+#' }
 build_imbcr_spp <- function(imbcr_data, dir_path = NULL){
   # imbcr_data = targets::tar_read(unit_data)
   

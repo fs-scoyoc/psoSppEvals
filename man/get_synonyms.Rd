@@ -19,7 +19,6 @@ not be queried).
 }
 \examples{
 library(mpsgSE)
-spp_data <- mpsgSE::sp_list_ex |>
-  get_taxonomies('scientific_name')
+spp_data <- sp_list_ex |> get_taxonomies('scientific_name')
 get_synonyms(spp_data)
 }

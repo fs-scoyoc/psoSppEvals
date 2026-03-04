@@ -16,12 +16,8 @@
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#'
 #' library(mpsgSE)
 #' spp_list <- get_taxonomies(sp_list_ex)
-#'
-#' ## End(Not run)
 get_taxonomies <- function(spp_list, query_field = "scientific_name", 
                            correct = FALSE) {
   # spp_list = iucn_paths[1:100, ]
@@ -117,8 +113,7 @@ get_taxonomies <- function(spp_list, query_field = "scientific_name",
 #'
 #' @examples
 #' library(mpsgSE)
-#' spp_data <- mpsgSE::sp_list_ex |>
-#'   get_taxonomies('scientific_name')
+#' spp_data <- sp_list_ex |> get_taxonomies('scientific_name', correct = TRUE)
 #' get_synonyms(spp_data)
 get_synonyms <- function(spp_list) {
 

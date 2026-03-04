@@ -69,6 +69,7 @@ or polygon (\code{sf} object), and then reads the data into R.
 Additional details...
 }
 \examples{
+\dontrun{
 library("mpsgSE")
 
 # Read spatial data into R
@@ -89,6 +90,7 @@ gbif_dat <- get_gbif_data(gbif_key = 'new',
 gbif_dat <- get_gbif_data(gbif_key = '9999999-999999999999999',
                           t_path = file.path(t_path, "data"),
                           crs = 'NAD83')
+}
 }
 \seealso{
 \code{\link[rgbif:download_predicate_dsl]{rgbif::pred_within()}}, \code{\link[rgbif:occ_download]{rgbif::occ_download()}},

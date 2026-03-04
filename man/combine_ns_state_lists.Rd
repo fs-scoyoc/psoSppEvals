@@ -19,11 +19,13 @@ This function combines the state NatureServe lists returned from
 \code{get_ns_state_list()} and returns a species list data frame.
 }
 \examples{
+\dontrun{
 library("mpsgSE")
 
 ns_co <- get_ns_state_list("CO")
 ns_ks <- get_ns_state_list("KS")
 ns_data <- combine_natureserve_data(ns_co, ns_ks)
+}
 }
 \seealso{
 \code{\link[=get_ns_state_list]{get_ns_state_list()}}

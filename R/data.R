@@ -51,7 +51,7 @@
 #'   \item{forestnumber}{Forest number.}
 #'   \item{forestorgcode}{Forest org code.}
 #'   \item{forestname}{Forest name.}
-#'   \item{gis_acres}{Fores acres calsulated by ESRI ArcGIS.}
+#'   \item{gis_acres}{Acres calsulated by ESRI ArcGIS.}
 #' }
 #' @source Forest Service EDW Rest Services, https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_ForestSystemBoundaries_01/MapServer
 "fs_units"
@@ -84,6 +84,15 @@
 #'   \item{errored_name}{Name that is not being queried in GBIF.}
 #'   \item{corrected_name}{A scientific name for the same speces in the GBIF backbome taxononmy.}
 #'   \item{taxon_id}{Taxon ID.}
+#'   \item{gbif_taxonID}{Taxon ID from GBIF.}
+#'   \item{kingdom}{Taxonomic Kingdom}
+#'   \item{phylum}{Taxonomic Phylum}
+#'   \item{class}{Taxonomic Class}
+#'   \item{order}{Taxonomic Order}
+#'   \item{family}{Taxonomic Family}
+#'   \item{genus}{Taxonomic Genus}
+#'   \item{species}{Taxonomic Species}
+#'   \item{subspecies}{Taxonomic Subspecies}
 #' }
 "name_corrections"
 

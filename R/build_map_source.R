@@ -17,10 +17,9 @@
 #' @export
 #' 
 #' @examples
-#' ## Not run:
-#' 
+#' \dontrun{
 #' library("mpsgSE")
-#' ebird_key <- "abcde12fghij34"
+#' ebird_key <- Sys.getenv("EBIRDST_KEY")
 #' 
 #' # Build speceis list
 #' spp_list <- get_taxonomies(sp_list_ex)
@@ -42,8 +41,7 @@
 #'
 #' # Build map source data frame
 #' map_sources <- build_map_source(spp_list, bien_maps, ebird_maps, iucn_maps)
-#' 
-#' ## End(Not run)                     
+#' }
 build_map_source <- function(spp_list, bien_maps, ebird_maps, iucn_maps) {
   all_maps = spp_list |>
     dplyr::select(taxon_id) |>

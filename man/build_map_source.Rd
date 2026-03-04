@@ -25,10 +25,9 @@ This function takes in the maps that were retrieved using
 taxonomies, and range map data sources.
 }
 \examples{
-## Not run:
-
+\dontrun{
 library("mpsgSE")
-ebird_key <- "abcde12fghij34"
+ebird_key <- Sys.getenv("EBIRDST_KEY")
 
 # Build speceis list
 spp_list <- get_taxonomies(sp_list_ex)
@@ -50,8 +49,7 @@ iucn_maps <- get_iucn_maps(spp_list)
 
 # Build map source data frame
 map_sources <- build_map_source(spp_list, bien_maps, ebird_maps, iucn_maps)
-
-## End(Not run)                     
+}
 }
 \seealso{
 \code{\link[=get_taxonomies]{get_taxonomies()}},

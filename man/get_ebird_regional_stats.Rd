@@ -23,13 +23,11 @@ This function downloads regional trend statistics from eBird using the
 Additional details...
 }
 \examples{
-## Not run:
-
+\dontrun{
 library(mpsgSE)
 spp_list <- get_taxonomies(sp_list_ex)
 ebird_reg_status <- get_ebird_regional_stats(spp_list, ebird_access_key = ebird_key)
-
-## End(Not run)                     
+}
 }
 \seealso{
 \code{\link[=get_taxonomies]{get_taxonomies()}}, \code{\link[=download_ebird_status_maps]{download_ebird_status_maps()}}

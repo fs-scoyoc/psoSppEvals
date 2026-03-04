@@ -96,6 +96,7 @@ function can simply be executed again to retrieve the data. Check the
 data servers if the error is persistent.
 }
 \examples{
+\dontrun{
 library(mpsgSE)
 states <- c("Utah", "Nevada", "New Mexico")
 region_number <- "04"
@@ -103,6 +104,7 @@ forest_number <- "07"
 forest_name <- "Dixie National Forest"
 basemap_data <- get_basemap_data(states, region_number, forest_number, 
                                  forest_name)
+}
 }
 \seealso{
 \code{\link[=read_edw_lyr]{read_edw_lyr()}}, \code{\link[rnaturalearth:ne_countries]{rnaturalearth::ne_countries()}},

@@ -73,6 +73,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' library(mpsgSE)
 #' states <- c("Utah", "Nevada", "New Mexico")
 #' region_number <- "04"
@@ -80,6 +81,7 @@
 #' forest_name <- "Dixie National Forest"
 #' basemap_data <- get_basemap_data(states, region_number, forest_number, 
 #'                                  forest_name)
+#' }
 get_basemap_data = function(states, region_number, forest_number, forest_name,
                             admin_bndry = TRUE, plan_area = TRUE, 
                             districts = TRUE, target_crs = "EPSG:4326"){
@@ -203,8 +205,7 @@ get_basemap_data = function(states, region_number, forest_number, forest_name,
 #' @export
 #' 
 #' @examples
-#' ## Not run:
-#' 
+#' \dontrun{
 #' library("mpsgSE")
 #' 
 #' # Read spatial data into R
@@ -221,8 +222,7 @@ get_basemap_data = function(states, region_number, forest_number, forest_name,
 #' 
 #' # Clip to extents
 #' unit_gbif <- clip_fc(gbif_sf, sf_plan_area)
-#' 
-#' ## End (Not run)
+#' }
 clip_fc <- function(sf_lyr, sf_clip, locale = NULL){
   
   # Transform clipping layer
@@ -271,9 +271,8 @@ clip_fc <- function(sf_lyr, sf_clip, locale = NULL){
 #' # Administrative Boundary for the Dixie National Forest
 #' admin_bndry <- read_edw_lyr("EDW_ForestSystemBoundaries_01", layer = 1) |> 
 #'   dplyr::filter(forestname == "Dixie National Forest")
-#' 
 read_edw_lyr <- function(map_name, layer = 0, service = "arcx", 
-                         crs = "EPSG:4326"){
+                         target_crs = "EPSG:4326"){
   
   # map_name = "EDW_BioTESP_01"; layer = 1; service = "arcn"
   # map_name = "EDW_ForestSystemBoundaries_01"; layer = 0; service = "arcx"
@@ -310,14 +309,12 @@ read_edw_lyr <- function(map_name, layer = 0, service = "arcx",
 #' @export
 #' 
 #' @examples
-#' ## Not run:
-#' 
+#' \dontrun{
 #' library("mpsgSE")
 #' 
 #' read_fc(lyr = "feature_name", dsn = file.path("T:/path/to/geodatabase"), 
 #'         crs = "NAD83")
-#' 
-#' ## End (Not run)
+#' }
 read_fc <- function(lyr, dsn, target_crs = NULL){
   fc = sf::read_sf(layer = lyr, dsn = dsn) |> sf::st_make_valid()
   if(!is.null(target_crs)){fc = sf::st_transform(fc, crs = target_crs)}

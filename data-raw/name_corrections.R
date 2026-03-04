@@ -30,7 +30,6 @@ if (any(inst_pkgs == FALSE)) {
 invisible(lapply(pkgs, library, character.only = TRUE))
 
 
-
 # Name Corrections ----
 # This data frame has common name, scientific names that do not return taxon 
 #     ID's, and corrected names for the same species that will return taxon ID's 
@@ -44,7 +43,7 @@ name_corrections = tibble::tibble(
     "an angle moth", "Pin Lichen", "Lindberg's Plait Moss", 
     "Tufted Evening-primrose", "Nuttals's Sandwart", "Glaucous Rattlesnakeroot",
     "Tall Fescue", "Colorado River Cutthroat Trout", 
-    "Bonneville Cutthroat Trout"
+    "Bonneville Cutthroat Trout", "Lewis's Trinity"
     ),
   # Names throwing taxon ID errors
   errored_name = c(
@@ -55,7 +54,8 @@ name_corrections = tibble::tibble(
     "Argynnis diana", "Macaria prunosata", "Calicium tigillare", 
     "Hypnum lindbergii", "Oenothera caespitosa", "Minuartia nuttallii", 
     "Prenanthes racemose", "Schedonorus arundinaceus", 
-    "Oncorhynchus virginalis pleuriticus", "Oncorhynchus virginalis utah"
+    "Oncorhynchus virginalis pleuriticus", "Oncorhynchus virginalis utah", 
+    "Lewisia taylorii"
     ), 
   # Corrected scientific names
   corrected_name = c(
@@ -66,7 +66,7 @@ name_corrections = tibble::tibble(
     "Speranza prunosata", "Calicium tigillare", "Calliergonella lindbergii", 
     "Oenothera cespitosa", "Sabulina nuttallii", "Nabalus racemosus", 
     "Lolium arundinaceum", "Oncorhynchus clarkii pleuriticus", 
-    "Oncorhynchus clarkii utah"
+    "Oncorhynchus clarkii utah", "Lewisia taylorii"
     )
   ) |> 
   # Pull taxon IDs from GBIF
@@ -78,6 +78,7 @@ name_corrections = tibble::tibble(
     taxon_id = ifelse(errored_name == "Furcula vargoi", 10047243, taxon_id),
     taxon_id = ifelse(errored_name == "Lepidostoma apache", 125954696, taxon_id),
     taxon_id = ifelse(errored_name == "Calicium tigillare", 7682261, taxon_id),
+    taxon_id = ifelse(errored_name == "Lewisia taylorii", 295883556, taxon_id),
     taxon_id = as.numeric(taxon_id)
   ) |> 
   dplyr::arrange(kingdom, phylum, class, order, family, genus, species, corrected_name)
@@ -88,12 +89,16 @@ name_corrections = tibble::tibble(
 #     found manually on the GBIF website.
 manual_corrections <- tibble::tibble(
   # Common names
-  common_name = c("Vargo's Furcula", "a lepidostomatid caddisfly", "pin lichen"),
+  common_name = c(
+    "Vargo's Furcula", "a lepidostomatid caddisfly", "pin lichen", 
+    "Lewis's Trinity"
+    ),
   # Names throwing taxon ID errors
-  scientific_name = c("Furcula vargoi", "Lepidostoma apache", 
-                      "Calicium tigillare"), 
+  scientific_name = c(
+    "Furcula vargoi", "Lepidostoma apache", "Calicium tigillare", 
+    "Lewisia taylorii"), 
   # Taxon ID's
-  taxon_id = c(10047243, 125954696, 7682261)
+  taxon_id = c(10047243, 125954696, 7682261, 295883556)
   )
 
 

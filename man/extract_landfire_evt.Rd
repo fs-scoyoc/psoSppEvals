@@ -22,5 +22,10 @@ This function extracts LANDFIRE EVT data to species occurrence data and then
 summarizes the EVT data by taxa.
 }
 \examples{
+\dontrun{
 library(mpsgSE)
+
+message("Example coming soon. To a theater near you.")
+
+}
 }

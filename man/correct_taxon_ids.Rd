@@ -27,7 +27,7 @@ Documentation will be updated shortly.
 \examples{
 library(mpsgSE)
 
- spp_list = tibble::tibble(
+spp_list = tibble::tibble(
    common_name = c("Western Toad", "Northern Leopard Frog", "Mountain Plover", 
                    "Snowy Plover", "American Goshawk", "Ferruginous Hawk", 
                    "Hopi Chipmunk", "Canada Lynx", "American Pika",
@@ -45,7 +45,7 @@ library(mpsgSE)
      taxon_id = taxize::get_gbifid(scientific_name, ask = FALSE, rows = 1, 
                                    messages = FALSE)) |> 
    dplyr::distinct()
- correct_taxon_ids(spp_list)
+spp_list_fix <- correct_taxon_ids(spp_list)
 }
 \seealso{
 \code{\link[=get_taxonomies]{get_taxonomies()}}

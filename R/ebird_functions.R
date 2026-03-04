@@ -17,8 +17,7 @@
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#' 
+#' \dontrun{
 #' library(mpsgSE)
 #' spp_list <- get_taxonomies(sp_list_ex)
 #' ebird_status <- download_ebird_status_maps(spp_list, 
@@ -27,8 +26,7 @@
 #' ebird_maps <- download_ebird_range_maps(spp_list,
 #'                                         output_path = file.path("data/ebirdst"),
 #'                                         ebird_access_key = ebird_key)
-#' 
-#' ## End(Not run)                     
+#' }
 download_ebird_range_maps = function(spp_list, output_path, ebird_access_key){
 
   # evaluate output directory
@@ -84,15 +82,13 @@ download_ebird_range_maps = function(spp_list, output_path, ebird_access_key){
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#' 
+#' \dontrun{
 #' library(mpsgSE)
 #' spp_list <- get_taxonomies(sp_list_ex)
 #' ebird_status <- download_ebird_status_maps(spp_list, 
 #'                                            output_path = file.path("data/ebirdst"), 
 #'                                            ebird_access_key = ebird_key)
-#' 
-#' ## End(Not run)                     
+#' }                     
 download_ebird_status_maps = function(spp_list, output_path, ebird_access_key){
   
   ebirdst::set_ebirdst_access_key(ebird_access_key, overwrite = TRUE)
@@ -137,8 +133,7 @@ download_ebird_status_maps = function(spp_list, output_path, ebird_access_key){
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#' 
+#' \dontrun{
 #' library(mpsgSE)
 #' spp_list <- get_taxonomies(sp_list_ex)
 #' ebird_status <- download_ebird_status_maps(spp_list, 
@@ -147,8 +142,7 @@ download_ebird_status_maps = function(spp_list, output_path, ebird_access_key){
 #' ebird_maps <- download_ebird_trends_maps(spp_list,
 #'                                          output_path = file.path("data/ebirdst"),
 #'                                          ebird_access_key = ebird_key)
-#' 
-#' ## End(Not run)                     
+#' }
 download_ebird_trends_maps <- function(spp_list, output_path, ebird_access_key){
   
   ebirdst::set_ebirdst_access_key(ebird_access_key, overwrite = TRUE)
@@ -192,13 +186,11 @@ download_ebird_trends_maps <- function(spp_list, output_path, ebird_access_key){
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#' 
+#' \dontrun{
 #' library(mpsgSE)
 #' spp_list <- get_taxonomies(sp_list_ex)
 #' ebird_reg_status <- get_ebird_regional_stats(spp_list, ebird_access_key = ebird_key)
-#' 
-#' ## End(Not run)                     
+#' }
 get_ebird_regional_stats <- function(spp_list, ebird_access_key){
 
   ebird_spp <- spp_list |>
@@ -256,8 +248,7 @@ get_ebird_regional_stats <- function(spp_list, ebird_access_key){
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#' 
+#' \dontrun{
 #' library(mpsgSE)
 #' spp_list <- get_taxonomies(sp_list_ex)
 #' ebird_status <- download_ebird_status_maps(spp_list, 
@@ -266,8 +257,7 @@ get_ebird_regional_stats <- function(spp_list, ebird_access_key){
 #' ebird_trends <- get_ebird_trends(spp_list,
 #'                                  output_path = file.path("data/ebirdst"),
 #'                                  ebird_access_key = ebird_key)
-#' 
-#' ## End(Not run)                     
+#' }
 get_ebird_trends <- function(spp_list, output_path, ebird_access_key){
   
   ebirdst::set_ebirdst_access_key(ebird_access_key, overwrite = TRUE)

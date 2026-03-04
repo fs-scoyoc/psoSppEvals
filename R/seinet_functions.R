@@ -14,8 +14,7 @@
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#'
+#' \dontrun{
 #' library("mpsgSE")
 #'
 #' # Path to data folder
@@ -29,8 +28,7 @@
 #' birds <- dplyr::filter(class == "Aves")
 #' # Subset spatial SEINet data
 #' sei_birds <- build_seinet_spatial_data(sei_dat, birds)
-#'
-#' ## End(Not run)
+#' }
 build_seinet_spatial_data <- function(sei_data, spp_list) {
 
   # sei_data = targets::tar_read(sei_unit)
@@ -87,8 +85,7 @@ build_seinet_spatial_data <- function(sei_data, spp_list) {
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#'
+#' \dontrun{
 #' library("mpsgSE")
 #'
 #' # Path to data folder
@@ -96,8 +93,7 @@ build_seinet_spatial_data <- function(sei_data, spp_list) {
 #'
 #' # Pull data from existing SEINet query
 #' sei_dat <- get_seinet_data(data_folder, crs = "EPSG:26913")
-#'
-#' ## End(Not run)
+#' }
 get_seinet_data <- function(dir_path, crs = NULL, correct = TRUE){
   # dir_path = file.path("data", "SEINet"); crs = "EPSG:26913"
 
@@ -165,8 +161,7 @@ get_seinet_data <- function(dir_path, crs = NULL, correct = TRUE){
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#'
+#' \dontrun{
 #' library("mpsgSE")
 #'
 #' # Path to data folder
@@ -177,8 +172,7 @@ get_seinet_data <- function(dir_path, crs = NULL, correct = TRUE){
 #'
 #' # Summarize species
 #' spp_list <- build_seinet_spp(sei_dat)
-#'
-#' ## End(Not run)
+#' }
 build_seinet_spp <- function(seinet_data, locale = FALSE, correct = FALSE){
   # seinet_data = targets::tar_read(sei_unit); locale = "FIF" 
   

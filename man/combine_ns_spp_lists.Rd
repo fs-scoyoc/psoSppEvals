@@ -19,8 +19,7 @@ This function combines two species data frames returned from
 \code{build_ns_spp_list()}.
 }
 \examples{
-## Not run:
-
+\dontrun{
 library("mpsgSE")
 
 # Colorado
@@ -33,8 +32,7 @@ spp_wy <- build_ns_spp_list(ns_wy)
 
 # Combine CO and WY
 spp_list <- combine_ns_spp_lists(spp_co, spp_wy)
-
-## End(Not run)
+}
 }
 \seealso{
 \code{\link[=build_ns_spp_list]{build_ns_spp_list()}}

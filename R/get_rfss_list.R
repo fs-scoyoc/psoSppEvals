@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @examples
-#' install.packages(mpsgSE)
+#' library(mpsgSE)
 #' r1_ssl <- get_rfss_list("R1")
 get_rfss_list <- function(fs_region){
   ss = mpsgSE::rfss |> dplyr::filter(region == fs_region)
@@ -26,7 +26,7 @@ get_rfss_list <- function(fs_region){
 #' @export
 #'
 #' @examples
-#' install.packages(mpsgSE)
+#' library(mpsgSE)
 #' list_regions()
 list_regions <- function(){
   mpsgSE::rfss |> dplyr::pull(region) |> unique() |> sort()

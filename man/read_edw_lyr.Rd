@@ -4,7 +4,7 @@
 \alias{read_edw_lyr}
 \title{\strong{Deprecated}. Read spatial data from Forest Service ArcGIS REST Services}
 \usage{
-read_edw_lyr(map_name, layer = 0, service = "arcx", crs = "EPSG:4326")
+read_edw_lyr(map_name, layer = 0, service = "arcx", target_crs = "EPSG:4326")
 }
 \arguments{
 \item{map_name}{Character. Name of map layer.}
@@ -36,7 +36,6 @@ library(mpsgSE)
 # Administrative Boundary for the Dixie National Forest
 admin_bndry <- read_edw_lyr("EDW_ForestSystemBoundaries_01", layer = 1) |> 
   dplyr::filter(forestname == "Dixie National Forest")
-
 }
 \seealso{
 \code{\link[arcgislayers:arc_read]{arcgislayers::arc_read()}}, \code{\link[sf:st_transform]{sf::st_transform()}}

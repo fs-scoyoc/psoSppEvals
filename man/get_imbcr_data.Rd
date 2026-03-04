@@ -32,12 +32,9 @@ You must be connected to the T-drive, e.g., through VPN, to use this function
 unless you have the *.rda file on your local machine.
 }
 \examples{
-## Not run:
-
+\dontrun{
 library("mpsgSE")
-
 mgmt_units <- c("Cimarron National Grassland", "Comanche National Grassland")
 get_imbcr_data(mgmt_units)
-
-## End(Not run)
+}
 }

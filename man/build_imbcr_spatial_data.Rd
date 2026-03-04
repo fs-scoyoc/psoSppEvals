@@ -22,20 +22,20 @@ Subset eligible species from IMBCR data.
 Additional details...
 }
 \examples{
-## Not run:
-
+\dontrun{
 library("mpsgSE")
 
 # Read IMBCR data into R
 mgmt_units <- c("Cimarron National Grassland", "Comanche National Grassland")
 imbcr_dat <- get_imbcr_data(mgmt_units)
+
 # Summarize data by species
 spp_list <- build_imbcr_spp(imbcr_dat)
 birds <- dplyr::filter(spp_list, family == "Corvidae")
+
 # Subset spatial data
 corvids <- build_imbcr_spatial_data(imbcr_dat, birds)
-
-## End(Not run)
+}
 }
 \seealso{
 \code{\link[=get_imbcr_data]{get_imbcr_data()}}, \code{\link[=build_imbcr_spp]{build_imbcr_spp()}}, \code{\link[=get_taxonomies]{get_taxonomies()}}

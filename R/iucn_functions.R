@@ -14,12 +14,11 @@
 #' @export
 #' @seealso [get_taxonomies()]
 #' @examples
+#' \dontrun{
 #' library('mpsgSE')
-#' 
 #' spp_list <- get_taxonomies(mpsgSE::sp_list_ex, correct = TRUE)
-#' 
 #' iucn_maps <- get_iucn_maps(spp_list)
-#' 
+#' }
 get_iucn_maps <- function(spp_list){
   
   # spp_list = targets::tar_read(rfss)
@@ -54,12 +53,11 @@ get_iucn_maps <- function(spp_list){
 #' This function reads spatial (polygon) range data from International Union for 
 #'     Conservation of Nature (IUCN) into R. These shapefiles were downloaded 
 #'     from IUCN (<https://www.iucnredlist.org/resources/spatial-data-download>), 
-#'     and saved on the MPSG T-drive. This function will this function will fail 
-#'     if you are not on a FS network or in the FS VDI. Use 
-#'     `get_iucn_shp_paths()` to get the shapefile paths prior to running this 
-#'     function.
+#'     and saved on the MPSG T-drive. This function will fail if you are not on 
+#'     a FS network or in the FS VDI. Use `get_iucn_shp_paths()` to get the 
+#'     shapefile paths prior to running this function.
 #'
-#' @param iucn_paths 
+#' @param iucn_paths File paths to IUCN shapefiles.
 #' 
 #' @seealso [get_taxonomies()], [get_iucn_shp_paths()]
 #' 
@@ -68,14 +66,12 @@ get_iucn_maps <- function(spp_list){
 #' @export
 #' 
 #' @examples
-#' ## Not run:
-#' 
+#' \dontrun{
 #' library(mpsgSE)
 #' spp_list <- get_taxonomies(sp_list_ex)
 #' map_paths <- get_iucn_shp_paths(spp_list)
 #' iucn_maps <- build_iucn_maps(map_paths)
-#' 
-#' ## End(Not run)                     
+#' }
 build_iucn_maps <- function(iucn_paths) {
   grouped_data = iucn_paths |>
     dplyr::group_by(file_path) |>
@@ -115,13 +111,11 @@ build_iucn_maps <- function(iucn_paths) {
 #' @export
 #' 
 #' @examples
-#' ## Not run:
-#' 
+#' \dontrun{
 #' library(mpsgSE)
 #' spp_list <- get_taxonomies(sp_list_ex)
 #' bien_map_paths <- get_iucn_shp_paths(spp_list)
-#' 
-#' ## End(Not run)                     
+#' }
 get_iucn_shp_paths <- function(spp_list){
   
   # spp_list = targets::tar_read(rfss)

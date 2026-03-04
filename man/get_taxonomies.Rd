@@ -25,12 +25,8 @@ taxonomies database. \code{taxon_id} is ID number of the accepted taxonomy
 from the GBIF backbone.
 }
 \examples{
-## Not run:
-
 library(mpsgSE)
 spp_list <- get_taxonomies(sp_list_ex)
-
-## End(Not run)
 }
 \seealso{
 \code{\link[=correct_taxon_ids]{correct_taxon_ids()}}

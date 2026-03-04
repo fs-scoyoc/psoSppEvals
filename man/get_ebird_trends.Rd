@@ -25,8 +25,7 @@ using the \code{ebirdst} package.
 Additional details...
 }
 \examples{
-## Not run:
-
+\dontrun{
 library(mpsgSE)
 spp_list <- get_taxonomies(sp_list_ex)
 ebird_status <- download_ebird_status_maps(spp_list, 
@@ -35,8 +34,7 @@ ebird_status <- download_ebird_status_maps(spp_list,
 ebird_trends <- get_ebird_trends(spp_list,
                                  output_path = file.path("data/ebirdst"),
                                  ebird_access_key = ebird_key)
-
-## End(Not run)                     
+}
 }
 \seealso{
 \code{\link[=get_taxonomies]{get_taxonomies()}}, \code{\link[=download_ebird_status_maps]{download_ebird_status_maps()}}

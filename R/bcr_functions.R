@@ -12,18 +12,14 @@
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#' 
 #' library("mpsgSE")
 #' 
 #' # Pull the Administrative Boundary for the Dixie National Forest
-#' adm_bdy = mpsgSE::read_edw_lyr("EDW_ForestSystemBoundaries_01", layer = 1) |>
+#' adm_bdy = psoGIStools::read_edw_lyr("EDW_ForestSystemBoundaries_01", 1) |>
 #'   dplyr::filter(region == "04" & forestnumber == "07")
 #' 
 #' # Get list of birds of conservation concern
-#' mpsgSE::get_bcr_list(adm_bdy)
-#'  
-#' ## End(Not run)                     
+#' get_bcr_list(adm_bdy)
 get_bcr_list <- function(sf_lyr){
   bcrs = mpsgSE::get_bc_regions(sf_lyr) |> dplyr::pull(bcr_label)
   bcc = mpsgSE::bcc_list
@@ -52,16 +48,12 @@ get_bcr_list <- function(sf_lyr){
 #' @export
 #'
 #' @examples
-#' ## Not run:
-#' 
 #' library("mpsgSE")
 #' 
 #' # Pull the Administrative Boundary for the Dixie National Forest
-#' adm_bdy <- mpsgSE::read_edw_lyr("EDW_ForestSystemBoundaries_01", layer = 1) |> 
+#' adm_bdy <- psoGIStools::read_edw_lyr("EDW_ForestSystemBoundaries_01", 1) |> 
 #'   dplyr::filter(region == "04" & forestnumber == "07")
 #' get_bc_regions(adm_bdy)
-#'  
-#' ## End(Not run)                     
 get_bc_regions <- function(sf_lyr){
   sf::st_intersection(
     sf::st_make_valid(sf_lyr),

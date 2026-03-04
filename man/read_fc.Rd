@@ -28,14 +28,12 @@ coordinate reference system (CRS) and will transform the feature to the
 target CRS if it is not.
 }
 \examples{
-## Not run:
-
+\dontrun{
 library("mpsgSE")
 
 read_fc(lyr = "feature_name", dsn = file.path("T:/path/to/geodatabase"), 
         crs = "NAD83")
-
-## End (Not run)
+}
 }
 \seealso{
 \code{\link[sf:st_read]{sf::read_sf()}}, \code{\link[sf:st_crs]{sf::st_crs()}}

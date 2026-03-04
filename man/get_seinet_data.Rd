@@ -34,8 +34,7 @@ The query results need to be manually downloaded in Darwin Core Archive
 format and unzipped before using this function.
 }
 \examples{
-## Not run:
-
+\dontrun{
 library("mpsgSE")
 
 # Path to data folder
@@ -43,8 +42,7 @@ data_folder <- file.path("data", "SEINet")
 
 # Pull data from existing SEINet query
 sei_dat <- get_seinet_data(data_folder, crs = "EPSG:26913")
-
-## End(Not run)
+}
 }
 \seealso{
 \code{\link[=get_taxonomies]{get_taxonomies()}}

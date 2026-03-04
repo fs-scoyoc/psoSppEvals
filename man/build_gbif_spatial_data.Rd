@@ -22,8 +22,7 @@ Subset eligible species from GBIF data and reduce variables.
 Additional details...
 }
 \examples{
-## Not run:
-
+\dontrun{
 library("mpsgSE")
 
 # Project directory path
@@ -37,8 +36,7 @@ gbif_list <- build_gbif_spp(gbif_dat)
 birds <- dplyr::filter(gbif_list, class == "Aves")
 # Subset spatial data
 gbif_birds <- build_gbif_spatial_data(gbif_dat, birds)
-
-## End(Not run)
+}
 }
 \seealso{
 \code{\link[=get_gbif_data]{get_gbif_data()}}, \code{\link[=build_gbif_spp]{build_gbif_spp()}}, \code{\link[=get_taxonomies]{get_taxonomies()}}
