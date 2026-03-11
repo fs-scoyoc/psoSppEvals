@@ -51,6 +51,8 @@ remotes::install_github("fs-scoyoc/mpsgSE")
 
 -   `build_ns_spp_list`: Build a species list with global and state NatureServe conservation rankings from `get_ns_state_list().`
 
+-   `build_quarto_params`: Build quarto parameters for automated evaluation templates.
+
 -   `build_seinet_spatial_data`: Subset eligible species from spatial SEINet data and reduce variables.
 
 -   `build_seinet_spp`: Summarize SEINet data by species.
