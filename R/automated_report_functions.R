@@ -39,8 +39,7 @@
 #' library('mpsgSE')
 #' spp_list <- get_taxonomies(mpsgSE::sp_list_ex, 'scientific_name', 
 #'                            correct = TRUE)
-#' qmd_params <- build_quarto_params(spp_list, file.path('output', 'spp_evlas'), 
-#'                                   "Smokey Bear National Forest")
+#' qmd_params <- build_quarto_params(spp_list, file.path('output', 'spp_evlas'))
 #' }
 build_quarto_params <- function(spp_list, 
                                 output_path = file.path("output/spp_evals")){
@@ -117,12 +116,45 @@ build_quarto_params <- function(spp_list,
 #' }
 setup_directories <- function(quarto_params){
   # quarto_params = qmd_params
-  # output_path = file.path("output", "spp_evals")
   
+  # Function to ask the user if they want to proceed
+  ask_to_proceed <- function(message = "Do you want to proceed? (y/n): ") {
+    repeat {
+      # Prompt the user
+      answer <- tolower(trimws(readline(prompt = message)))
+      
+      # Validate input
+      if (answer %in% c("y", "yes")) {
+        cat("Proceeding...\n")
+        return(TRUE)
+      } else if (answer %in% c("n", "no")) {
+        cat("Operation cancelled by user.\n")
+        return(FALSE)
+      } else {
+        cat("Invalid input. Please enter 'y' or 'n'.\n")
+      }
+    }
+  }
+
   # List directories
   new_dirs = unique(quarto_params$subfolder_path)
-  # Create directories
-  lapply(new_dirs, function(d){if(!dir.exists(d)) dir.create(d)})
+  
+  new_dirs = tibble::tibble(dir = unique(quarto_params$subfolder_path))
+  dirs = tidyr::separate_wider_delim(new_dirs, dir, "/", names_sep = "")
+  sub_dir = do.call(paste, c(dirs[, -ncol(dirs)], sep = "/")) |> unique()
+  out_dir = paste(getwd(), sub_dir, sep = "/")
+  message(glue::glue("Evaluation folders will be created in: 
+                     {out_dir}"))
+  # Verigy creation of directories and run
+  if (ask_to_proceed()) {
+    # Code to run if user agrees
+    cat("Creating directories.\n")
+    lapply(new_dirs, function(d){if(!dir.exists(d)) dir.create(d)})
+  } else {
+    # Code to run if user declines
+    stop("Directories not created. Pipeline stopped.", call. = TRUE)
+  }
+  
 }
 
 

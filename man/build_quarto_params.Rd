@@ -48,8 +48,7 @@ The sub-folder paths is assigned using taxonomy.
 library('mpsgSE')
 spp_list <- get_taxonomies(mpsgSE::sp_list_ex, 'scientific_name', 
                            correct = TRUE)
-qmd_params <- build_quarto_params(spp_list, file.path('output', 'spp_evlas'), 
-                                  "Smokey Bear National Forest")
+qmd_params <- build_quarto_params(spp_list, file.path('output', 'spp_evlas'))
 }
 }
 \seealso{
