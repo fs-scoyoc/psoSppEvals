@@ -125,7 +125,11 @@ remotes::install_github("fs-scoyoc/mpsgSE")
 
 -   `read_fc`: Deprecated. Use the `psoGIStools` package moving forward. Read feature class from a geodatabase into R.
 
+-   `setup_directories`: Create directories for automated evaluations.
+
 -   `wkt_string`: Create a well-known text string from an `sf` polygon object for `get_gbif()`.
+
+-   `write_evals`: Produce automated evaluation template documents.
 
 -   `write_habitat_xlsx`: Write an Excel workbook of NatureServe and LANDFIRE habitat types.
 

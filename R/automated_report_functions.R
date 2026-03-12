@@ -94,7 +94,7 @@ build_quarto_params <- function(spp_list,
 }
 
 
-#' Set up directories
+#' Create directories for automated evaluations
 #' 
 #' This function creates the sub-directories for the automated evaluation 
 #'     reports using the sub-directory paths from `build_quarto_params()`.

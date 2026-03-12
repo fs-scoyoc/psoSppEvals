@@ -2,7 +2,7 @@
 % Please edit documentation in R/automated_report_functions.R
 \name{setup_directories}
 \alias{setup_directories}
-\title{Set up directories}
+\title{Create directories for automated evaluations}
 \usage{
 setup_directories(quarto_params)
 }
