@@ -115,7 +115,7 @@ build_quarto_params <- function(spp_list,
 #' setup_directories(qmd_params)
 #' }
 setup_directories <- function(quarto_params){
-  # quarto_params = qmd_params
+  # quarto_params = targets::tar_read(rpt_qmd_params)
   
   # Function to ask the user if they want to proceed
   # ask_to_proceed <- function(message = "Do you want to proceed? (y/n): ") {
@@ -135,7 +135,7 @@ setup_directories <- function(quarto_params){
   #     }
   #   }
   # }
-
+  
   # List directories
   new_dirs = unique(quarto_params$subfolder_path)
   
@@ -146,13 +146,21 @@ setup_directories <- function(quarto_params){
   message(glue::glue("Evaluation folders will be created in: 
                      {out_dir}"))
   # Create directories
-  lapply(new_dirs, function(d){if(!dir.exists(d)) dir.create(d)})
+  lapply(new_dirs$dir, function(d){
+    # d = new_dirs$dir[1]
+    nd = file.path(getwd(), d)
+    if(!dir.exists(nd)) dir.create(nd)
+    })
   
-  # # Verigy creation of directories and run
+  # Verify creation of directories and run
   # if (ask_to_proceed()) {
   #   # Code to run if user agrees
   #   cat("Creating directories.\n")
-  #   lapply(new_dirs, function(d){if(!dir.exists(d)) dir.create(d)})
+  #   lapply(new_dirs$dir, function(d){
+  #     # d = new_dirs$dir[1]
+  #     nd = file.path(getwd(), d)
+  #     if(!dir.exists(nd)) dir.create(nd)
+  #   })
   # } else {
   #   # Code to run if user declines
   #   stop("Directories not created. Pipeline stopped.", call. = TRUE)
