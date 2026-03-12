@@ -149,7 +149,7 @@ setup_directories <- function(quarto_params){
   lapply(new_dirs$dir, function(d){
     # d = new_dirs$dir[1]
     nd = file.path(getwd(), d)
-    if(!dir.exists(nd)) dir.create(nd)
+    if(!dir.exists(nd)) dir.create(nd, recursive = TRUE)
     })
   
   # Verify creation of directories and run
