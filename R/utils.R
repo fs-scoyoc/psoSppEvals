@@ -27,7 +27,8 @@ utils::globalVariables(
     "gRank", "usesaCode", "taxclass", "taxorder", "subnationCode", 
     "state_srank", "roundedSRank", "state_nat", "native", "usfws_esa", 
     "input_name", "bind_rows", "area_m2", "evt_gp_n", "evt_sbcls", "acres", 
-    "continent_name", "taxonID")
+    "continent_name", "taxonID", "sn_base", "cn", "file_name", "subfoder_path", 
+    "full_path", "crs")
   )
 
 

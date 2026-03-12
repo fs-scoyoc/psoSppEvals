@@ -283,7 +283,7 @@ read_edw_lyr <- function(map_name, layer = 0, service = "arcx",
   ) |>
     janitor::clean_names() |> 
     sf::st_make_valid() |> 
-    sf::st_transform(crs = crs)
+    sf::st_transform(crs = target_crs)
   return(lyr)
 }
 
