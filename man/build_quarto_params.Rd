@@ -12,8 +12,6 @@ build_quarto_params(spp_list, output_path = file.path("output/spp_evals"))
 
 \item{output_path}{The path to the directory where you want the reports saved.
 This can be}
-
-\item{fs_unit_name}{Name of FS unit "e.g. Klamath National Forest".}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble::tibble()}}.

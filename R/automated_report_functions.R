@@ -5,7 +5,6 @@
 #'      
 #' @param spp_list Species list with taxon ID's and taxonomies from 
 #'     `get_taxonomies()`.
-#' @param fs_unit_name Name of FS unit "e.g. Klamath National Forest". 
 #' @param output_path The path to the directory where you want the reports saved.
 #'     This can be 
 #'
@@ -89,7 +88,7 @@ build_quarto_params <- function(spp_list,
       unit_name = fs_unit_name
     ) |>
     dplyr::select(taxon_id, scientific_name, common_name, file_name, 
-                  subfolder_path, full_path, unit_name)
+                  subfolder_path, full_path)
   return(qmd_params)
 }
 
