@@ -5,6 +5,10 @@
 #'      
 #' @param spp_list Species list with taxon ID's and taxonomies from 
 #'     `get_taxonomies()`.
+#' @param fs_unit_name Character string for Forest Service unit name. 
+#' @param states Character string or a concatenated vector for states the forest 
+#'     or grassland overlaps.
+#' @param crs Coordinate reference system used to mapping.
 #' @param output_path The path to the directory where you want the reports saved.
 #'     This can be 
 #'
@@ -41,7 +45,7 @@
 #'                            correct = TRUE)
 #' qmd_params <- build_quarto_params(spp_list, file.path('output', 'spp_evlas'))
 #' }
-build_quarto_params <- function(spp_list, 
+build_quarto_params <- function(spp_list, fs_unit_name, states, crs,
                                 output_path = file.path("output/spp_evals")){
   # spp_list = targets::tar_read(nko_list)
   # output_path = "output/spp_evals"
@@ -83,10 +87,11 @@ build_quarto_params <- function(spp_list,
       cn = gsub("'", "", cn),
       subfolder_path = glue::glue("{output_path}/{subfolder}"),
       file_name = glue::glue("{date_stamp}_AUTO_GENERATED_{cn}_{sn_base}.docx"),
-      full_path = glue::glue("{subfolder_path}/{file_name}")
+      full_path = glue::glue("{subfolder_path}/{file_name}"), 
+      unit_name = fs_unit_name, states = states, crs = crs
     ) |>
-    dplyr::select(taxon_id, scientific_name, common_name, file_name, 
-                  subfolder_path, full_path)
+    dplyr::select(taxon_id, scientific_name, common_name, file_name, unit_name, 
+                  states, crs, subfolder_path, full_path)
   return(qmd_params)
 }
 

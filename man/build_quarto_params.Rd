@@ -4,11 +4,24 @@
 \alias{build_quarto_params}
 \title{Build Quarto Parameters for Automated Evaluation Templates}
 \usage{
-build_quarto_params(spp_list, output_path = file.path("output/spp_evals"))
+build_quarto_params(
+  spp_list,
+  fs_unit_name,
+  states,
+  crs,
+  output_path = file.path("output/spp_evals")
+)
 }
 \arguments{
 \item{spp_list}{Species list with taxon ID's and taxonomies from
 \code{get_taxonomies()}.}
+
+\item{fs_unit_name}{Character string for Forest Service unit name.}
+
+\item{states}{Character string or a concatenated vector for states the forest
+or grassland overlaps.}
+
+\item{crs}{Coordinate reference system used to mapping.}
 
 \item{output_path}{The path to the directory where you want the reports saved.
 This can be}
