@@ -87,11 +87,11 @@ build_quarto_params <- function(spp_list, fs_unit_name, states, crs,
       cn = gsub("'", "", cn),
       subfolder_path = glue::glue("{output_path}/{subfolder}"),
       file_name = glue::glue("{date_stamp}_AUTO_GENERATED_{cn}_{sn_base}.docx"),
-      full_path = glue::glue("{subfolder_path}/{file_name}"), 
+      output_file = glue::glue("{subfolder_path}/{file_name}"), 
       unit_name = fs_unit_name, states = states, crs = crs
     ) |>
-    dplyr::select(taxon_id, scientific_name, common_name, file_name, unit_name, 
-                  states, crs, subfolder_path, full_path)
+    dplyr::select(taxon_id, scientific_name, common_name, unit_name, states, 
+                  crs, file_name, subfolder_path, output_file)
   return(qmd_params)
 }
 
