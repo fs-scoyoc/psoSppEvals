@@ -210,13 +210,14 @@ write_evals <- function(quarto_params){
   # quarto_params = qmd_params
   
   lapply(quarto_params$taxon_id, function(t_id){
-    # t_id = 2422924
+    # t_id = quarto_params$taxon_id[1]
     sp = dplyr::filter(quarto_params, taxon_id == t_id)
+    params = dplyr::select(sp, taxon_id, unit_name, states, crs)
     message(paste0(t_id, ": ", sp$common_name, " (", sp$scientific_name, ")"))
-    quarto::quarto_render("species_evaluation.qmd", 
+    quarto::quarto_render(file.path("species_evaluation.qmd"), 
                           output_file = sp$file_name,
-                          execute_params = list(taxon_id = t_id))
-    file.copy(sp$file_name, file.path(sp$full_path), overwrite = TRUE)
+                          execute_params = params)
+    file.copy(sp$file_name, file.path(sp$output_file), overwrite = TRUE)
     file.remove(sp$file_name)
   })
 }
