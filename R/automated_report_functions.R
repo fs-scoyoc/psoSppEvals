@@ -180,6 +180,7 @@ setup_directories <- function(quarto_params){
 #'     produced from `build_quarto_params()`.
 #'
 #' @param quarto_params Data frame from [build_quarto_params()].
+#' @param qmd_path Path to quarto script. Default is the working directory.
 #' 
 #' @details
 #' For each species in the data frame, this function runs 
@@ -206,7 +207,8 @@ setup_directories <- function(quarto_params){
 #' setup_directories(qmd_params)
 #' write_evals(qmd_params)
 #' }
-write_evals <- function(quarto_params){
+write_evals <- function(quarto_params, 
+                        qmd_path = file.path("species_evaluation.qmd")){
   # quarto_params = qmd_params
   
   lapply(quarto_params$taxon_id, function(t_id){
@@ -214,7 +216,7 @@ write_evals <- function(quarto_params){
     sp = dplyr::filter(quarto_params, taxon_id == t_id)
     params = dplyr::select(sp, taxon_id, unit_name, states, crs)
     message(paste0(t_id, ": ", sp$common_name, " (", sp$scientific_name, ")"))
-    quarto::quarto_render(file.path("species_evaluation.qmd"), 
+    quarto::quarto_render(qmd_path, 
                           output_file = sp$file_name,
                           execute_params = params)
     file.copy(sp$file_name, file.path(sp$output_file), overwrite = TRUE)
