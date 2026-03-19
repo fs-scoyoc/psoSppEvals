@@ -4,10 +4,12 @@
 \alias{write_evals}
 \title{Produce Automated Evaluation Template Documents}
 \usage{
-write_evals(quarto_params)
+write_evals(quarto_params, qmd_path = file.path("species_evaluation.qmd"))
 }
 \arguments{
 \item{quarto_params}{Data frame from \code{\link[=build_quarto_params]{build_quarto_params()}}.}
+
+\item{qmd_path}{Path to quarto script. Default is the working directory.}
 }
 \value{
 Nothing.
