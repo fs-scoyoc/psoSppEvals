@@ -91,7 +91,9 @@ remotes::install_github("fs-scoyoc/mpsgSE")
 
 -   `get_ebird_trends`: Calculate abundance trends from eBird data.
 
--   `get_gbif_data`: Query and download species occurrence records from GBIF and read them into R as spatial (`sf`)data.
+-   `get_gbif_data`: Get GBIF occurrence records for an area of analysis (polygon).
+
+-   `get_gbif_occ_data`: Get GBIF occurrence records for a list of species.
 
 -   `get_imbcr_data`: Read IMBCR occurrence data into R. This function requires access to internal Forest Service servers.
 

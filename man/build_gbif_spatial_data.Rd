@@ -18,9 +18,6 @@ An \link[sf:sf]{sf::sf} object.
 \description{
 Subset eligible species from GBIF data and reduce variables.
 }
-\details{
-Additional details...
-}
 \examples{
 \dontrun{
 library("mpsgSE")
@@ -29,7 +26,8 @@ library("mpsgSE")
 t_path <- file.path("T:/path/to/project/directory/data")
 
 # Pull data from existing GBIF query
-gbif_dat <- get_gbif_data(gbif_key = '9999999-999999999999999', t_path = t_path)
+gbif_dat <- get_gbif_data(gbif_key = '9999999-999999999999999', 
+                          t_path = t_path)
 # Summarize species
 gbif_list <- build_gbif_spp(gbif_dat)
 # Subset data

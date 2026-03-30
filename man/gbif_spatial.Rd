@@ -10,10 +10,12 @@ gbif_spatial(gbif_dat, crs = NULL)
 \item{gbif_dat}{GBIF data frame from \code{get_gbif_data()}.}
 
 \item{crs}{Target coordinate reference system (CRS). Either and
-\code{sf::st_crs()} object or accepted input string for
-\code{sf::st_crs()} (e.g. "WGS84" or "NAD83"). See \code{sf::st_crs()}
-for more details. Default is NULL. If NULL, resulting sf
-object CRS will be WGS84.}
+\code{sf::st_crs()} object or accepted string (e.g. "WGS84" or "NAD83").
+See \code{sf::st_crs()} for more details. Default is NULL. If NULL, resulting
+\code{sf} object CRS will be EPSG:4326 (WGS84).}
+}
+\value{
+An \link[sf:sf]{sf::sf} object.
 }
 \description{
 This internal function converts the output from \code{get_gbif_data()} to a

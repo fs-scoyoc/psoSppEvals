@@ -6,9 +6,6 @@
 #'
 #' @return An [sf] object.
 #'
-#' @details
-#' Additional details...
-#'
 #' @seealso [get_gbif_data()], [build_gbif_spp()], [get_taxonomies()]
 #'
 #' @export
@@ -21,7 +18,8 @@
 #' t_path <- file.path("T:/path/to/project/directory/data")
 #'
 #' # Pull data from existing GBIF query
-#' gbif_dat <- get_gbif_data(gbif_key = '9999999-999999999999999', t_path = t_path)
+#' gbif_dat <- get_gbif_data(gbif_key = '9999999-999999999999999', 
+#'                           t_path = t_path)
 #' # Summarize species
 #' gbif_list <- build_gbif_spp(gbif_dat)
 #' # Subset data
@@ -58,32 +56,31 @@ build_gbif_spatial_data <- function(gbif_data, spp_list) {
 }
 
 
-#' Query GBIF species occurrence records
+#' Get GBIF occurrence records for an area of analysis
 #'
 #' This function queries GBIF for species occurrence records for a given area,
-#'   or polygon (`sf` object), and then reads the data into R.
+#'     or polygon (`sf` object), and then reads the data into R.
 #'
 #' @param gbif_key The 22-digit GFIB key including hyphen for the data package.
-#'   Use "new" for new GBIF queries.
+#'     Use "new" for new GBIF queries.
 #' @param t_path The directory path where the GBIF data package is or will be
-#'   stored.
-#' @param aoa_wkt Well-known text (wtk) string for the area of analysis. Use
-#'   `wkt_string()` to generate the wtk string. This is required when *gbif_key*
-#'   is set to **new**. Default is NULL.
+#'     stored.
+#' @param wkt_string Spatial polygon (sf) of the area of analysis. This is 
+#'     required when *gbif_key* is set to **new**. Default is NULL.
 #' @param gbif_user Your GBIF user name. This is required when *gbif_key* is set
-#'   to **new**. Default is NULL.
+#'     to **new**. Default is NULL.
 #' @param gbif_pwd Your GBIF password. This is required when *gbif_key* is set
-#'   to **new**. Default is NULL.
+#'     to **new**. Default is NULL.
 #' @param gbif_email Your GBIF email address. This is required when *gbif_key*
-#'   is set to **new**. Default is NULL.
+#'     is set to **new**. Default is NULL.
 #' @param gbif_format The format of the data returned from GBIF. Default is
-#'   Darwin-Core Achrive (DWAC). See `rgbif::occ_download()` for more details.
-#' @param crs Target coordinate reference system (CRS). Either and
-#'                `sf::st_crs()` object or accepted input string (e.g. "NAD83").
-#'                See `sf::st_crs()` for more details. Default is NULL. If NULL,
-#'                resulting sf object CRS will be WGS84.
+#'     Darwin-Core Achrive (DWAC). See `rgbif::occ_download()` for more details.
+#' @param crs Target coordinate reference system (CRS). Either and 
+#'     `sf::st_crs()` object or accepted input string (e.g. "NAD83"). See 
+#'     `sf::st_crs()` for more details. Default is NULL. If NULL, resulting `sf` 
+#'     object CRS will be WGS84.
 #' @param process_data Logical. Process data after reading them into R (TRUE ==
-#'   yes, FALSE == no). Default is TRUE. The processing step
+#'     yes, FALSE == no). Default is TRUE. The processing step
 #' @param correct Logical. Run `correct_taxon_ids()` on data. Default is TRUE.
 #'
 #'   1. filters the data for species, subspecies, and varieties,
@@ -96,7 +93,13 @@ build_gbif_spatial_data <- function(gbif_data, spp_list) {
 #' @return An sf class object.
 #'
 #' @details
-#' Additional details...
+#' This function submits a records request using the polygon provided to 
+#'     spatially query GBIF records in 
+#'     [Darwin Core Archive format](https://www.gbif.org/darwin-core) using 
+#'     [rgbif::pred_within()]. GBIF records requests are staged on GBIF servers 
+#'     and are then downloaded to a local or network directory using 
+#'     [rgbif::occ_download()]. Finally, the data are read into R using 
+#'     [rgbif::occ_download_get()] and [rgbif::occ_download_import()].
 #'
 #' @seealso [rgbif::pred_within()], [rgbif::occ_download()],
 #'          [rgbif::occ_download_wait()], [rgbif::occ_download_get()],
@@ -126,7 +129,7 @@ build_gbif_spatial_data <- function(gbif_data, spp_list) {
 #'                           t_path = file.path(t_path, "data"),
 #'                           crs = 'NAD83')
 #' }
-get_gbif_data <- function(gbif_key, t_path, aoa_wkt = NULL, gbif_user = NULL,
+get_gbif_data <- function(gbif_key, t_path, aoa_poly = NULL, gbif_user = NULL,
                      gbif_pwd = NULL, gbif_email = NULL, gbif_format = "DWCA",
                      crs = NULL, process_data = TRUE, correct = TRUE){
   #-- Function variables
@@ -141,7 +144,7 @@ get_gbif_data <- function(gbif_key, t_path, aoa_wkt = NULL, gbif_user = NULL,
   #-- Pull GBIF Data
   if(gbif_key == "new"){
     message("Requesting data from GBIF")
-    gbifPred = rgbif::pred_within(aoa_wkt)
+    gbifPred = rgbif::pred_within(wkt_string(aoa_poly))
     gbifDwnld = rgbif::occ_download(gbifPred, user = gbif_user, pwd = gbif_pwd,
                                      email = gbif_email, format = gbif_format)
     rgbif::occ_download_wait(gbifDwnld)
@@ -176,7 +179,8 @@ get_gbif_data <- function(gbif_key, t_path, aoa_wkt = NULL, gbif_user = NULL,
                                  scientific_name),
         scientific_name = trimws(scientific_name),
         # Parse date formats, day of year, and year
-        parsed_date = lubridate::parse_date_time(eventDate, date_formats) |> as.Date(),
+        parsed_date = lubridate::parse_date_time(eventDate, date_formats) |> 
+          as.Date(),
         # parsed_date = ifelse(lubridate::year(parsed_date) == 9999, NA, date),
         day_of_year = lubridate::yday(parsed_date),
         parsed_year = lubridate::year(parsed_date),
@@ -194,6 +198,50 @@ get_gbif_data <- function(gbif_key, t_path, aoa_wkt = NULL, gbif_user = NULL,
 }
 
 
+#' Get GBIF occurrence records for a list of species
+#' 
+#' This function queries GBIF occurrence records for a species list using the 
+#'     taxon ID from `get_taxonomies()` using [rgbif::occ_search()].
+#'
+#' @param spp_list A list of species with taxon ID's from `get_taxonomies()`.
+#' @param spatial Logical (TRUE/FALSE). Return spatial data. Default is TRUE.
+#' @param crs Target coordinate reference system (CRS). Either and 
+#'    `sf::st_crs()` object or accepted string (e.g. "EPSG:4326" or "NAD83"). 
+#'    Default is EPSG:4326 (WGS84).
+#'
+#' @return An [sf] object.
+#' @seealso [get_taxonomies()], [rgbif::occ_search()]
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' library(mpsgSE)
+#' 
+#' # Species list with taxon ID's
+#' spp <- get_taxonomies(mpsgSE::sp_list_ex, correct = TRUE)
+#' 
+#' # Pull occurrence data
+#' occ <- get_gbif_occ_data(spp)
+#' }
+get_gbif_occ_data <- function(spp_list, spatial = TRUE, crs = "EPSG:4326"){
+  # Query GBIF data
+  occ_ls = rgbif::occ_search(taxonKey = spp_list$taxon_id)
+  # Convert list to data frame
+  occ = lapply(1:length(occ_ls), function(x){
+    dat = occ_ls[[x]]$data |> dplyr::mutate(taxon_id = names(occ_ls[x]))
+    return(dat)
+  }) |> 
+    dplyr::bind_rows()
+  # Convert to spatial
+  if(spatial){
+    occ = occ |> 
+      dplyr::filter(!is.na(decimalLatitude) | !is.na(decimalLongitude)) |> 
+      gbif_spatial(crs = crs)
+  }
+  return(occ)
+}
+
+
 #' Summarize GBIF data by species
 #'
 #' This function summarizes the spatial GBIF object from `get_gbif_data()` by
@@ -205,7 +253,8 @@ get_gbif_data <- function(gbif_key, t_path, aoa_wkt = NULL, gbif_user = NULL,
 #'     `get_taxonomies()` function.
 #'
 #' @param gbif_data Spatial GBIF data from `get_gbif_data()`.
-#' @param locale Logical. Location description of data. E.g., unit acronym or "Buffer"
+#' @param locale Logical. Location description of data (e.g., unit acronym or 
+#'     "Buffer").
 #' @param correct Logical. Run `correct_taxon_ids()` on data. Default is FALSE
 #'
 #' @return A tibble.
@@ -293,30 +342,17 @@ build_gbif_spp <- function(gbif_data, locale = TRUE, correct = FALSE){
 }
 
 
-#' Create a well-known text string (WTK) string
+#' Internal Function: Create a well-known text string (WTK) string
 #'
 #' Creates a well-known text string from a polygon (`sf` object). This function
-#'     transforms the input polygon to WGS84 prior to calculating the wkt string.
+#'     transforms the input polygon to WGS84 prior to calculating the wkt 
+#'     string.
 #'
 #' @param my_polygon An `sf` polygon object.
 #'
 #' @return An `sf` vector object.
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' library("mpsgSE")
-#'
-#' # Read spatial data into R
-#' t_path <- file.path("T:/path/to/project/directory")
-#' gdb_path <- file.path(t_path, "GIS_Data.gdb")
-#' sf_aoa <- read_fc(lyr = "AdminBdy_1kmBuffer", dsn = gdb_path, crs = "NAD83")
-#'
-#' # Create WKT string
-#' wkt_string(sf_aoa)
-#' }
 wkt_string <- function(my_polygon){
-  fc = sf::st_transform(my_polygon, crs ="WGS84" )
+  fc = sf::st_transform(my_polygon, crs ="EPSG:4326" )
   wkt = sf::st_bbox(fc) |>
     sf::st_as_sfc() |>
     sf::st_as_text()
@@ -332,15 +368,17 @@ wkt_string <- function(my_polygon){
 #'
 #' @param gbif_dat GBIF data frame from `get_gbif_data()`.
 #' @param crs Target coordinate reference system (CRS). Either and 
-#'                `sf::st_crs()` object or accepted input string for 
-#'                `sf::st_crs()` (e.g. "WGS84" or "NAD83"). See `sf::st_crs()`
-#'                for more details. Default is NULL. If NULL, resulting sf 
-#'                object CRS will be WGS84.
+#'    `sf::st_crs()` object or accepted string (e.g. "WGS84" or "NAD83"). 
+#'    See `sf::st_crs()` for more details. Default is NULL. If NULL, resulting 
+#'    `sf` object CRS will be EPSG:4326 (WGS84).
+#' 
+#' @return An [sf] object.
 gbif_spatial <- function(gbif_dat, crs = NULL){
   fc = sf::st_as_sf(gbif_dat, coords = c("decimalLongitude", "decimalLatitude"),
-                    crs = "WGS84")
+                    crs = "EPSG:4326")
   if(!is.null(crs)){
     if(sf::st_crs(fc) != crs) fc = sf::st_transform(fc, crs = crs)
   }
   return(fc)
 } 
+

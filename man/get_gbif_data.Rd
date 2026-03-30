@@ -2,12 +2,12 @@
 % Please edit documentation in R/gbif_functions.R
 \name{get_gbif_data}
 \alias{get_gbif_data}
-\title{Query GBIF species occurrence records}
+\title{Get GBIF occurrence records for an area of analysis}
 \usage{
 get_gbif_data(
   gbif_key,
   t_path,
-  aoa_wkt = NULL,
+  aoa_poly = NULL,
   gbif_user = NULL,
   gbif_pwd = NULL,
   gbif_email = NULL,
@@ -24,10 +24,6 @@ Use "new" for new GBIF queries.}
 \item{t_path}{The directory path where the GBIF data package is or will be
 stored.}
 
-\item{aoa_wkt}{Well-known text (wtk) string for the area of analysis. Use
-\code{wkt_string()} to generate the wtk string. This is required when \emph{gbif_key}
-is set to \strong{new}. Default is NULL.}
-
 \item{gbif_user}{Your GBIF user name. This is required when \emph{gbif_key} is set
 to \strong{new}. Default is NULL.}
 
@@ -41,9 +37,9 @@ is set to \strong{new}. Default is NULL.}
 Darwin-Core Achrive (DWAC). See \code{rgbif::occ_download()} for more details.}
 
 \item{crs}{Target coordinate reference system (CRS). Either and
-\code{sf::st_crs()} object or accepted input string (e.g. "NAD83").
-See \code{sf::st_crs()} for more details. Default is NULL. If NULL,
-resulting sf object CRS will be WGS84.}
+\code{sf::st_crs()} object or accepted input string (e.g. "NAD83"). See
+\code{sf::st_crs()} for more details. Default is NULL. If NULL, resulting \code{sf}
+object CRS will be WGS84.}
 
 \item{process_data}{Logical. Process data after reading them into R (TRUE ==
 yes, FALSE == no). Default is TRUE. The processing step}
@@ -57,6 +53,9 @@ yes, FALSE == no). Default is TRUE. The processing step}
 genus, specific epithet, and infraspecific epithet, and
 \item attempts to parse dates, day of year, and year values.
 }}
+
+\item{wkt_string}{Spatial polygon (sf) of the area of analysis. This is
+required when \emph{gbif_key} is set to \strong{new}. Default is NULL.}
 }
 \value{
 An sf class object.
@@ -66,7 +65,13 @@ This function queries GBIF for species occurrence records for a given area,
 or polygon (\code{sf} object), and then reads the data into R.
 }
 \details{
-Additional details...
+This function submits a records request using the polygon provided to
+spatially query GBIF records in
+\href{https://www.gbif.org/darwin-core}{Darwin Core Archive format} using
+\code{\link[rgbif:download_predicate_dsl]{rgbif::pred_within()}}. GBIF records requests are staged on GBIF servers
+and are then downloaded to a local or network directory using
+\code{\link[rgbif:occ_download]{rgbif::occ_download()}}. Finally, the data are read into R using
+\code{\link[rgbif:occ_download_get]{rgbif::occ_download_get()}} and \code{\link[rgbif:occ_download_import]{rgbif::occ_download_import()}}.
 }
 \examples{
 \dontrun{
