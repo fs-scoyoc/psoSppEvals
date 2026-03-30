@@ -35,7 +35,7 @@ format and unzipped before using this function.
 }
 \examples{
 \dontrun{
-library("mpsgSE")
+library("psoSppEvals")
 
 # Path to data folder
 data_folder <- file.path("data", "SEINet")

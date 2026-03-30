@@ -23,7 +23,7 @@ summarizes the EVT data by taxa.
 }
 \examples{
 \dontrun{
-library(mpsgSE)
+library(psoSppEvals)
 
 message("Example coming soon. To a theater near you.")
 

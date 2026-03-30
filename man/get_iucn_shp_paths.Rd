@@ -19,7 +19,7 @@ this function will fail if you are not on a FS network or in the FS VDI.
 }
 \examples{
 \dontrun{
-library(mpsgSE)
+library(psoSppEvals)
 spp_list <- get_taxonomies(sp_list_ex)
 bien_map_paths <- get_iucn_shp_paths(spp_list)
 }

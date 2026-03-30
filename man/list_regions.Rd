@@ -13,6 +13,6 @@ A \code{vector()}
 This function lists the regions in the \code{rfss} dataset.
 }
 \examples{
-library(mpsgSE)
+library(psoSppEvals)
 list_regions()
 }

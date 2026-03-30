@@ -15,7 +15,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #'
 #' # Path to data folder
 #' data_folder <- file.path("T:/path/to/project/directory", "data/SEINet")
@@ -86,7 +86,7 @@ build_seinet_spatial_data <- function(sei_data, spp_list) {
 #'
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #'
 #' # Path to data folder
 #' data_folder <- file.path("data", "SEINet")
@@ -119,7 +119,7 @@ get_seinet_data <- function(dir_path, crs = NULL, correct = TRUE){
   gbif_tids = sf::st_drop_geometry(raw_dat) |>
     dplyr::select(SEINet_taxonID, scientificName) |>
     dplyr::distinct() |>
-    mpsgSE::get_taxonomies(query_field = "scientificName", correct = correct) |>
+    psoSppEvals::get_taxonomies(query_field = "scientificName", correct = correct) |>
     dplyr::select(-scientificName)
 
   # Rename SEINet taxonomy variables that are duplicated in GBIF
@@ -162,7 +162,7 @@ get_seinet_data <- function(dir_path, crs = NULL, correct = TRUE){
 #'
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #'
 #' # Path to data folder
 #' data_folder <- file.path("T:/path/to/project/directory", "data/SEINet")
@@ -236,7 +236,7 @@ build_seinet_spp <- function(seinet_data, locale = FALSE, correct = FALSE){
     dplyr::rename("scientific_name" = scientificName)
   
   #  Correct Taxon IDs
-  if(correct) dat = mpsgSE::correct_taxon_ids(dat) 
+  if(correct) dat = psoSppEvals::correct_taxon_ids(dat) 
   
   return(dat)
 }

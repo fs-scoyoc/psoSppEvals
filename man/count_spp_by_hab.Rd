@@ -18,7 +18,7 @@ habitat in a data frame returned from \code{get_ns_habitat()}.
 }
 \examples{
 \dontrun{
-library("mpsgSE")
+library("psoSppEvals")
 ns_co <- get_ns_state_list("CO")
 habitats <- get_ns_habitat(ns_co)
 habitat_xwalk <- count_spp_by_hab(habitats)

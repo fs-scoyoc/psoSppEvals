@@ -18,7 +18,7 @@ Conservation Consern (BCC) region.
 }
 \examples{
 \dontrun{
-library("mpsgSE")
+library("psoSppEvals")
 regions <- c("UT-BCR9", "UT-BCR16", "UT")
 imbcr_trends <- get_imbcr_trends(regions)
 }

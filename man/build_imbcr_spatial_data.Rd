@@ -23,7 +23,7 @@ Additional details...
 }
 \examples{
 \dontrun{
-library("mpsgSE")
+library("psoSppEvals")
 
 # Read IMBCR data into R
 mgmt_units <- c("Cimarron National Grassland", "Comanche National Grassland")

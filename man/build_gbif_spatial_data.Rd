@@ -20,7 +20,7 @@ Subset eligible species from GBIF data and reduce variables.
 }
 \examples{
 \dontrun{
-library("mpsgSE")
+library("psoSppEvals")
 
 # Project directory path
 t_path <- file.path("T:/path/to/project/directory/data")

@@ -18,7 +18,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' library(mpsgSE)
+#' library(psoSppEvals)
 #' spp_list <- get_taxonomies(sp_list_ex)
 #' ebird_status <- download_ebird_status_maps(spp_list, 
 #'                                            output_path = file.path("data/ebirdst"), 
@@ -83,7 +83,7 @@ download_ebird_range_maps = function(spp_list, output_path, ebird_access_key){
 #'
 #' @examples
 #' \dontrun{
-#' library(mpsgSE)
+#' library(psoSppEvals)
 #' spp_list <- get_taxonomies(sp_list_ex)
 #' ebird_status <- download_ebird_status_maps(spp_list, 
 #'                                            output_path = file.path("data/ebirdst"), 
@@ -134,7 +134,7 @@ download_ebird_status_maps = function(spp_list, output_path, ebird_access_key){
 #'
 #' @examples
 #' \dontrun{
-#' library(mpsgSE)
+#' library(psoSppEvals)
 #' spp_list <- get_taxonomies(sp_list_ex)
 #' ebird_status <- download_ebird_status_maps(spp_list, 
 #'                                            output_path = file.path("data/ebirdst"), 
@@ -187,7 +187,7 @@ download_ebird_trends_maps <- function(spp_list, output_path, ebird_access_key){
 #'
 #' @examples
 #' \dontrun{
-#' library(mpsgSE)
+#' library(psoSppEvals)
 #' spp_list <- get_taxonomies(sp_list_ex)
 #' ebird_reg_status <- get_ebird_regional_stats(spp_list, ebird_access_key = ebird_key)
 #' }
@@ -249,7 +249,7 @@ get_ebird_regional_stats <- function(spp_list, ebird_access_key){
 #'
 #' @examples
 #' \dontrun{
-#' library(mpsgSE)
+#' library(psoSppEvals)
 #' spp_list <- get_taxonomies(sp_list_ex)
 #' ebird_status <- download_ebird_status_maps(spp_list, 
 #'                                            output_path = file.path("data/ebirdst"), 

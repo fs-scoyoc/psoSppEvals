@@ -23,7 +23,7 @@ A data frame of 333 observations and 17 variables.
 \item{family}{Taxonomic Family}
 \item{genus}{Taxonomic Genus}
 \item{species}{Taxonomic Species}
-\item{taxon_id}{MPSG taxon ID.}
+\item{taxon_id}{PSO taxon ID.}
 }
 }
 \source{

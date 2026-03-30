@@ -17,7 +17,7 @@ This function clips the Birds of Conservation Regions \link[sf:sf]{sf::sf} objec
 polygon.
 }
 \examples{
-library("mpsgSE")
+library("psoSppEvals")
 
 # Pull the Administrative Boundary for the Dixie National Forest
 adm_bdy <- psoGIStools::read_edw_lyr("EDW_ForestSystemBoundaries_01", 1) |> 

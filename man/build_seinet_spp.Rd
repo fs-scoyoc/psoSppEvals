@@ -24,7 +24,7 @@ there are less than seven (7) observations.
 }
 \examples{
 \dontrun{
-library("mpsgSE")
+library("psoSppEvals")
 
 # Path to data folder
 data_folder <- file.path("T:/path/to/project/directory", "data/SEINet")

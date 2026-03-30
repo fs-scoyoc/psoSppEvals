@@ -97,7 +97,7 @@ pull_edw_bio_data <- function(aoa_sf, crs,
     sf::st_drop_geometry() |> 
     dplyr::select(scientific_name) |> 
     dplyr::distinct() |> 
-    mpsgSE::get_taxonomies(query_field = "scientific_name", correct = TRUE)
+    psoSppEvals::get_taxonomies(query_field = "scientific_name", correct = TRUE)
   
   # Final Data Set ----
   # Format Dates

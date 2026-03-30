@@ -25,7 +25,7 @@ Additional details...
 }
 \examples{
 \dontrun{
-library(mpsgSE)
+library(psoSppEvals)
 spp_list <- get_taxonomies(sp_list_ex)
 ebird_status <- download_ebird_status_maps(spp_list, 
                                            output_path = file.path("data/ebirdst"), 

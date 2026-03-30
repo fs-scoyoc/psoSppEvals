@@ -13,7 +13,7 @@
 #' 
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #' ns_co <- get_ns_state_list("CO", taxonomy = FALSE)
 #' spp_list <- build_ns_spp_list(ns_co)
 #' }
@@ -64,7 +64,7 @@ build_ns_spp_list <- function(ns_data){
 #' 
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #'
 #' # Colorado
 #' ns_co <- get_ns_state_list("CO")
@@ -105,7 +105,7 @@ combine_ns_habs <- function(state_a_habitats, state_b_habitats){
 #' 
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #'
 #' # Colorado
 #' ns_co <- get_ns_state_list("CO")
@@ -160,7 +160,7 @@ combine_ns_spp_lists <- function(ns_spp_1, ns_spp_2){
 #' @export
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #'
 #' ns_co <- get_ns_state_list("CO")
 #' ns_ks <- get_ns_state_list("KS")
@@ -225,7 +225,7 @@ combine_ns_state_lists <- function(ns_list_1, ns_list_2){
 #'
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #' ns_co <- get_ns_state_list("CO")
 #' habitats <- get_ns_habitat(ns_co)
 #' habitat_xwalk <- count_spp_by_hab(habitats)
@@ -236,7 +236,7 @@ count_spp_by_hab <- function(ns_habitats){
     dplyr::ungroup() |>
     dplyr::summarise(n_spp = dplyr::n(),
                      .by = c("habitat_category", "ns_habitat_type")) |>
-    dplyr::mutate(mpsg_habitat = NA) |>
+    dplyr::mutate(pso_habitat = NA) |>
     dplyr::arrange(habitat_category, ns_habitat_type)
   return(df)
 }
@@ -258,7 +258,7 @@ count_spp_by_hab <- function(ns_habitats){
 #'
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #' co_ns_data_no_taxonid <- get_ns_state_list("CO", taxonomy = FALSE)
 #' co_ns_data <- get_ns_state_list("CO")
 #' }
@@ -298,9 +298,9 @@ get_ns_state_list <- function(state, taxonomy = TRUE, correct = FALSE) {
     dplyr::ungroup() |> 
     dplyr::distinct()
   # get taxon ids and taxonomies
-  if (isTRUE(taxonomy) & isFALSE(correct)) sss <- mpsgSE::get_taxonomies(sss)
+  if (isTRUE(taxonomy) & isFALSE(correct)) sss <- psoSppEvals::get_taxonomies(sss)
   if (isTRUE(taxonomy) & isTRUE(correct)){
-    sss <- mpsgSE::get_taxonomies(sss, correct = TRUE)
+    sss <- psoSppEvals::get_taxonomies(sss, correct = TRUE)
     }
   
   # construct output list
@@ -326,7 +326,7 @@ get_ns_state_list <- function(state, taxonomy = TRUE, correct = FALSE) {
 #'
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #' ns_co <- get_ns_state_list("CO")
 #' habitats <- get_ns_habitat(ns_co)
 #' }

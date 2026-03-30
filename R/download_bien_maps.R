@@ -14,7 +14,7 @@
 #' 
 #' @examples
 #' \dontrun{
-#' library(mpsgSE)
+#' library(psoSppEvals)
 #' spp_list <- get_taxonomies(sp_list_ex)
 #' bien_range_maps <- download_bien_range_maps(spp_list, file.path("data", "bien_maps"))
 #' }
@@ -39,7 +39,7 @@ download_bien_maps <- function(spp_list, output_path) {
     dplyr::filter(range_map_downloaded == "Yes") |> 
     dplyr::mutate(species = gsub("_", " ", species)) |> 
     dplyr::rename("scientific_name" = species) |> 
-    mpsgSE::get_taxonomies(query_field = "scientific_name", correct = TRUE)
+    psoSppEvals::get_taxonomies(query_field = "scientific_name", correct = TRUE)
   
   bien_maps_sf = lapply(bien_maps$scientific_name, function(sp){
     sp_dat = dplyr::filter(bien_maps, scientific_name == sp)

@@ -74,7 +74,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' library(mpsgSE)
+#' library(psoSppEvals)
 #' states <- c("Utah", "Nevada", "New Mexico")
 #' region_number <- "04"
 #' forest_number <- "07"
@@ -127,14 +127,14 @@ get_basemap_data = function(states, region_number, forest_number, forest_name,
   message("FS Boundaries")
   # Administrative Boundary
   if (isTRUE(admin_bndry)) {
-    ad_bdy = mpsgSE::read_edw_lyr("EDW_ForestSystemBoundaries_01") |> 
+    ad_bdy = psoSppEvals::read_edw_lyr("EDW_ForestSystemBoundaries_01") |> 
       dplyr::filter(region == region_number & forestnumber == forest_number) |>
       sf::st_transform(target_crs) |> 
       sf::st_make_valid()
     } else (ad_bdy = admin_bndry)
   # Plan Area (Forest Service Land)
   if (isTRUE(plan_area)) {
-    pl_ar = mpsgSE::read_edw_lyr("EDW_BasicOwnership_02") |> 
+    pl_ar = psoSppEvals::read_edw_lyr("EDW_BasicOwnership_02") |> 
       dplyr::filter(forestname == forest_name) |>
       dplyr::filter(ownerclassification == "USDA FOREST SERVICE") |>
       sf::st_transform(target_crs) |> 
@@ -142,7 +142,7 @@ get_basemap_data = function(states, region_number, forest_number, forest_name,
     } else (pl_ar = plan_area)
   # Ranger Districts
   if (isTRUE(districts)){
-    dists = mpsgSE::read_edw_lyr("EDW_RangerDistricts_03", layer = 1) |>
+    dists = psoSppEvals::read_edw_lyr("EDW_RangerDistricts_03", layer = 1) |>
       dplyr::filter(region == region_number & forestnumber == forest_number) |>
       sf::st_transform(target_crs) |>
       sf::st_make_valid()
@@ -206,7 +206,7 @@ get_basemap_data = function(states, region_number, forest_number, forest_name,
 #' 
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #' 
 #' # Read spatial data into R
 #' t_path <- file.path("T:/path/to/project/directory")
@@ -266,7 +266,7 @@ clip_fc <- function(sf_lyr, sf_clip, locale = NULL){
 #' @export
 #' 
 #' @examples
-#' library(mpsgSE)
+#' library(psoSppEvals)
 #' 
 #' # Administrative Boundary for the Dixie National Forest
 #' admin_bndry <- read_edw_lyr("EDW_ForestSystemBoundaries_01", layer = 1) |> 
@@ -310,7 +310,7 @@ read_edw_lyr <- function(map_name, layer = 0, service = "arcx",
 #' 
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #' 
 #' read_fc(lyr = "feature_name", dsn = file.path("T:/path/to/geodatabase"), 
 #'         crs = "NAD83")

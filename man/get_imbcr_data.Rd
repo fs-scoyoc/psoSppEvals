@@ -33,7 +33,7 @@ unless you have the *.rda file on your local machine.
 }
 \examples{
 \dontrun{
-library("mpsgSE")
+library("psoSppEvals")
 mgmt_units <- c("Cimarron National Grassland", "Comanche National Grassland")
 get_imbcr_data(mgmt_units)
 }

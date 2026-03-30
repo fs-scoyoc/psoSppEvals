@@ -97,7 +97,7 @@ data servers if the error is persistent.
 }
 \examples{
 \dontrun{
-library(mpsgSE)
+library(psoSppEvals)
 states <- c("Utah", "Nevada", "New Mexico")
 region_number <- "04"
 forest_number <- "07"

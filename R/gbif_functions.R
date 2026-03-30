@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #'
 #' # Project directory path
 #' t_path <- file.path("T:/path/to/project/directory/data")
@@ -108,7 +108,7 @@ build_gbif_spatial_data <- function(gbif_data, spp_list) {
 #'
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #'
 #' # Read spatial data into R
 #' t_path <- file.path("T:/path/to/project/directory")
@@ -187,11 +187,11 @@ get_gbif_data <- function(gbif_key, t_path, aoa_poly = NULL, gbif_user = NULL,
         source = "GBIF"
       ) |>
       dplyr::mutate_if(is.character, trimws) |> 
-      mpsgSE::correct_taxon_ids()
+      psoSppEvals::correct_taxon_ids()
   }
   
   # Correct Taxon IDs
-  if(correct) gbif = mpsgSE::correct_taxon_ids(gbif) 
+  if(correct) gbif = psoSppEvals::correct_taxon_ids(gbif) 
 
   #-- Return spatial GBIF data
   return(gbif_spatial(gbif))
@@ -215,10 +215,10 @@ get_gbif_data <- function(gbif_key, t_path, aoa_poly = NULL, gbif_user = NULL,
 #'
 #' @examples
 #' \dontrun{
-#' library(mpsgSE)
+#' library(psoSppEvals)
 #' 
 #' # Species list with taxon ID's
-#' spp <- get_taxonomies(mpsgSE::sp_list_ex, correct = TRUE)
+#' spp <- get_taxonomies(psoSppEvals::sp_list_ex, correct = TRUE)
 #' 
 #' # Pull occurrence data
 #' occ <- get_gbif_occ_data(spp)
@@ -263,7 +263,7 @@ get_gbif_occ_data <- function(spp_list, spatial = TRUE, crs = "EPSG:4326"){
 #'
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #'
 #' # Project directory path
 #' t_path <- file.path("T:/path/to/project/directory")
@@ -336,7 +336,7 @@ build_gbif_spp <- function(gbif_data, locale = TRUE, correct = FALSE){
                    species, scientific_name)
   
   # Correct Taxon IDs
-  if(correct) dat = mpsgSE::correct_taxon_ids(dat) 
+  if(correct) dat = psoSppEvals::correct_taxon_ids(dat) 
 
   return(dat)
 }

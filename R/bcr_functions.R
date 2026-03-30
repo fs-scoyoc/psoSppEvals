@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @examples
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #' 
 #' # Pull the Administrative Boundary for the Dixie National Forest
 #' adm_bdy = psoGIStools::read_edw_lyr("EDW_ForestSystemBoundaries_01", 1) |>
@@ -21,8 +21,8 @@
 #' # Get list of birds of conservation concern
 #' get_bcr_list(adm_bdy)
 get_bcr_list <- function(sf_lyr){
-  bcrs = mpsgSE::get_bc_regions(sf_lyr) |> dplyr::pull(bcr_label)
-  bcc = mpsgSE::bcc_list
+  bcrs = psoSppEvals::get_bc_regions(sf_lyr) |> dplyr::pull(bcr_label)
+  bcc = psoSppEvals::bcc_list
   
   get_list = function(bcr_code){
     bcc[grepl(paste0("\\b", bcr_code, "\\b"), bcc$bc_rs_for_bcc_listing_breeding), ]
@@ -48,7 +48,7 @@ get_bcr_list <- function(sf_lyr){
 #' @export
 #'
 #' @examples
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #' 
 #' # Pull the Administrative Boundary for the Dixie National Forest
 #' adm_bdy <- psoGIStools::read_edw_lyr("EDW_ForestSystemBoundaries_01", 1) |> 
@@ -57,7 +57,7 @@ get_bcr_list <- function(sf_lyr){
 get_bc_regions <- function(sf_lyr){
   sf::st_intersection(
     sf::st_make_valid(sf_lyr),
-    sf::st_transform(mpsgSE::bcc_regions, crs = sf::st_crs(sf_lyr))
+    sf::st_transform(psoSppEvals::bcc_regions, crs = sf::st_crs(sf_lyr))
     ) |>
     sf::st_drop_geometry() |> 
     dplyr::select(-dplyr::contains("shape") & -dplyr::contains("Shape") & 

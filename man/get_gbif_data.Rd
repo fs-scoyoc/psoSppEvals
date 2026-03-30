@@ -75,7 +75,7 @@ and are then downloaded to a local or network directory using
 }
 \examples{
 \dontrun{
-library("mpsgSE")
+library("psoSppEvals")
 
 # Read spatial data into R
 t_path <- file.path("T:/path/to/project/directory")

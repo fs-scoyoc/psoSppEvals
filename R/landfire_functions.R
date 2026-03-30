@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' library(mpsgSE)
+#' library(psoSppEvals)
 #' 
 #' message("Example coming soon. To a theater near you.")
 #' 
@@ -97,7 +97,7 @@ pull_landfire <- function(plan_area_sf, lf_dir, email_address, res = 30){
 #'
 #' @examples
 #' \dontrun{
-#' library(mpsgSE)
+#' library(psoSppEvals)
 #' 
 #' message("Example coming soon. To a theater near you.")
 #' 

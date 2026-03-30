@@ -28,7 +28,7 @@ CRS is not changed.
 }
 \examples{
 \dontrun{
-library("mpsgSE")
+library("psoSppEvals")
 
 # Read spatial data into R
 t_path <- file.path("T:/path/to/project/directory")

@@ -25,7 +25,7 @@ for the Plan Area (FS lands).
 }
 \examples{
 \dontrun{
-library(mpsgSE)
+library(psoSppEvals)
 
 message("Example coming soon. To a theater near you.")
 

@@ -20,7 +20,7 @@ This function combines the state NatureServe lists returned from
 }
 \examples{
 \dontrun{
-library("mpsgSE")
+library("psoSppEvals")
 
 ns_co <- get_ns_state_list("CO")
 ns_ks <- get_ns_state_list("KS")

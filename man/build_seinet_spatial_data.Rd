@@ -23,7 +23,7 @@ Additional details...
 }
 \examples{
 \dontrun{
-library("mpsgSE")
+library("psoSppEvals")
 
 # Path to data folder
 data_folder <- file.path("T:/path/to/project/directory", "data/SEINet")

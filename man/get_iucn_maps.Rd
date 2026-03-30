@@ -21,8 +21,8 @@ if you are not on a FS network.
 }
 \examples{
 \dontrun{
-library('mpsgSE')
-spp_list <- get_taxonomies(mpsgSE::sp_list_ex, correct = TRUE)
+library('psoSppEvals')
+spp_list <- get_taxonomies(psoSppEvals::sp_list_ex, correct = TRUE)
 iucn_maps <- get_iucn_maps(spp_list)
 }
 }

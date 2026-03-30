@@ -11,7 +11,7 @@ A data frame of 4142 observations and 11 variables.
 \item{common_name}{Common name of species.}
 \item{region}{Forest Service Region}
 \item{orig_scientific_name}{Origial, uncleaned and unverified scientific name of species.}
-\item{taxon_id}{MPSG taxon ID.}
+\item{taxon_id}{PSO taxon ID.}
 \item{gbif_taxonID}{Taxon ID from GBIF.}
 \item{kingdom}{Taxonomic Kingdom}
 \item{phylum}{Taxonomic Phylum}

@@ -1,8 +1,8 @@
-# Mountain Planning Service Group Species Evaluation (`mpsgSE`) R Package
+# Planning Service Organization Species Evaluation (psoSppEvals) R Package
 
 ## Overview
 
-Welcome to the Mountain Planning Service Group (MPSG; USDA Forest Service) Species Evaluation R package. This package has been developed by MPSG staff to standardize species data and produce template species evaluation documents that are part of the [Species of Conservation Concern (SCC)](https://www.fs.usda.gov/naturalresources/programs/scc.shtml) process. This package hosts several utilities that standardize species observation data from repositories like the Global Biodiversity Information Facility (GBIF; <https://www.gbif.org/>) and SEINet <https://swbiodiversity.org/seinet/index.php>), query species range data from eBird <https://science.ebird.org/en/status-and-trends>) and the Botanical Information and Ecological Network (<https://bien.nceas.ucsb.edu/bien/>), and produces template species evaluation documents in Microsoft Word format using a `Quarto` scrip.
+Welcome to the Planning Service Organization (PSO; USDA Forest Service) Species Evaluation R package. This package is in development by PSO staff to standardize species data and produce template species evaluation documents as part of the [Species of Conservation Concern (SCC)](https://www.fs.usda.gov/naturalresources/programs/scc.shtml) process of land management plan revision. This package hosts several utilities that standardize species observation data from repositories like the Global Biodiversity Information Facility (GBIF; <https://www.gbif.org/>) and SEINet <https://swbiodiversity.org/seinet/index.php>), query species range data from eBird <https://science.ebird.org/en/status-and-trends>) and the Botanical Information and Ecological Network (<https://bien.nceas.ucsb.edu/bien/>), and produces template species evaluation documents in Microsoft Word format using a `Quarto` scrip.
 
 **Notes:**
 
@@ -28,12 +28,12 @@ Welcome to the Mountain Planning Service Group (MPSG; USDA Forest Service) Speci
 ## Installation
 
 ``` r
-remotes::install_github("fs-scoyoc/mpsgSE")
+remotes::install_github("fs-scoyoc/psoSppEvals")
 ```
 
 ## Template Species Evaluation Documents
 
-[Here](https://github.com/fs-scoyoc/mpsgSE/blob/main/docs/Example_Olive-sided_Flycatcher_Contopus_cooperi.pdf) is an example of a template species evaluation document for Olive-sided Flycatcher on the Bitterroot National Forest. These documents are templates that are customized for each land management revision project (i.e., a National Forest or Grassland) and MPSG biologists will add, revise, or remove information using their best professional judgment before this document becomes part of the project record.
+[Here](https://github.com/fs-scoyoc/mpsgSE/blob/main/docs/Example_Olive-sided_Flycatcher_Contopus_cooperi.pdf) is an example of a template species evaluation document for Olive-sided Flycatcher on the Bitterroot National Forest. These documents are templates that are customized for each land management revision project (i.e., a National Forest or Grassland) and PSO biologists will add, revise, or remove information using their best professional judgment before this document becomes part of the project record.
 
 ## List of Functions
 
@@ -139,7 +139,7 @@ remotes::install_github("fs-scoyoc/mpsgSE")
 
 ## List of Data Sets
 
-The data sets listed below are used in the MPSG species evaluation process and not intended for distribution. Recommended best practice is to obtain these data from their sources.
+The data sets listed below are used in the PSO species evaluation process and not intended for distribution. Recommended best practice is to obtain these data from their sources.
 
 -   `bcc_list`: 2024 US Fish & Wildlife Birds of Conservation Concern List.
 

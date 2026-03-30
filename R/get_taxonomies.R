@@ -16,7 +16,7 @@
 #' @export
 #'
 #' @examples
-#' library(mpsgSE)
+#' library(psoSppEvals)
 #' spp_list <- get_taxonomies(sp_list_ex)
 get_taxonomies <- function(spp_list, query_field = "scientific_name", 
                            correct = FALSE) {
@@ -39,7 +39,7 @@ get_taxonomies <- function(spp_list, query_field = "scientific_name",
   # Correct Scientific Names with known Errors
   if(correct) {
     # Read corrected names data frame
-    cor_names = mpsgSE::name_corrections
+    cor_names = psoSppEvals::name_corrections
     # Match scientific names
     matched_names = match(distinct_spp$my_clean_query_name, cor_names$errored_name)
     # Correct scientific names
@@ -59,7 +59,7 @@ get_taxonomies <- function(spp_list, query_field = "scientific_name",
     # Get GBIF IF
     gbif_taxonID = names(tax_list)[[i]]
     if(!is.na(gbif_taxonID)){
-      # Get MPSG taxon ID
+      # Get taxon ID
       final_id = tax_list[[i]] |>
         tail(1) |>
         dplyr::pull(id)
@@ -93,7 +93,7 @@ get_taxonomies <- function(spp_list, query_field = "scientific_name",
     dplyr::distinct()
   
   if(correct) {
-    returned_dat = mpsgSE::correct_taxon_ids(returned_dat, query_field = query_field)
+    returned_dat = psoSppEvals::correct_taxon_ids(returned_dat, query_field = query_field)
   }
   
   return(returned_dat)
@@ -112,7 +112,7 @@ get_taxonomies <- function(spp_list, query_field = "scientific_name",
 #' @export
 #'
 #' @examples
-#' library(mpsgSE)
+#' library(psoSppEvals)
 #' spp_data <- sp_list_ex |> get_taxonomies('scientific_name', correct = TRUE)
 #' get_synonyms(spp_data)
 get_synonyms <- function(spp_list) {
@@ -131,3 +131,63 @@ get_synonyms <- function(spp_list) {
 
   return(syns)
 }
+
+
+#' Correct known issues with taxon ID's and scientific names.
+#' 
+#' Documentation will be updated shortly.
+#'
+#' @param spp_list A data frame with taxon ID's from `get_taxonomies()`.
+#' @param query_field Field holding scientific names
+#' @param update_scientific_names Optional. TRUE/FALSE. Update query field scientific 
+#'     names with corrected scientific names. Default is FALSE.
+#'
+#' @returns A [tibble::tibble()] with corrected taxon ID's and scientific names.
+#' @seealso [get_taxonomies()]
+#' @export
+#' 
+#' @examples
+#' library(psoSppEvals)
+#' 
+#' spp_list = tibble::tibble(
+#'    common_name = c("Western Toad", "Northern Leopard Frog", "Mountain Plover", 
+#'                    "Snowy Plover", "American Goshawk", "Ferruginous Hawk", 
+#'                    "Hopi Chipmunk", "Canada Lynx", "American Pika",
+#'                    "Largemouth Bass", "Westslope Cutthroat Trout", 
+#'                    "Vargo's Furcula", "Western Bumblebee", "Monarch"),
+#'    scientific_name = c("Anaxyrus boreas", "Lithobates pipiens", 
+#'                        "Anarhynchus montanus", "Anarhynchus nivosus", 
+#'                        "Accipiter atricapillus", "Buteo regalis", 
+#'                        "Neotamias rufus", "Lynx canadensis", "Ochotona princeps", 
+#'                        "Micropterus nigricans", "Oncorhynchus lewisi", 
+#'                        "Furcula vargoi", "Bombus occidentalis", 
+#'                        "Danaus plexippus")
+#'    ) |> 
+#'    dplyr::mutate(
+#'      taxon_id = taxize::get_gbifid(scientific_name, ask = FALSE, rows = 1, 
+#'                                    messages = FALSE)) |> 
+#'    dplyr::distinct()
+#' spp_list_fix <- correct_taxon_ids(spp_list)
+correct_taxon_ids <- function(spp_list, query_field = "scientific_name", 
+                              update_scientific_names = FALSE){
+  # Read corrected names data frame
+  dat = psoSppEvals::name_corrections
+  
+  # Match scientific names
+  spp_list_sci_names = dplyr::pull(spp_list, query_field)
+  mat_nam = match(spp_list_sci_names, dat$errored_name)
+  
+  # Correct taxon ID's
+  spp_list$taxon_id[!is.na(mat_nam)] = dat$taxon_id[mat_nam[!is.na(mat_nam)]]
+  
+  if(update_scientific_names){
+    # Correct scientific names
+    cor_sci_names = spp_list_sci_names
+    cor_sci_names[!is.na(mat_nam)] = dat$corrected_name[mat_nam[!is.na(mat_nam)]]
+    spp_list[, query_field] = cor_sci_names
+  }
+  
+  # Return data
+  return(spp_list)
+}
+

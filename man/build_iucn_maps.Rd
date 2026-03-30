@@ -22,7 +22,7 @@ shapefile paths prior to running this function.
 }
 \examples{
 \dontrun{
-library(mpsgSE)
+library(psoSppEvals)
 spp_list <- get_taxonomies(sp_list_ex)
 map_paths <- get_iucn_shp_paths(spp_list)
 iucn_maps <- build_iucn_maps(map_paths)

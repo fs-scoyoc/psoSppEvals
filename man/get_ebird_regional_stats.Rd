@@ -24,7 +24,7 @@ Additional details...
 }
 \examples{
 \dontrun{
-library(mpsgSE)
+library(psoSppEvals)
 spp_list <- get_taxonomies(sp_list_ex)
 ebird_reg_status <- get_ebird_regional_stats(spp_list, ebird_access_key = ebird_key)
 }

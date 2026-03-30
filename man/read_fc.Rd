@@ -29,7 +29,7 @@ target CRS if it is not.
 }
 \examples{
 \dontrun{
-library("mpsgSE")
+library("psoSppEvals")
 
 read_fc(lyr = "feature_name", dsn = file.path("T:/path/to/geodatabase"), 
         crs = "NAD83")

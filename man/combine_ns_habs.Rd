@@ -20,7 +20,7 @@ This function combines two habitat data frames returned from
 }
 \examples{
 \dontrun{
-library("mpsgSE")
+library("psoSppEvals")
 
 # Colorado
 ns_co <- get_ns_state_list("CO")

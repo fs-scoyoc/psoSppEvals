@@ -15,7 +15,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #'
 #' # Read IMBCR data into R
 #' mgmt_units <- c("Cimarron National Grassland", "Comanche National Grassland")
@@ -67,7 +67,7 @@ build_imbcr_spatial_data <- function(imbcr_data, spp_list){
 #'
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #' mgmt_units <- c("Cimarron National Grassland", "Comanche National Grassland")
 #' get_imbcr_data(mgmt_units)
 #' }
@@ -109,7 +109,7 @@ get_imbcr_data <- function(fs_unit, crs = NULL, dir_path = NULL){
 #'
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #' regions <- c("UT-BCR9", "UT-BCR16", "UT")
 #' imbcr_trends <- get_imbcr_trends(regions)
 #' }
@@ -143,7 +143,7 @@ get_imbcr_trends <- function(bcc_region){
 #'
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #'
 #' # Read IMBCR data into R
 #' mgmt_units <- c("Cimarron National Grassland", "Comanche National Grassland")

@@ -18,7 +18,7 @@ return synonyms for unique taxon ID's (i.e., duplicated taxon ID's will
 not be queried).
 }
 \examples{
-library(mpsgSE)
+library(psoSppEvals)
 spp_data <- sp_list_ex |> get_taxonomies('scientific_name', correct = TRUE)
 get_synonyms(spp_data)
 }

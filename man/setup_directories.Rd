@@ -19,9 +19,8 @@ reports using the sub-directory paths from \code{build_quarto_params()}.
 }
 \examples{
 \dontrun{
-library('mpsgSE')
-spp_list <- get_taxonomies(mpsgSE::sp_list_ex, 'scientific_name', 
-                           correct = TRUE)
+library('psoSppEvals')
+spp_list <- get_taxonomies(psoSppEvals::sp_list_ex, correct = TRUE)
 qmd_params <- build_quarto_params(spp_list, file.path('output', 'spp_evlas'), 
                                   "Smokey Bear National Forest")
 setup_directories(qmd_params)

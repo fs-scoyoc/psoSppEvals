@@ -15,8 +15,8 @@
 #' @seealso [get_taxonomies()]
 #' @examples
 #' \dontrun{
-#' library('mpsgSE')
-#' spp_list <- get_taxonomies(mpsgSE::sp_list_ex, correct = TRUE)
+#' library('psoSppEvals')
+#' spp_list <- get_taxonomies(psoSppEvals::sp_list_ex, correct = TRUE)
 #' iucn_maps <- get_iucn_maps(spp_list)
 #' }
 get_iucn_maps <- function(spp_list){
@@ -67,7 +67,7 @@ get_iucn_maps <- function(spp_list){
 #' 
 #' @examples
 #' \dontrun{
-#' library(mpsgSE)
+#' library(psoSppEvals)
 #' spp_list <- get_taxonomies(sp_list_ex)
 #' map_paths <- get_iucn_shp_paths(spp_list)
 #' iucn_maps <- build_iucn_maps(map_paths)
@@ -112,7 +112,7 @@ build_iucn_maps <- function(iucn_paths) {
 #' 
 #' @examples
 #' \dontrun{
-#' library(mpsgSE)
+#' library(psoSppEvals)
 #' spp_list <- get_taxonomies(sp_list_ex)
 #' bien_map_paths <- get_iucn_shp_paths(spp_list)
 #' }

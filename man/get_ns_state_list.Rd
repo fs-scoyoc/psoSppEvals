@@ -24,7 +24,7 @@ This function imports NatureServe species data for a given state into R.
 }
 \examples{
 \dontrun{
-library("mpsgSE")
+library("psoSppEvals")
 co_ns_data_no_taxonid <- get_ns_state_list("CO", taxonomy = FALSE)
 co_ns_data <- get_ns_state_list("CO")
 }

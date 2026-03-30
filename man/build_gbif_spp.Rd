@@ -28,7 +28,7 @@ observations. This function then verifies taxonomy using the
 }
 \examples{
 \dontrun{
-library("mpsgSE")
+library("psoSppEvals")
 
 # Project directory path
 t_path <- file.path("T:/path/to/project/directory")

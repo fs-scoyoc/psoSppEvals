@@ -31,7 +31,7 @@ using the \code{arcgislayers} package. You must be on a Forest Service network
 to access data from the internal ArcGIS REST Service.
 }
 \examples{
-library(mpsgSE)
+library(psoSppEvals)
 
 # Administrative Boundary for the Dixie National Forest
 admin_bndry <- read_edw_lyr("EDW_ForestSystemBoundaries_01", layer = 1) |> 

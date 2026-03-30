@@ -22,7 +22,7 @@ spatial (\code{sf}) object.
 }
 \examples{
 \dontrun{
-library(mpsgSE)
+library(psoSppEvals)
 spp_list <- get_taxonomies(sp_list_ex)
 bien_range_maps <- download_bien_range_maps(spp_list, file.path("data", "bien_maps"))
 }

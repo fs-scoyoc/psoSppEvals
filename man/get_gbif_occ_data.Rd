@@ -24,10 +24,10 @@ taxon ID from \code{get_taxonomies()} using \code{\link[rgbif:occ_search]{rgbif:
 }
 \examples{
 \dontrun{
-library(mpsgSE)
+library(psoSppEvals)
 
 # Species list with taxon ID's
-spp <- get_taxonomies(mpsgSE::sp_list_ex, correct = TRUE)
+spp <- get_taxonomies(psoSppEvals::sp_list_ex, correct = TRUE)
 
 # Pull occurrence data
 occ <- get_gbif_occ_data(spp)

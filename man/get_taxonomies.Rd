@@ -25,7 +25,7 @@ taxonomies database. \code{taxon_id} is ID number of the accepted taxonomy
 from the GBIF backbone.
 }
 \examples{
-library(mpsgSE)
+library(psoSppEvals)
 spp_list <- get_taxonomies(sp_list_ex)
 }
 \seealso{

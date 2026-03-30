@@ -19,7 +19,7 @@ This function returns a data frame of bird species that occur in the Birds of
 Conservation Regions a National Forest or Grassland overlaps.
 }
 \examples{
-library("mpsgSE")
+library("psoSppEvals")
 
 # Pull the Administrative Boundary for the Dixie National Forest
 adm_bdy = psoGIStools::read_edw_lyr("EDW_ForestSystemBoundaries_01", 1) |>

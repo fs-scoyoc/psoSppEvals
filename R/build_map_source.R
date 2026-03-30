@@ -18,7 +18,7 @@
 #' 
 #' @examples
 #' \dontrun{
-#' library("mpsgSE")
+#' library("psoSppEvals")
 #' ebird_key <- Sys.getenv("EBIRDST_KEY")
 #' 
 #' # Build speceis list

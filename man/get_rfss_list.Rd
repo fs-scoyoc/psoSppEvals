@@ -14,10 +14,10 @@ get_rfss_list(fs_region)
 }
 \description{
 This funciton filter's the master Regional Forester's Sensitive Species List
-saved as the \code{rfss} dataset in the \code{mpsgSE} package to a specified Forest
+saved as the \code{rfss} dataset in the \code{psoSppEvals} package to a specified Forest
 Service Region.
 }
 \examples{
-library(mpsgSE)
+library(psoSppEvals)
 r1_ssl <- get_rfss_list("R1")
 }
