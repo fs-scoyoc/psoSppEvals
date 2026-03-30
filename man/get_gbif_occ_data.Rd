@@ -16,7 +16,7 @@ get_gbif_occ_data(spp_list, spatial = TRUE, crs = "EPSG:4326")
 Default is EPSG:4326 (WGS84).}
 }
 \value{
-An \link[sf:sf]{sf::sf} object.
+An \link[sf:sf]{sf::sf} object or a \code{\link[tibble:tibble]{tibble::tibble()}}.
 }
 \description{
 This function queries GBIF occurrence records for a species list using the

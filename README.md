@@ -27,7 +27,14 @@ Welcome to the Planning Service Organization (PSO; USDA Forest Service) Species 
 
 ## Installation
 
+This package requires two packages not available on CRAN, `arcgisbinding` and `psoGIStools`, to install. The [`arcgisbinding`](https://github.com/R-ArcGIS/arcgisbinding) package is on hosted on ESRI and the [`psoGIStools`](https://github.com/fs-scoyoc/psoGIStools) package is on GitHub. The following code installs these two packages, then installs the `psoSppEvals` package.
+
 ``` r
+# Requisite packages not on CRAN
+install.packages("arcgisbinding", repos="https://r.esri.com", type="win.binary")
+remotes::install_github("fs-scoyoc/psoGIStools")
+
+# Install psoSppEvals
 remotes::install_github("fs-scoyoc/psoSppEvals")
 ```
 

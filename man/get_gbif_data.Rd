@@ -24,6 +24,9 @@ Use "new" for new GBIF queries.}
 \item{t_path}{The directory path where the GBIF data package is or will be
 stored.}
 
+\item{aoa_poly}{Spatial polygon (sf) of the area of analysis. This is
+required when \emph{gbif_key} is set to \strong{new}. Default is NULL.}
+
 \item{gbif_user}{Your GBIF user name. This is required when \emph{gbif_key} is set
 to \strong{new}. Default is NULL.}
 
@@ -53,9 +56,6 @@ yes, FALSE == no). Default is TRUE. The processing step}
 genus, specific epithet, and infraspecific epithet, and
 \item attempts to parse dates, day of year, and year values.
 }}
-
-\item{wkt_string}{Spatial polygon (sf) of the area of analysis. This is
-required when \emph{gbif_key} is set to \strong{new}. Default is NULL.}
 }
 \value{
 An sf class object.

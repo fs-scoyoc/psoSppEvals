@@ -65,7 +65,7 @@ build_gbif_spatial_data <- function(gbif_data, spp_list) {
 #'     Use "new" for new GBIF queries.
 #' @param t_path The directory path where the GBIF data package is or will be
 #'     stored.
-#' @param wkt_string Spatial polygon (sf) of the area of analysis. This is 
+#' @param aoa_poly Spatial polygon (sf) of the area of analysis. This is 
 #'     required when *gbif_key* is set to **new**. Default is NULL.
 #' @param gbif_user Your GBIF user name. This is required when *gbif_key* is set
 #'     to **new**. Default is NULL.
@@ -209,7 +209,7 @@ get_gbif_data <- function(gbif_key, t_path, aoa_poly = NULL, gbif_user = NULL,
 #'    `sf::st_crs()` object or accepted string (e.g. "EPSG:4326" or "NAD83"). 
 #'    Default is EPSG:4326 (WGS84).
 #'
-#' @return An [sf] object.
+#' @return An [sf] object or a [tibble::tibble()].
 #' @seealso [get_taxonomies()], [rgbif::occ_search()]
 #' @export
 #'
