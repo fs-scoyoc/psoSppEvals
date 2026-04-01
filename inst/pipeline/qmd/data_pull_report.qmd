@@ -1,0 +1,492 @@
+---
+title: "Species Evaluation Data Acquisition Report"
+subtitle: "Fishlake National Forest"
+author: 
+  - name: "Matthew Van Scoyoc"
+    affiliations: "Planning Service Organization, USDA Forest Service"
+date: "`r format(as.Date(Sys.time()), '%d %B, %Y')`"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-title: Contents
+    toc-depth: 2
+    toc-location: left
+    number-sections: true
+    link-external-newwindow: true
+  # pdf:
+  #   documentclass: document
+  #   sansfont: Arial
+  #   mainfont: Arial
+  #   monofont: Calibri
+  #   toc: true
+  #   toc-title: Contents
+  #   toc-depth: 2
+  #   number-sections: true
+  #   colorlinks: true
+  docx:
+    reference-doc: 'style-ref.docx'
+    number-sections: true
+    toc: true
+    toc-title: Contents
+    toc-depth: 2
+    df-print: kable
+    knitr:
+      opts_chunk:
+        dev: 'ragg_png'
+    fig-width: 6.25
+params:
+  unit_short: "DIF"
+  unit_full: "Dixie National Forest"
+  gbif_key: "0016100-260208012135463"
+bibliography: references.bib
+---
+
+```{r knitr, message=FALSE, warning=FALSE, include=FALSE}
+# Set global knitr options
+knitr::opts_chunk$set(eval = TRUE, echo = FALSE, results = 'hide', comment = "",
+                      message=FALSE, warning=FALSE,
+                      tidy = TRUE, tidy.opts = list(width.cutoff = 60), 
+                      cache = FALSE)
+```
+
+```{r setup}
+#-- Packages
+# R packages used in this script
+pkgs <- c("dplyr", 
+          "extrafont",
+          "ggplot2",
+          "ggspatial",
+          "ggtext",
+          "glue",
+          "lubridate", 
+          "sf", 
+          "targets", 
+          "tidyterra")
+
+# Install packages if they aren't in your library
+inst_pkgs <- pkgs %in% rownames(installed.packages())
+if (any(inst_pkgs == FALSE)) {
+  install.packages(pkgs[!inst_pkgs],
+                   lib =  .libPaths()[1],
+                   repos = "https://cloud.r-project.org",
+                   type = 'source',
+                   dependencies = TRUE,
+                   quiet = TRUE)
+  }
+# Load packages
+invisible(lapply(pkgs, library, character.only = TRUE)) |> suppressWarnings()
+
+#-- Functions
+#' This function pulls and formats the modified date from a file.
+#'
+#' @param file_path Path to file
+#'
+#' @returns A date string
+pull_date <- function(file_path){
+  file.info(file_path) |> 
+    dplyr::pull(mtime) |>
+    as.Date() |>
+    format('%d %B, %Y')
+}
+```
+
+\newpage
+
+# Overview {#sec-overview}
+
+Land management plan revision requires information about species occurrences to inform the Species of Conservation Concern (SCC) process and the creation of plan components. Species occurrence data from state natural heritage programs and publicly accessible repositories can be leveraged to answer species occurrence questions for a national forest or grassland. This document describes the data acquisition process and provides brief summaries of each data set. Much of this process uses the R statistical programming language (version `r paste(R.version$major, R.version$minor, sep = ".")`; [@rcoreteam2025] for repeatability and consistency across planning areas.
+
+# Occurrence Data {#sec-occurrence-data}
+
+Species occurrences records were pulled for a 1-km buffer around the administrative boundary of `r params$unit_full` (@fig-aoa-map). These data were clipped to the plan area, or Forest Service-owned land, and a 1-km buffer around the plan area for these analyses. The sections below describes the data acquisition process and provides a brief description of each dataset.
+
+## Utah Natural Heritage Program Data
+
+State Natural Heritage Programs provide species occurrence data, and habitat and distribution models for federal and state agencies, and non-governmental organizations throughout their state. Many state Natural Heritage Programs share spatial element occurrence (EO) data with the Forest Service that is stored in restricted folders on a remote server commonly refereed to as the T-drive. @fig-nhp-map shows the Utah Natural Heritage Program (UNHP) EO data within the plan area.
+
+```{r nhp}
+nhp_dat <- targets::tar_read(od_unhp_data)
+nhp_unit <- targets::tar_read(od_unhp_unit)
+nhp_lst <- targets::tar_read(od_unhp_unit_spp)
+
+nhp_dates <- sf::st_drop_geometry(nhp_dat)|> 
+  dplyr::select(taxon_id, dplyr::contains("parsed")) |>
+  tidyr::pivot_longer(cols = dplyr::contains("parsed"),
+                      names_to = "obs_var", values_to = "date") |>
+  dplyr::mutate(year = lubridate::year(date)) |>
+  dplyr::filter(!is.na(year) & !is.na(taxon_id))
+```
+
+EO data from UNHP were acquired from the T-drive on 13 February, 2026 [@utahnaturalhistoryprogram]. The data contain `r format(nrow(nhp_dat), big.mark = ",")` records and `r ncol(nhp_dat)` fields of data. The period of record spans `r min(nhp_dates$year)` to `r max(nhp_dates$year)`. There are `r nrow(nhp_unit)` records within the plan area that account for `r nrow(nhp_lst)` species.
+
+## Global Biodiversity Information Facility Data {#sec-gbif_summary}
+
+```{r gbif, results='hold'}
+# Load data
+targets::tar_load(od_gbif_data)
+targets::tar_load(od_gbif_unit)
+targets::tar_load(od_gbif_unit_spp)
+
+# acquisition date
+gbif_acq_date <- file.path("data", paste0(params$gbif_key, ".zip")) |> 
+  pull_date()
+
+#-- Data summary
+# Date formats
+gbif_yrs <- sf::st_drop_geometry(od_gbif_data) |> 
+  dplyr::select(gbifID, parsed_date) |> 
+  dplyr::filter(!is.na(parsed_date)) |> 
+  dplyr::mutate(year = lubridate::year(parsed_date))
+# range(gbif_yrs$year)
+
+gbif_institutes <- sf::st_drop_geometry(od_gbif_data) |> 
+  dplyr::select(publisher, gbifID) |>
+  dplyr::distinct() |> 
+  dplyr::group_by(publisher) |> 
+  dplyr::count(publisher, name = 'GBIF_Records') |> 
+  dplyr::arrange(publisher)
+```
+
+Global Biodiversity Information Facility (GBIF) [@globalbiodiversityinformationfacilityWhatGBIF2022] is a repository of externally sourced species occurrence records from museum collections, academic studies, and citizen science programs. GBIF records requests are staged on GBIF servers and must be downloaded. See [Getting Occurrence Data From GBIF](https://docs.ropensci.org/rgbif/articles/getting_occurrence_data.html) for details. An R script submits a records request using the 1-km buffer around the administrative boundary to spatially query GBIF records in [Darwin Core Archive format](https://www.gbif.org/darwin-core) [@globalbiodiversityinformationfacility2023] for full data provenance. The data are downloaded, unzipped, and read into R once the request is available using the `rgbif` package (version 3.7.8; [@chamberlain2017; @chamberlain2026].
+
+Data were acquired from GBIF on `r gbif_acq_date` and contain `r format(nrow(od_gbif_data), big.mark = ",")` records and `r ncol(od_gbif_data)` fields of data [@globalbiodiversityinformationfacility]. Records were obtained from `r nrow(gbif_institutes)` sources (e.g., museum collections or citizen science programs; @sec-apdx-a). The period of record spans `r min(gbif_yrs$year)` to `r max(gbif_yrs$year)`. There are `r format(nrow(od_gbif_unit$all_data), big.mark = ",")` records within the plan area that account for `r  format(nrow(od_gbif_unit_spp$all_spp), big.mark = ",")` species. @fig-gbif-map shows the GBIF species occurrence data within the plan area.
+
+## SEINet Data {#sec-seinet_summary}
+
+```{r seinet}
+# Load data
+targets::tar_load(od_sei_data)
+targets::tar_load(od_sei_unit)
+targets::tar_load(od_sei_unit_spp)
+
+sei_zip = list.files(path = here::here("data", "SEINet"), pattern = "\\.zip$",
+                     ignore.case = TRUE, full.names = TRUE)
+seinet_date <- file.path(sei_zip) |> pull_date()
+
+#-- Data summary
+seinet_yrs <- sf::st_drop_geometry(od_sei_data) |>
+  dplyr::select(id, parsed_date) |> 
+  dplyr::filter(!is.na(parsed_date)) |> 
+  dplyr::mutate(year = lubridate::year(parsed_date)) |> 
+  dplyr::filter(!year == 207)
+# range(seinet_yrs$year)
+
+sei_institutes <- sf::st_drop_geometry(od_sei_data) |>
+  dplyr::select(institutionCode, id) |> 
+  dplyr::distinct() |>
+  dplyr::group_by(institutionCode) |> 
+  dplyr::count(institutionCode, name = 'SEINet_Records') |> 
+  dplyr::arrange(institutionCode)
+```
+
+[SEINet](https://swbiodiversity.org/seinet/index.php) is a data portal that provides a suite of tools, including species occurrence data from museum collections, and state and federal agencies. SEINet data are available through an online data portal and are downloaded manually. A polygon box, or well-known text footprint, was drawn around the administrative boundary to query species observations using the Taxonomic Criteria search page (<https://swbiodiversity.org/seinet/collections/harvestparams.php>). The query results were manually downloaded in Darwin Core Archive format and unzipped, and a script reads them into R.
+
+SEINet data were queried and downloaded on `r seinet_date` and contain `r format(nrow(od_sei_data), big.mark = ",")` records and `r ncol(od_sei_data)` fields of data [@seinetportalnetwork]. Records were obtained from `r nrow(sei_institutes)` sources (@sec-apdx-b). The period of record spans `r min(seinet_yrs$year)` to `r max(seinet_yrs$year)`. There are `r format(nrow(od_sei_unit$all_data), big.mark = ",")` records within the plan area that account for `r  format(nrow(od_sei_unit_spp$all_spp), big.mark = ",")` species. @fig-seinet-map shows the SEINet species occurrence data within the plan area.
+
+## Integrated Monitoring in Bird Conservation Regions Data {#sec-imbcr_summary}
+
+```{r}
+# Load data
+targets::tar_load(od_imbcr_data)
+targets::tar_load(od_imbcr_unit)
+targets::tar_load(od_imbcr_unit_spp)
+```
+
+The [Integrated Monitoring in Bird Conservation Regions (IMBCR)](https://www.birdconservancy.org/what-we-do/science/monitoring/imbcr-program/) is a long-term avian monitoring program coordinated by the [Bird Conservancy of the Rockies](https://www.birdconservancy.org/), and maintains monitoring plots on public lands throughout Forest Service Regions 1-4. IMBCR data spanning 2008-2025 were obtained for Forest Service lands on 25 September, 2025 [@birdconservancyoftherockiesIntegratedMonitoringBird]. These data were received in a Microsoft Excel file (personal communication) and a script reads them into R. These data contain `r format(nrow(od_imbcr_data), big.mark = ",")` records and `r ncol(od_imbcr_data)` fields of data within the administrative boundary of the `r params$unit_full`. There are `r format(nrow(od_imbcr_unit), big.mark = ",")` records within the plan area that account for `r  format(nrow(od_imbcr_unit_spp), big.mark = ",")` species. @fig-imbcr-map shows the IMBCR species occurrence data within the plan area.
+
+## Forest Service Data {#sec-fs_summary}
+
+```{r fs_data}
+targets::tar_load(od_fs_data)
+targets::tar_load(od_fs_unit)
+targets::tar_load(od_fs_unit_spp)
+
+
+fs_yrs <- sf::st_drop_geometry(od_fs_data) |>
+  dplyr::select(taxon_id, scientific_name, parsed_date_collected, 
+                parsed_date_collected_recent) |>
+  tidyr::pivot_longer(cols = c(parsed_date_collected, 
+                               parsed_date_collected_recent),
+                      names_to = "obs_time", values_to = "date") |>
+  dplyr::mutate(year = lubridate::year(date)) |> 
+  dplyr::filter(!is.na(year))
+
+# range(fs_yrs$year)
+
+```
+
+Wildlife, aquatic biota, rare plant, and invasive plant data from the Forest Service Enterprise Data Warehouse (EDW), the corporate spatial data repository for the Forest Service, were acquired on 13 February 2026. These data were clipped to the 1-km buffer using ArcGIS Pro (version 3.3.1; [@esriinc.2025] and a script reads them into R. These data contain `r format(nrow(od_fs_data), big.mark = ",")` records with the period of record spanning `r min(fs_yrs$year)` to `r max(fs_yrs$year)`. There are `r format(nrow(od_fs_unit), big.mark = ",")` records within the plan area that account for `r  format(nrow(od_fs_unit_spp), big.mark = ",")` species. @fig-fs-map shows the Forest Service species data within the plan area.
+
+## Data Limitations {#sec-limitations}
+
+### Occurrence Data {#sec-occurrence_data}
+
+These are occurrence are presence-only data and can document the presence of species in an area of interest. Probable or possible presence is not quantified, and most importantly, these data cannot determine the absence or abundance of a species. Lack of species observations is not evidence of absence: a lack of observation may be because the species is rare in that area, or because no one ever looked for it there. Similarly, the number of occurrence records is not an indicator of abundance. For example, showy flowering plants or rare birds will trigger many more occurrence records relative to their abundance than “less interesting” or common species. The source external species occurrence datasets often lack information on collection level of effort and on species absences which is essential for estimating abundance. Lastly, we can assume that occurrence records are duplicated across data sources (see @sec-duplicate_records). It is not appropriate to use these data to estimate abundance or populations.
+
+### Spatial Accuracy {#sec-spatial_accuracy}
+
+Species occurrence locations are not validated and may include coordinate data of varying and undocumented precision or accuracy. The occurrence records from this data pull have geographic location coordinates in longitude and latitude and may include country and state codes and location descriptors. Each observation may include an estimate of the location uncertainty, which may range from a few meters to several kilometers or may be missing. Any use of the occurrence locations should consider the location uncertainty and/or precision noted for each observation. Recent observations may be generated using GPS technology, while coordinates in older observations may have been read from a map, and very old observations usually include only verbal descriptions of the observation location. Some of the verbal descriptions may be “geo-referenced” using current maps and historic location names. Also, some source datasets may have the location coordinates deliberately fuzzed to protect the location of sensitive species.
+
+### Duplicate Records {#sec-duplicate_records}
+
+Some museums and natural history institutions share their data with state heritage programs, GBIF, and SEINet; therefore, we can assume that some observations are duplicated. These analyses do not attempt to reduce duplicated records. Instead, these analyses assemble a comprehensive list of species known to occur on the forest or grassland (see @sec-occurrence_data).
+
+### Taxonomy {#sec-taxonomy}
+
+The classification of living organisms changes frequently as our understanding of the relationships among species and the boundaries between distinct taxa evolves. The externally sourced data include verbatim scientific names of varying vintage. Each taxonomic system reflected in the GBIF backbone (see @sec-taxa_validation) has different policies for when to accept taxonomic revisions and may not include certain suites of taxa like insects, non-vascular plants, and microorganisms. A single scientific name might refer to completely different sets of organisms in the different systems used in the backbone or a group of organisms may have different scientific names applied in the different systems.
+
+# Taxonomic Validation {#sec-taxa_validation}
+
+Taxonomic names were validated against the GBIF Backbone Taxonomy [@gbifsecretariat] using the `taxize` package (version `r packageVersion("taxize")`; [@chamberlain2020] in R. The GBIF Backbone Taxonomy provides a method to resolve taxonomic conflicts between data sources. The GBIF Backbone Taxonomy is based on 105 taxonomic checklists including but not limited to the Catalogue of Life, Integrated Taxonomic Information System, and the International Barcode of Life project. The GBIF Backbone Taxonomy was used because it is a comprehensive taxonomic list with over four million accepted names and three million synonyms that offers flexible and repeatable tools to programmatically validate taxonomies. Every scientific name from each dataset was validated with the GBIF Backbone Taxonomy and assigned a unique taxonomic identifier that allows the taxon to be joined to like taxa.
+
+# Taxonomic Synonyms
+
+```{r}
+syn_date <- file.path("_targets/objects", "elig_synonyms") |> 
+  pull_date()
+```
+
+Current and historic taxonomic synonyms, or synonyms, can provide clarity and consistency when discussing information about a species. Synonyms were queried for all species eligible for the SCC list in the GBIF Backbone Taxonomy on `r syn_date` using the `rgbif` package [@chamberlain2017; @chamberlain2026].
+
+# Habitat Desctiptions
+
+```{r}
+ns_hab_date <- file.path("_targets/objects", "elig_ns_habitats") |> 
+  pull_date()
+```
+
+Landscape-scale habitat associations are often described in terms of biomes, ecosystems, or habitat types that a species occupies. NatureServe maintains over 1,000 habitat models for species of conservation interest that include extensive information that on the environmental factors driving the modes predictions. NatureServe habitat descriptions were pulled for all species eligible for the SCC list from the NatureServe API (<https://explorer.natureserve.org>) on `r ns_hab_date` [@natureserve].
+
+# Species Range Data
+
+```{r}
+bien_date <- file.path("_targets/objects", "nko_bien_maps") |> 
+  pull_date()
+ebird_date <- file.path("_targets/objects", "nko_ebird_range_maps") |> 
+  pull_date()
+```
+
+The native distribution, or species range, of a species can inform whether the species is native to the plan area and the likelihood of persistence within the plan area. Species range data are pulled for all species eligible for the SCC list from the Botanical Information and Ecology Network (BIEN), eBird, and the International Union for Conservation of Nature (IUCN). BIEN data were downloaded using the `BIEN` package (version `r packageVersion("BIEN")`; [@maitner2025] on `r bien_date`. eBird data were were pulled using the `ebirdst` package (version `r packageVersion("ebirdst")`; [@fink] on `r ebird_date`. IUCN data were downloaded from [https://www.iucnredlist.org/resources/spatial-data-download](#0){.uri} on 12 January, 2026 [@internationalunionfortheconservationofnature].
+
+# Trend Data
+
+Bird trend data were downloaded from IMBCR, North American Breeding Bird Survey (BBS), and eBird. IMBCR provides population estimates and trends for diurnal breeding landbirds at the local and regional scale in the western United States. IMBCR data were acquired directly from IMBCR (personal communication) on 25 September, 2025 [@birdconservancyoftherockiesIntegratedMonitoringBird]. BBS is a long-term, large-scale monitoring program collecting data along roadside survey routes during the breeding season. BBS Core Trend 1966-2023 data were acquired from the USGS Science-Base Catalog (<https://www.sciencebase.gov/catalog/item/67aba702d34e329fb20457b1>) on 16 December, 2025 [@hostetler]. eBird is an extensive network of citizen scientists, and the large dataset provides detailed views of bird population changes at both local and regional scales. eBird data were were pulled using the `ebirdst` package (version `r packageVersion("ebirdst")`) on `r ebird_date` [@fink].
+
+\newpage
+
+# Figures
+
+```{r results='hold'}
+#| label: fig-aoa-map
+#| fig-align: center
+#| fig-cap: Map of plan area (light green area) showing the administrative boundary (dark green outline).
+#| fig-alt: Map of plan area (light green area) showing the administrative boundary (dark green outline).
+#| fig-dpi: 300
+#| fig-width: 6.5
+
+targets::tar_load(sd_basemap_data)
+bbox <- sf::st_buffer(sd_basemap_data$admin_bndry, 5000) |> sf::st_bbox()
+
+# Base Map
+p_base <- ggplot2::ggplot() +
+  ggplot2::geom_sf(data = sd_basemap_data$plan_area,
+                   ggplot2::aes(fill = "Forest Service"),
+                   color = "#4EB265") +
+  ggplot2::scale_fill_manual(values = c("#CAE0AB")) +
+  ggplot2::geom_sf(data = sd_basemap_data$admin_bndry, fill = "transparent",
+                   color = "#4EB265", lwd = 1) +
+  scale_x_continuous(limits = bbox[c(1, 3)]) +
+  scale_y_continuous(limits = bbox[c(2, 4)]) +
+  ggspatial::annotation_north_arrow(
+    location = "br",
+    which_north = "true",
+    height = unit(0.33, "in"),
+    width = unit(0.33, "in"),
+    style = north_arrow_fancy_orienteering()
+  ) +
+  ggplot2::theme_minimal() +
+  ggplot2::theme(
+    plot.background = element_rect(color = "black", linewidth = 1),
+    plot.title = element_markdown(face = "bold", hjust = 0, 
+                                  margin = margin(0, 0, 5, 0, "pt")),
+    plot.margin = margin(t = 10, r = 10, b = 10, l = 10, "pt"),
+    plot.caption = element_markdown(),
+    legend.title = element_markdown(),
+    legend.position = "inside",
+    legend.position.inside = c(0.9, 0.8),
+    legend.box.background = element_rect(color = "black", linewidth = 0.5, 
+                                         fill = "white"), 
+    axis.text = element_blank(),
+    panel.grid = element_blank(),
+    legend.key.spacing = unit(0, "pt"),
+    legend.margin = margin(0, 0, 0, 0, "pt"),
+    legend.box.margin = margin(5, 5, 5, 5, "pt")
+  )
+
+p_base +
+  ggplot2::geom_sf(data = sd_basemap_data$admin_bndry, fill = "transparent", 
+                   color = "#4EB265", lwd = 1) +
+  labs(
+    title = params$unit_full,
+    subtitle = "Area of Analysis",
+    # color = "**Occurrence Data**",
+    fill = "**Land Ownership**",
+    x = "",
+    y = ""
+  )
+```
+
+\newpage
+
+```{r results='hold'}
+#| label: fig-nhp-map
+#| fig-cap: "Map of Natural Heritage Program EO data (blue areas) within the plan area."
+#| fig-alt: "Map of Natural Heritage Program EO data (blue areas) within the plan area."
+#| fig-width: 6.5
+#| fig-align: "center"
+#| fig-dpi: 300
+
+p_base +
+  geom_sf(data = nhp_unit, fill = "#1965B0", aes(color = "EO Data")) +
+  scale_color_manual(values = "#1965B0") +
+  ggplot2::geom_sf(data = sd_basemap_data$admin_bndry, fill = "transparent", 
+                   color = "#4EB265", lwd = 1) +
+  labs(
+    title = params$unit_full,
+    subtitle = "Natural Heritage Program Data",
+    color = "**Occurrence Data**",
+    fill = "**Land Ownership**",
+    x = "",
+    y = ""
+  )
+```
+
+```{r results='hold'}
+#| label: fig-gbif-map
+#| fig-cap: "Map of GBIF occurrence data (blue points) within the plan area."
+#| fig-alt: "Map of GBIF occurrence data (blue points) within the plan area."
+#| fig-width: 6.5
+#| fig-align: "center"
+#| fig-dpi: 300
+
+p_base +
+  geom_sf(data = od_gbif_unit$all_data, fill = "#1965B0", 
+          aes(color = "GBIF Records")) +
+  scale_color_manual(values = "#1965B0") +
+  ggplot2::geom_sf(data = sd_basemap_data$admin_bndry, fill = "transparent", 
+                   color = "#4EB265", lwd = 1) +
+  labs(
+    title = params$unit_full,
+    subtitle = "Global Biodiversity Information\nFacility (GBIF) Data",
+    color = "**Occurrence Data**",
+    fill = "**Land Ownership**",
+    x = "",
+    y = ""
+  )
+```
+
+```{r results='hold'}
+#| label: fig-seinet-map
+#| fig-cap: "Map of SEINet occurrence data (blue points) with in the plan area."
+#| fig-alt: "Map of SEINet occurrence data (blue points) with in the plan area."
+#| fig-width: 6.5
+#| fig-align: "center"
+#| fig-dpi: 300
+
+p_base +
+  geom_sf(data = od_sei_unit$all_data, fill = "#1965B0", 
+          aes(color = "SEINet Records")) +
+  scale_color_manual(values = "#1965B0") +
+  ggplot2::geom_sf(data = sd_basemap_data$admin_bndry, fill = "transparent", 
+                   color = "#4EB265", lwd = 1) +
+  labs(
+    title = params$unit_full,
+    subtitle = "SEINet Data",
+    color = "**Occurrence Data**",
+    fill = "**Land Ownership**",
+    x = "",
+    y = ""
+  )
+```
+
+```{r results='hold'}
+#| label: fig-imbcr-map
+#| fig-cap: "Map of IMBCR occurrence data (blue points) with in the plan area."
+#| fig-alt: "Map of IMBCR occurrence data (blue points) with in the plan area."
+#| fig-width: 6.5
+#| fig-align: "center"
+#| fig-dpi: 300
+
+p_base +
+  geom_sf(data = od_imbcr_unit, fill = "#1965B0", aes(color = "IMBCR Records")) +
+  scale_color_manual(values = "#1965B0") +
+  ggplot2::geom_sf(data = sd_basemap_data$admin_bndry, fill = "transparent", 
+                   color = "#4EB265", lwd = 1) +
+  labs(
+    title = params$unit_full,
+    subtitle = "Bird Conservancy of the Rockies\nData",
+    color = "**Occurrence Data**",
+    fill = "**Land Ownership**",
+    x = "",
+    y = ""
+  )
+```
+
+```{r results='hold'}
+#| label: fig-fs-map
+#| fig-cap: "Map of Forest Service occurrence data (blue points) with in the plan area."
+#| fig-alt: "Map of Forest Service occurrence data (blue points) with in the plan area."
+#| fig-width: 6.5
+#| fig-align: "center"
+#| fig-dpi: 300
+
+p_base +
+  geom_sf(data = od_fs_unit, fill = "#1965B0", aes(color = "Forest Service Records")) +
+  scale_color_manual(values = "#1965B0") +
+  ggplot2::geom_sf(data = sd_basemap_data$admin_bndry, fill = "transparent", 
+                   color = "#4EB265", lwd = 1) +
+  labs(
+    title = params$unit_full,
+    subtitle = "Forest Service EDW",
+    color = "**Occurrence Data**",
+    fill = "**Land Ownership**",
+    x = "",
+    y = ""
+  )
+```
+
+# References {#sec-references}
+
+::: {#refs}
+:::
+
+\newpage
+
+# Appendix A. GBIF Data Source Institutions. {#sec-apdx-a}
+
+```{r gbif_sources, results='asis'}
+#| tab-cap: "Table 1. Data sources from GBIF data."
+kableExtra::kable(gbif_institutes, 
+                  col.names = c("Institution", "Number of Records"))
+```
+
+\newpage
+
+# Appendix B. SEINet Data Source Institutions. {#sec-apdx-b}
+
+```{r seinet_sources, results='asis'}
+#| tab-cap: "Table 2. Data sources from SEINet data."
+kableExtra::kable(sei_institutes, 
+                  col.names = c("Institution Code", "Number of Records"))
+```
+
+\newpage
+
+# Session Info {#sec-session}
+
+This data-driven report was generated using [Quarto](https://quarto.org/) (version `r quarto::quarto_version()`; [@allaire2025] and R (version `r paste(R.version$major, R.version$minor, sep = ".")`; [@rcoreteam2025] using RStudio (version 2024.4.2.764; [@positteam2025]. The following output contains information about the environment this script was run in, including the operating system, R version, and packages used.
+
+```{r session, results='hold'}
+sessionInfo()
+```

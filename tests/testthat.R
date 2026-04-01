@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(mpsgSE)
+library(psoSppEvals)
 
-test_check("mpsgSE")
+test_check("psoSppEvals")

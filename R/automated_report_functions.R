@@ -117,7 +117,7 @@ build_quarto_params <- function(spp_list, fs_unit_name, states, crs,
 #'                                   "Smokey Bear National Forest")
 #' setup_directories(qmd_params)
 #' }
-setup_directories <- function(quarto_params){
+set_up_directories <- function(quarto_params){
   # quarto_params = targets::tar_read(rpt_qmd_params)
   
   # Function to ask the user if they want to proceed

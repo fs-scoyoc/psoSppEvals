@@ -1,0 +1,965 @@
+---
+params:
+  taxon_id: "2427185" # Western Toad
+  # taxon_id: "2480506" # Golden Eagle
+  # taxon_id: "2482033" # Western Grebe
+  # taxon_id: "1340478" # Yellow Bumblebee
+  # taxon_id: "2889628" # Widtsoe Buckwheat
+  # taxon_id: "NA"
+  # scientific_name: "Scientific name"
+  # common_name: "Common Name"
+  unit_name: "Smokey Bear National Forest"
+  states: "State"
+  crs: "EPSG:26912"
+  # subfolder_path: "c:/path/to/folder"
+  # file_name: "yyyymmdd_AUTO_GEN_scientific_name_common_name.xlsx"
+  # output_file: "c:/path/to/folder/yyyymmdd_AUTO_sciname_comname.xlsx"
+    
+format:
+  docx:
+    reference-doc: 'template_mpsg_styles.docx'
+    number-sections: false
+    df-print: kable
+    knitr:
+      opts_chunk:
+        dev: 'ragg_png'
+        fig-width: 6.5
+execute:
+  echo: false
+  message: false
+  warning: false
+  class-output: 'r'
+  fig-width: 6.5
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup}
+library(ggplot2)
+library(dplyr)
+library(sf)
+library(targets)
+library(flextable)
+library(kableExtra)
+library(officer)
+library(glue)
+library(ggtext)
+library(ggspatial)
+library(extrafont)
+library(tidyterra)
+library(tidyr)
+library(tibble)
+library(tmap)
+extrafont::loadfonts(quiet = T)
+
+#-- Load spatial data
+# Occurrence data
+sp_pts <- targets::tar_read(nko_occ_data) |> 
+  dplyr::filter(taxon_id == params$taxon_id)
+# # Summarize occurrence data
+# spatial_nobs <- sp_pts |>
+#   sf::st_drop_geometry() |>
+#   dplyr::group_by(taxon_id, source) |>
+#   dplyr::summarise(n = dplyr::n(), .groups = 'drop') |>
+#   dplyr::mutate(source = paste0(source, "_nObs")) |>
+#   tidyr::pivot_wider(names_from = source, values_from = n) |>
+#   dplyr::mutate(tot_nObs_all = rowSums(dplyr::across(dplyr::contains("_nObs"))))
+# # Construct summary if there are no point data
+# if(nrow(spatial_nobs) == 0) {
+#   spatial_nobs <- tibble::tibble(
+#     "taxon_id" = params$taxon_id, "GBIF_nObs" = 0, "SEINet_nObs" = 0,
+#     "IMBCR_nObs" = 0, "UNHP_nObs" = 0, "FS_nObs" = 0, "tot_nObs_all" = 0
+#     )
+#   }
+
+# Load species data
+species_data <- targets::tar_read(nko_list) |> 
+  dplyr::filter(taxon_id == params$taxon_id) |> 
+  dplyr::distinct(taxon_id, .keep_all = TRUE)
+
+# Glue species name to create title
+sp_names <- glue::glue("{species_data$common_name} (*{species_data$scientific_name}*)")
+
+# Functions ----
+#' Glue vector
+#' This function returns a string of text with comma's between each value.
+#'
+#' @param v A vector of numbers or characters.
+#'
+#' @return A string of comma separated values.
+#'
+#' @examples glue_vector(month.abb)
+glue_vector <- function(v) {
+  if (length(v) == 1){
+    as.character(v)
+  } else if (length(v) == 2){
+    glue::glue("{v[1]} and {v[2]}")
+  } else {
+    glue::glue("{paste(v[1:length(v) - 1], collapse = ', ')}, and {v[length(v)]}")
+  }
+}
+```
+
+```{r base_map}
+## Base plot style.
+p_base <- ggplot2::ggplot() +
+  ggplot2::theme_minimal() +
+  ggspatial::annotation_north_arrow(
+    location = "br",
+    which_north = "true",
+    height = ggplot2::unit(0.33, "in"),
+    width = ggplot2::unit(0.33, "in"),
+    style = ggspatial::north_arrow_fancy_orienteering()
+  ) +
+  ggplot2::theme(
+    plot.background = ggplot2::element_rect(color = "black", linewidth = 1),
+    plot.title = ggtext::element_markdown(
+      face = "bold", hjust = 0, margin = ggplot2::margin(0, 0, 5, 0, "pt")
+      ),
+    plot.margin = ggplot2::margin(t = 10, r = 10, b = 10, l = 10, "pt"),
+    plot.caption = ggtext::element_markdown(),
+    legend.title = ggtext::element_markdown(),
+    legend.position = "inside",
+    legend.position.inside = c(0.9, 0.8),
+    legend.box.background = ggplot2::element_rect(
+      color = "black", linewidth = 0.5, fill = "white"
+      ),
+    legend.box.margin = ggplot2::margin(0, 3, 0, 3, unit = "pt")
+  )
+
+# Load targets
+targets::tar_load(sd_basemap_data)
+
+
+m_source <- targets::tar_read(nko_map_source) |>
+  dplyr::filter(taxon_id == params$taxon_id) |>
+  dplyr::pull(map_source)
+```
+
+::: {custom-style="Body Text"}
+# `r species_data$common_name` (*`r species_data$scientific_name`*)
+
+## Regional Summary:
+
+###### Filled out by regional staff only
+
+### Potential SCC:
+
+###### FILLED OUT BY REGIONAL STAFF ONLY: Yes/No
+
+## Specialist Summary:
+
+### Rationale
+
+###### SEE INSTRUCTIONS, ADD TEXT
+
+
+## Species occurrence records and conservation categories^[Unless otherwise stated information comes from USDA Forest Service 2026]
+
+### What, if any, are the scientific name synonyms for the species?
+
+```{r synonyms, results='hide'}
+synonyms <- targets::tar_read(nko_synonyms) |>
+  dplyr::filter(taxon_id == params$taxon_id) |> 
+  dplyr::filter(!stringr::str_detect(canonicalName, "\\?")) |> 
+  dplyr::pull(canonicalName) |>
+  unique()
+
+citation <- "(GBIF Secretariat 2023. via USDA Forest Service 2026)"
+
+if (length(synonyms) > 1){
+  synonyms <- glue_vector(synonyms)
+  synonym_text <- glue::glue(
+    "Current and historic synonyms for *{species_data$scientific_name}* are: *{synonyms}* {citation}."
+    )
+  } else if (length(synonyms) == 1){
+    synonym_text <- glue::glue(
+      "The current and historic synonym for *{species_data$scientific_name}* is: *{synonyms}* {citation}."
+      )
+    } else(
+      synonym_text <- glue::glue(
+        "There are no known synonyms for this species {citation}."
+        )
+      )
+```
+
+`r synonym_text`
+
+### Conservation Status
+
+```{r status_table, results='asis'}
+status_table <- species_data |> 
+  dplyr::select(dplyr::contains("g_rank"), dplyr::contains("s_rank"), r4_ssl,
+                usfws_bcc, dplyr::contains("swap"), blm_ssl, esa_status) |>
+  dplyr::mutate(
+    dplyr::across(dplyr::everything(), ~ifelse(is.na(.), "None", .))
+    ) |> 
+  tidyr::pivot_longer(cols = dplyr::everything()) |>
+  dplyr::mutate(
+    name = dplyr::case_when(
+        name == "g_rank" ~ "NatureServe Global Rank",
+        name == "rounded_g_rank" ~ "NatureServe Rounded Global Rank",
+        name == "ut_s_rank" ~ "NatureServe Utah State Rank",
+        name == "r4_ssl" ~ "USFS Region 4 Sensitive Species List",
+        name == "usfws_bcc" ~ "USFWS Birds of Conservation Concern",
+        name == "ut_swap" ~ "Utah SWAP List",
+        name == "blm_ssl" ~ "Utah BLM Sensitive Species List",
+        name == "esa_status" ~ "Endangered Species Act Status",
+        )
+  ) |> 
+  dplyr::rename("Conservation List" = name, 
+                "Status" = value)
+```
+
+Table 1. Conservation status.
+```{r status_flextable}
+flextable::flextable(status_table, cwidth = c(3.4, 1.2)) |> 
+  flextable::border(part = 'all',
+                    border = officer::fp_border(color = "black", width = 1, 
+                                                style = "solid")) |> 
+  flextable::bold(part = "header", bold = TRUE) |>
+  flextable::fontsize(size = 10, part = 'all') |> 
+  flextable::set_table_properties(align = "left")
+```
+
+
+### Occurrence Records
+
+```{r nobs_table, results='asis'}
+nobs_tbl <- species_data |> 
+  dplyr::select(gbif_n_obs, sei_net_n_obs, imbcr_n_obs, unhp_n_obs, 
+                fs_edw_n_obs) |> 
+  tidyr::pivot_longer(cols = dplyr::everything()) |>
+  dplyr::filter(!is.na(value)) |> 
+  dplyr::mutate(
+    name = dplyr::case_when(
+        name == "gbif_n_obs" ~ "Global Biodiversity Information Facility (GBIF)",
+        name == "sei_net_n_obs" ~ "SEINet",
+        name == "imbcr_n_obs" ~ "Bird Conservancy of the Rockies",
+        name == "unhp_n_obs" ~ "Utah Natural Heritage Program",
+        name == "fs_edw_n_obs" ~ "USDA Forest Service"
+        )
+  ) |> 
+  dplyr::rename("Data Source" = name, 
+                "Number of Observations" = value)
+```
+
+Table 2. Occurrence records by data source.
+```{r nobs_flextabel}
+flextable::flextable(nobs_tbl, cwidth = c(3.48, 2)) |>
+  flextable::border(part = 'all',
+                    border = officer::fp_border(color = "black", width = 1, 
+                                                style = "solid")) |> 
+  flextable::bold(part = "header", bold = TRUE) |>
+  flextable::fontsize(size = 10, part = 'all') |> 
+  flextable::set_table_properties(align = "left")
+```
+
+
+#### Year of first and last observation for all occurrence data:
+
+First: `r species_data$min_year_all`, Last: `r species_data$max_year_all`
+
+### Is the species currently federally designated as threatened, endangered, proposed, or candidate species under the Endangered Species Act?
+
+```{r fws_status}
+if (is.na(species_data$esa_status)) {
+  fed_status_string <- "No."
+  } else if (species_data$esa_status == "Under Review") {
+    fed_status_string <- glue::glue("No. Current USFWS status: {species_data$esa_status}.")
+    } else {
+      fed_status_string <- glue::glue("Yes. Current USFWS status: {species_data$esa_status}")
+      }
+```
+
+`r fed_status_string`
+
+### Species' Native Range
+
+###### SEE INSTRUCTIONS, ADD TEXT
+
+
+### Is the species native to, and known to occur in, the plan area?
+
+```{r nko_determination}
+nn_base <- species_data$native_known_to_occur
+nn_basi <- ifelse(
+  is.na(species_data$rationale_basi) | species_data$rationale_basi == 0, 
+  "",
+  # "Native and known to occur based on the total number of occurrences and date of most recent occurrences.", 
+  species_data$rationale_basi
+  )
+basi_statement <- glue::glue("{nn_base}. {nn_basi}")
+```
+
+`r basi_statement`
+
+## Species information
+
+### Species Current Range Size and Configuration
+
+#### What is the size of the species' range?
+
+###### SEE INSTRUCTIONS, SELECT FROM AND ADD SUPPORTING TEXT AS NEEDED:
+
+Large (i.e., roughly the area of the continental U.S. or larger), Moderate (i.e., roughly ½ the area of the continental U.S.), Regional Endemic (i.e., occupying roughly the area of 2-6 states), State Endemic (i.e., only known to occur in the state overlapping the plan area but occupying an area larger than the environs of the plan area), Local Endemic (i.e., a state endemic only found within the plan area and the surrounding counties), Unknown (no modeled range map could be found for the species)
+
+
+#### Is the portion of the species’ range that overlaps the plan area disjunct from the main range of the species (i.e., the range overlapping the plan area is smaller and not connected to the larger range of the species)?
+
+###### SEE INSTRUCTIONS, SELECT FROM AND ADD SUPPORTING TEXT AS NEEDED:
+
+No, Unknown (no modeled range map could be found for the species), Yes, Yes – disjunct breeding population, Yes -- disjunct non-breeding population, Yes – disjunct year-round population
+
+
+#### Does the plan area transect the edge of the species modeled range?
+
+###### SEE INSTRUCTIONS, SELECT FROM AND ADD SUPPORTING TEXT AS NEEDED:
+
+No, Unknown (no modeled range map could be found for the species), Yes, Yes – edge of breeding range, Yes – edge of non-breeding range, Yes – edge of year-round range, Yes – edge of breeding and non-breeding range; Species range does not overlap the plan area; see rationale for “known to occur”
+
+
+### Range Summary
+
+###### SEE INSTRUCTIONS, ADD TEXT.
+
+
+### Species’ Landscape-scale Habitat
+
+#### What are the landscape-scale habitat types or ecosystems the species occupies based on Best Available Scientific Information (BASI), including literature from outside of the plan area?
+
+```{r habitat1}
+targets::tar_load(nko_ns_habitats)
+
+comments <- nko_ns_habitats |>
+  dplyr::filter(taxon_id == params$taxon_id) |>
+  dplyr::filter(habitat_category == "comments")
+
+comment_narrative <- if (nrow(comments) >= 1) { 
+  paste(comments$ns_habitat_type, collapse = ". ")
+  } else {
+    "[NO HABITAT NARRATIVE WAS GENERATED FROM NATURESERVE]"
+    }
+```
+
+###### SEE INSTRUCTIONS; CHECK OUTPUT FOR ACCURACY OR DELETE “NO HABITAT” STATEMENT; MODIFY AND ADD SUPPORTING TEXT AS NEEDED.
+
+`r comment_narrative` (NatureServe 2025 via USDA Forest Service 2026).
+
+
+#### Based on BASI about the landscape-scale habitat types or ecosystems the species occupies, what landscape-scale habitat types or ecosystems in the plan area are likely to support the species?
+
+###### SEE INSTRUCTIONS; CHECK OUTPUT FOR ACCURACY; MODIFY HABITAT LIST AND ADD SUPPORTING TEXT AS NEEDED
+
+```{r habitat2}
+targets::tar_load(nko_habitats_crosswalk)
+
+all_hab_types_sentence <- nko_habitats_crosswalk |>
+  dplyr::filter(!is.na(mpsg_habitat)) |>
+  dplyr::pull(mpsg_habitat) |>
+  unique() |>
+  paste(collapse = "; ")
+
+get_hab_types <- nko_habitats_crosswalk |>
+  dplyr::filter(taxon_id == params$taxon_id) |>
+  dplyr::filter(!is.na(mpsg_habitat)) |>
+  dplyr::distinct(mpsg_habitat)
+
+hab_type_narrative <- if (nrow(get_hab_types) > 0) {
+  get_hab_types |> dplyr::pull(mpsg_habitat) |> glue_vector()
+  } else {
+    no_data_warning <- str_to_upper("There are no habitat types available for this speciesi from NatureServe that crosswalk to MPSG defined ecosystems:")
+    glue("{no_data_warning} {all_hab_types_sentence}.")
+    }
+```
+
+`r hab_type_narrative`
+
+#### What is the distribution, abundance, and quality of those habitat types or ecosystems? 
+
+###### SEE INSTRUCTIONS, ADD TEXT 
+
+#### Does the species respond uniquely to landscape-scale habitat threats and trends, and if so, how?
+
+###### SEE INSTRUCTIONS, ADD TEXT 
+
+
+### Species Fine-scale Habitat 
+
+#### What are the fine-scale habitat features or conditions that the species relies on?
+
+###### SEE INSTRUCTIONS, ADD TEXT 
+
+
+#### What are the threats and trends for the fine-scale habitat features this species relies on (distribution, abundance, and quality), both within and beyond the plan area?
+
+###### SEE INSTRUCTIONS, ADD TEXT
+
+
+### Population
+
+#### Abundance and distribution of species in the plan area
+
+###### SEE INSTRUCTIONS, ADD TEXT
+
+
+#### Population trend of species on and off the plan area
+
+###### SEE INSTRUCTIONS, ADD TEXT
+
+```{r trend_narrative, results='hide'}
+if (!is.na(species_data$class) & species_data$class == "Aves") {
+  #-- BBS Trends
+  bbs_narrative <- targets::tar_read(nko_bbs_trend_narratives) |>
+    dplyr::filter(taxon_id == params$taxon_id)
+
+  bbs_narrative <- if (nrow(bbs_narrative) >= 1) {
+    paste(bbs_narrative$final_narrative, collapse = ". ")
+    } else {
+      "No narrative from USGS BBS."
+    }
+  
+  
+  #-- IMBCR Trends
+  targets::tar_load(nko_imbcr_trend_narratives)
+  # primary narrative
+  imbcr_narrative <- nko_imbcr_trend_narratives$unit_narratives |>
+    dplyr::filter(taxon_id == params$taxon_id)
+  imbcr_narrative <- if (nrow(imbcr_narrative) >= 1) {
+    paste(imbcr_narrative$narrative, collapse = ". ")
+    } else {
+      "No IMBCR trend information available for this species."
+      }
+  # additional narrative
+  imbcr_additional_narrative <- nko_imbcr_trend_narratives$additional_narratives |>
+    dplyr::filter(taxon_id == params$taxon_id)
+  imbcr_additional_narrative <- if (nrow(imbcr_additional_narrative) >= 1) {
+    paste(imbcr_additional_narrative$narrative, collapse = ". ")
+    } else {NA}
+  
+  
+  #-- eBird
+  ebird_trend_dat <- targets::tar_read(nko_ebird_trend_maps) |>
+    dplyr::filter(taxon_id == params$taxon_id)
+  if(nrow(ebird_trend_dat) > 0){
+    ebird_trend_maps <- TRUE
+    state_aoi <- dplyr::filter(sd_basemap_data$l_48, name %in% params$states)
+    
+    # Trend
+    ebird_trend_rast <- ebirdst::rasterize_trends(ebird_trend_dat, 
+                                                  layers = "abd_ppy") |> 
+      terra::project(y = state_aoi)
+    # Status
+    targets::tar_load(nko_ebird_status_maps)
+    # Regional trends
+    reg_trends <- targets::tar_read(nko_ebird_regional_trends) |> 
+      dplyr::filter(taxon_id == params$taxon_id)
+    ebird_trends <- targets::tar_read(nko_ebird_trends) |> 
+      dplyr::filter(taxon_id == params$taxon_id)
+    trend_dat <- nko_ebird_status_maps$birds_w_status_maps |> 
+      dplyr::filter(taxon_id == params$taxon_id) |> 
+      dplyr::select(taxon_id, species_code, trends_season:beta0) |> 
+      dplyr::left_join(ebird_trends, by = "taxon_id") |> 
+      dplyr::left_join(reg_trends, by = "taxon_id")
+    abd_trend <- round(trend_dat$abd_trend_median, 1)
+
+    # month.name[as.numeric(stringr::str_split(trend_dat$trends_start_date, "-")[[1]][1])]
+    
+    ebird_trend_narrative <- paste0(
+      "Based on available eBird data, the range-wide trend for the ", 
+      stringr::str_to_title(gsub("_", " ", trend_dat$trends_region)), 
+      " ", 
+      trend_dat$trends_season, " season (", 
+      stringr::str_split(trend_dat$trends_start_date, "-")[[1]][2], " ",
+      month.name[as.numeric(stringr::str_split(trend_dat$trends_start_date, "-")[[1]][1])], 
+      " to ", 
+      stringr::str_split(trend_dat$trends_end_date, "-")[[1]][2], " ",
+      month.name[as.numeric(stringr::str_split(trend_dat$trends_end_date, "-")[[1]][1])],
+      ") suggest a ", abd_trend, "% median ",
+      dplyr::case_when(abd_trend > 0 ~ "increase",
+                       abd_trend < 0 ~ "decrease",
+                       TRUE ~ "an uncertain"), " in abundance (", 
+      round(trend_dat$abd_trend_upper, 1), " upper 90th quartile, ",
+      round(trend_dat$abd_trend_lower, 1), " lower 10th quartile). ",
+      "The following maps are for the ",
+      stringr::str_to_title(gsub("_", " ", trend_dat$trends_region)), " ", 
+      trend_dat$trends_season,
+      " season. The time period used to generate these trends is from ",
+      trend_dat$trends_start_year, " to ", trend_dat$trends_end_year, 
+      " (Johnston et al. 2023 via USDA Forest Service 2026)."
+      )
+    } else(ebird_trend_maps = FALSE)
+
+}
+```
+
+`r if(!is.na(species_data$class) & species_data$class=="Aves"){bbs_narrative}`
+
+`r if(!is.na(species_data$class) & species_data$class=="Aves"){ ifelse(isTRUE(ebird_trend_maps), ebird_trend_narrative, "No eBird trends data available.") }`
+
+`r if(!is.na(species_data$class) & species_data$class=="Aves"){ ifelse(!isFALSE(imbcr_narrative), imbcr_narrative, "No IMBCR trend data are available.") }`
+
+
+#### Threats to populations that are not habitat-related (on or off the plan area)
+
+###### SEE INSTRUCTIONS, ADD TEXT
+
+
+### Natural and Life History Characteristics that Inform Species Persistence
+
+#### Life history strategy
+
+###### SEE INSTRUCTIONS, ADD TEXT
+
+
+#### Ecological specialization
+
+###### SEE INSTRUCTIONS, ADD TEXT
+
+
+## References
+
+###### SEE INSTRUCTIONS, ADD TEXT
+
+
+\newpage
+
+## Maps (FOR REFERENCE ONLY - DELETE BEFORE PUBLISHING)
+
+### Range Maps
+
+**Note:** GBIF occurrence data are substituted if range data are not available.
+
+```{r bien_iucn_maps}
+#| warning: false
+#| message: false
+#| fig-cap: "Species range, clipped to show only the continental United States (note this may not reflect the species’ full range size)."
+#| fig-alt: "Species range, clipped to show only the continental United States (note this may not reflect the species’ full range size)."
+#| fig-height: 4.85
+
+if (any(stringr::str_detect(m_source, c("BIEN", "IUCN")))){
+  base_area <- sd_basemap_data$l_48
+
+  aoa <- sd_basemap_data$admin_bndry |>
+    sf::st_transform(sf::st_crs(base_area))
+
+  aoa_center <- aoa |>
+    sf::st_centroid() |>
+    sf::st_coordinates() |>
+    tibble::as_tibble() |> 
+    suppressWarnings()
+  
+  
+  if (any(stringr::str_detect(m_source, "IUCN"))) {
+    g_map_data <- targets::tar_read(nko_iucn_maps) |> 
+      dplyr::filter(taxon_id == params$taxon_id)
+    source_statement <- "**Source: IUCN Spatial Data**"
+  }
+  if (any(stringr::str_detect(m_source, "BIEN"))) {
+    g_map_data <- targets::tar_read(nko_bien_maps) |>
+      dplyr::filter(taxon_id == params$taxon_id)
+    source_statement <- "**Source**:Botanical Information and Ecology Network."
+  }
+
+  g_map_data <- g_map_data |>
+    sf::st_transform(st_crs(base_area)) |>
+    sf::st_intersection(st_union(base_area)) |> 
+    sf::st_make_valid() |> 
+    suppressWarnings()
+
+  p_base +
+    geom_sf(data = base_area, fill = "grey30", color = "white") +
+    geom_sf(data = g_map_data, aes(fill = "Species Range"), 
+            color = "transparent", alpha = 0.8) +
+    geom_sf(data = aoa, fill = "yellow", color = "transparent") +
+    annotate(
+      geom = "curve",
+      x = aoa_center$X + 950000,
+      y = aoa_center$Y - 950000,
+      xend = aoa_center$X,
+      yend = aoa_center$Y,
+      color = "#d35400",
+      linewidth = 1.1,
+      arrow = arrow(length = unit(2, "mm"))
+    ) +
+    geom_sf_label(
+      data = aoa,
+      label = params$unit_name,
+      size = 2.5,
+      nudge_x = 950000, nudge_y = -950000,
+      fill = "#edbb99"
+    ) +
+    scale_fill_manual(values = c("#1e8449")) +
+    labs(
+      title = sp_names,
+      subtitle = "Continental United States Range",
+      fill = "**Legend**",
+      caption = source_statement,
+      x = "",
+      y = ""
+    )
+  }
+```
+
+```{r ebird_gbif_maps}
+#| warning: false
+#| message: false
+
+if (any(stringr::str_detect(m_source, c("eBird", "GBIF")))){
+  # set map area
+  base_area <- sd_basemap_data$north_america
+  aoa <- sd_basemap_data$admin_bndry |> sf::st_transform(sf::st_crs(base_area))
+  aoa_center <- aoa |> sf::st_centroid() |> sf::st_coordinates() |>
+    tibble::as_tibble() |> suppressWarnings()
+  
+  if (any(stringr::str_detect(m_source, "GBIF"))) {
+    # Pull GBIF Data
+    sp_gbif_all <- rgbif::occ_search(taxonKey = params$taxon_id)
+    sp_gbif_data <- sp_gbif_all$data
+    
+    if (
+      all(c("decimalLongitude", "decimalLatitude") %in% colnames(sp_gbif_data))
+      ) {
+      g_map_data <- sp_gbif_data |> 
+      dplyr::filter(!is.na(decimalLongitude) | !is.na(decimalLatitude)) |>
+      sf::st_as_sf(coords = c("decimalLongitude", "decimalLatitude"), 
+                   crs = "EPSG:4326") |>
+      sf::st_transform(st_crs(base_area)) |>
+      sf::st_intersection(base_area |> st_union()) |> 
+        sf::st_make_valid()
+      
+      p_base_a <- p_base +
+        geom_sf(data = base_area, fill = "grey30", color = "white") +
+        geom_sf(data = g_map_data, aes(color = "Occurrence Record"), size = 2) +
+        geom_sf(data = aoa, fill = "yellow", color = "transparent") +
+        annotate(geom = "curve",
+                 x = aoa_center$X + 950000, y = aoa_center$Y - 950000,
+                 xend = aoa_center$X, yend = aoa_center$Y,
+                 color = "#d35400", linewidth = 1.1,
+                 arrow = arrow(length = unit(2, "mm"))) +
+        geom_sf_label(data = aoa, label = params$unit_name,
+                      size = 2.5, nudge_x = 950000, nudge_y = -950000,
+                      fill = "#edbb99") +
+        scale_color_manual(values = c("#1e8449")) +
+        labs(title = sp_names, subtitle = "North American Range",
+             color = "**Legend**",
+             caption = "**Source:** GBIF occurrence records.",
+             x = "", y = "")
+      } else {m_source <- "no_maps"}
+    } else if (any(stringr::str_detect(m_source, "eBird"))) {
+      g_map_data <- targets::tar_read(nko_ebird_range_maps) |>
+        dplyr::filter(taxon_id == params$taxon_id) |> 
+        sf::st_transform(sf::st_crs(base_area)) |>
+        sf::st_intersection(base_area |> sf::st_union()) |> 
+        suppressWarnings()
+      
+      count_season <- g_map_data |>
+        sf::st_drop_geometry() |>
+        dplyr::count(season) |>
+        dplyr::pull(season) |>
+        length()
+      
+      if (count_season > 1) {
+        mig_orig <- g_map_data |> 
+          dplyr::filter(season== "Migration")
+        breed_orig <- g_map_data |> 
+          dplyr::filter(season == "Breeding")
+        nonbreed <- g_map_data |> 
+          dplyr::filter(season == "Nonbreeding")
+        year_round <- breed_orig |>
+          sf::st_intersection(nonbreed) |>
+          sf::st_make_valid() |> 
+          sf::st_intersection(mig_orig) |>
+          sf::st_make_valid() |> 
+          dplyr::mutate(season = "Year Round") |> 
+          suppressWarnings()
+        g_map_data <- dplyr::bind_rows(mig_orig, breed_orig, nonbreed, 
+                                       year_round) |> 
+          dplyr::mutate(season = factor(season, 
+                                        levels = c("Breeding", "Nonbreeding", 
+                                                   "Migration", "Year Round")))
+        } else {
+          g_map_data <- g_map_data |> dplyr::mutate(season = "Year Round")
+          }
+      
+      p_base_a <- p_base +
+        geom_sf(data = base_area, fill = "grey40", color = "white") +
+        geom_sf(data = g_map_data, aes(fill = season), color = "transparent") +
+        scale_fill_brewer(palette = "Dark2") +
+        geom_sf(data = base_area, fill = "transparent", color = "white") +
+        labs(title = sp_names,
+             subtitle = "North American Range",
+             fill = "**Season**",
+             caption = "**Source:** eBird Status and Trends")
+    }
+  }
+```
+
+`r if(m_source == "no_maps") "Range map not available."`
+
+```{r range_maps}
+#| fig-cap: "North American Seasonal Ranges"
+#| fig-alt: "North American Seasonal Ranges"
+#| fig-height: 6.5
+#| warning: false
+#| message: false
+
+if (any(stringr::str_detect(m_source, "GBIF"))) p_base_a
+```
+
+```{r seasonal_ebird_map}
+#| fig-cap: "North American Seasonal Ranges"
+#| fig-alt: "North American Seasonal Ranges"
+#| fig-height: 7
+#| warning: false
+#| message: false
+
+if (any(stringr::str_detect(m_source, "eBird"))){
+  if (count_season > 1 & nrow(g_map_data) > 0) {
+    p_base_a +
+      facet_wrap(~season, ncol = 2) +
+      theme(legend.position = "none")
+    }
+  }
+```
+
+```{r resident_ebird_map}
+#| fig-cap: "North American Year Round Ranges"
+#| fig-alt: "North American Year Round Ranges"
+#| fig-height: 6.5
+#| warning: false
+#| message: false
+
+if (any(stringr::str_detect(m_source, "eBird"))){
+  if (count_season == 1 & nrow(g_map_data) > 0) {
+    p_base_a +
+      geom_sf(data = aoa, fill = "yellow", color = "transparent") +
+      annotate(geom = "curve",
+               x = aoa_center$X + 950000, y = aoa_center$Y - 950000,
+               xend = aoa_center$X, yend = aoa_center$Y,
+               color = "#d35400", linewidth = 1.1,
+               arrow = arrow(length = unit(2, "mm"))) +
+      geom_sf_label(data = aoa, label = params$unit_name, 
+                    size = 2.5, nudge_x = 950000, nudge_y = -950000, 
+                    fill = "#edbb99") +
+      labs(x = "", y = "")
+    }
+  }
+```
+
+
+### Occurrence Map
+
+```{r occ_map}
+#| eval: true
+#| fig-cap: "Occurrence records on Forest Service land."
+#| fig-alt: "Occurrence records on Forest Service land."
+#| fig-height: 5.5
+#| warning: false
+#| message: false
+
+# Load targets and prep data
+bbox <- sf::st_buffer(sd_basemap_data$admin_bndry, 5000) |> 
+  sf::st_bbox()
+
+# rd_labels <- basemap_data$districts %>%
+#   bind_cols(sf::st_coordinates(st_centroid(.))) |>
+#   mutate(
+#     name_sub = str_replace(districtname, " Ranger District", ""),
+#     label_n = glue("{name_sub} RD")
+#   ) |> 
+#   suppressWarnings()
+
+# roads <- basemap_data$roads |>
+#   select(highway, `tiger:name_base`:`tiger:name_base_4`)
+# motorways <- roads |>
+#   filter(highway == "motorway") |>
+#   mutate(name = case_when(
+#     `tiger:name_base` == "I-70" ~ "I-70",
+#     TRUE ~ `tiger:name_base`
+#   )) |>
+#   count(name)
+# 
+# trunk <- roads |>
+#   filter(highway == "trunk")
+# 
+# other_rd <- roads |>
+#   filter(highway %in% c("primary"))
+
+p_base +
+  geom_sf(data = sd_basemap_data$plan_area, 
+          aes(fill = "Forest Service"), color = "transparent") +
+  geom_sf(data = sd_basemap_data$admin_bndry, fill = "transparent", 
+          color = "#4EB265", lwd = 1) +
+  # geom_sf(data = basemap_data$l_48, color = 'black', fill = 'transparent', 
+  #         lwd = 1) +
+  # geom_sf(data = trunk, color = "grey80", linewidth = 1) +
+  # geom_sf(data = other_rd, color = "grey80", linewidth = 0.5) +
+  # geom_sf(data = motorways, color = "#DC050C", linewidth = 1, alpha = 0.5) +
+  # geom_sf_label(data = motorways, aes(label = name), fill = "black",
+  #               color = "white", label.r = unit(0.8, "lines"),
+  #               label.padding = unit(0.35, "lines")) +
+  geom_sf(data = sp_pts, aes(color = "Occurrences"), size = 2.5) +
+  scale_color_manual(values = c("#1965B0")) +
+  scale_fill_manual(values = c("#CAE0AB")) +
+  scale_x_continuous(limits = bbox[c(1, 3)]) +
+  scale_y_continuous(limits = bbox[c(2, 4)]) +
+  labs(
+    title = sp_names,
+    subtitle = glue::glue("Occurrence records on the {params$unit_name}"),
+    color = "**Occurrence Data**",
+    fill = "**Land Ownership**",
+    x = "",
+    y = ""
+  ) + 
+  theme(
+    axis.text = element_blank(),
+    panel.grid = element_blank(),
+    legend.key.spacing = unit(0, "pt"),
+    legend.margin = margin(0, 0, 0, 0, "pt"),
+    legend.box.margin = margin(5, 5, 5, 5, "pt")
+  )
+```
+
+
+### Bird Trend Maps
+
+`r if(isFALSE(exists("ebird_trend_maps", envir = .GlobalEnv))){"Bird trend maps are only available for birds. This species is not a bird."}`
+
+`r if(exists("ebird_trend_maps", envir = .GlobalEnv)){if(isFALSE(ebird_trend_maps)){"eBird trend data were not available for this species."}}`
+
+```{r na_ebird_trends}
+#| fig-cap: "eBird abundance trends for North America."
+#| fig-alt: "eBird abundance trends for North America."
+#| fig-height: 4
+#| warning: false
+#| message: false
+if(exists("ebird_trend_maps", envir = .GlobalEnv)){
+  if(isTRUE(ebird_trend_maps)){
+  
+  tmap::tm_shape(sd_basemap_data$north_america) +
+    tmap::tm_borders(col= 'white', lwd = 0) +
+    tmap::tm_shape(ebird_trend_rast) +
+    tmap::tm_raster(
+      col.scale = tmap::tm_scale_continuous(values = c("#DC050C", "#1965B0")),
+      col.legend = tmap::tm_legend(title = "% Change\nper Year", reverse = TRUE,
+                                   position = tmap::tm_pos_out("right"))
+      ) +
+    tmap::tm_shape(sd_basemap_data$north_america) +
+    tmap::tm_borders(col= 'black', lwd = 1) +
+    tmap::tm_shape(sd_basemap_data$admin_bndry) + 
+    tmap::tm_borders(col = "#4EB265", lwd = 2) +
+    tmap::tm_compass(type = "arrow", position = c("right", "top"),
+                     text.size = 0.5, bg.color = 'white', bg.alpha = 0.5) +
+    tmap::tm_scalebar(breaks = c(0, 50, 100, 200, 250),
+                      position = c("right", "bottom"),
+                      text.size = 0.4, bg.color = 'white', bg.alpha = 0.5) +
+    tmap::tm_add_legend(type = "polygons", labels = params$unit_name,
+                        fill = "white", col = "#4EB265", lwd = 2,
+                        position = tmap::tm_pos_out("right")) +
+    tmap::tm_title(
+      paste0(species_data$common_name, " (", species_data$scientific_name, ")"),
+      size = 1, fontface = "bold", position = c(0.01, 0.98), bg.color = 'white',
+      bg.alpha = 0.7
+      ) +
+    tmap::tm_title(paste0(stringr::str_to_sentence(trend_dat$trends_season), 
+                          " abundance trends (", trend_dat$trends_start_year, 
+                          "-", trend_dat$trends_end_year, ")"),
+                   size = 0.8, position = c(0.01, 0.98), stack = "verticle")
+  }
+}
+```
+
+
+```{r}
+#| label: us_ebird_trends
+#| fig-cap: "eBird abundance trends for the continental United States."
+#| fig-alt: "eBird abundance trends for the continental United States."
+#| fig-height: 4
+#| warning: false
+#| message: false
+
+if(exists("ebird_trend_maps", envir = .GlobalEnv)){
+  if(isTRUE(ebird_trend_maps)){
+  
+  tmap::tm_shape(sd_basemap_data$l_48) + 
+    tmap::tm_borders(col= 'white', lwd = 0) +
+    tmap::tm_shape(ebird_trend_rast) +
+    tmap::tm_raster(
+      col.scale = tmap::tm_scale_continuous(values = c("#DC050C", "#1965B0")),
+      col.legend = tmap::tm_legend(title = "% Change\nper Year", reverse = TRUE,
+                                   position = tmap::tm_pos_out("right"))
+      ) +
+    tmap::tm_shape(sd_basemap_data$north_america) +
+    tmap::tm_borders(col= 'black', lwd = 1) +
+    tmap::tm_shape(sd_basemap_data$l_48) + 
+    tmap::tm_borders(col= 'black', lwd = 1) +
+    tmap::tm_shape(sd_basemap_data$admin_bndry) + 
+    tmap::tm_borders(col = "#4EB265", lwd = 2) +
+    tmap::tm_compass(type = "arrow", position = c("right", "top"),
+                     text.size = 0.5, bg.color = 'white', bg.alpha = 0.5) +
+    tmap::tm_scalebar(breaks = c(0, 50, 100, 200, 250),
+                      position = c("right", "bottom"),
+                      text.size = 0.4, bg.color = 'white', bg.alpha = 0.5) +
+    tmap::tm_add_legend(type = "polygons", labels = params$unit_name,
+                        fill = "white", col = "#4EB265", lwd = 2,
+                        position = tmap::tm_pos_out("right")) +
+    tmap::tm_title(
+      paste0(species_data$common_name, " (", species_data$scientific_name, ")"),
+      size = 1, fontface = "bold", position = c(0.01, 0.98), bg.color = 'white',
+      bg.alpha = 0.7
+      ) +
+    tmap::tm_title(paste0(stringr::str_to_sentence(trend_dat$trends_season), 
+                          " abundance trends (", trend_dat$trends_start_year, 
+                          "-", trend_dat$trends_end_year, ")"),
+                   size = 0.8, position = c(0.01, 0.98), stack = "verticle")
+  }
+}
+```
+
+```{r}
+#| label: state_ebird_trends
+#| fig-cap: "eBird abundance trends for Utah."
+#| fig-alt: "eBird abundance trends for Utah."
+#| fig-height: 4
+#| warning: false
+#| message: false
+
+if(exists("ebird_trend_maps", envir = .GlobalEnv)){
+  if(isTRUE(ebird_trend_maps)){ 
+  
+  tmap::tm_shape(sf::st_buffer(state_aoi, 50000)) + 
+      tmap::tm_borders(col= 'white', lwd = 0) +
+      tmap::tm_shape(ebird_trend_rast) +
+      tmap::tm_raster(
+        col.scale = tmap::tm_scale_continuous(values = c("#DC050C", "#1965B0")),
+        col.legend = tmap::tm_legend(title = "% Change\nper Year", reverse = TRUE,
+                                     position = tmap::tm_pos_out("right"))
+        ) +
+      tmap::tm_shape(sd_basemap_data$l_48) + 
+      tmap::tm_borders(col= 'black', lwd = 1) +
+      tmap::tm_shape(state_aoi) + tmap::tm_borders(col= 'black', lwd = 2) +
+      tmap::tm_shape(sd_basemap_data$admin_bndry) + 
+    tmap::tm_borders(col = "#4EB265", lwd = 2) +
+      tmap::tm_compass(type = "arrow", position = c("right", "top"),
+                       text.size = 0.5, bg.color = 'white', bg.alpha = 0.5) +
+      tmap::tm_scalebar(breaks = c(0, 50, 100, 200, 250),
+                        position = c("right", "bottom"),
+                        text.size = 0.4, bg.color = 'white', bg.alpha = 0.5) +
+      tmap::tm_add_legend(type = "polygons", labels = params$unit_name,
+                          fill = "white", col = "#4EB265", lwd = 2,
+                          position = tmap::tm_pos_out("right")) +
+      tmap::tm_title(
+        paste0(species_data$common_name, " (", species_data$scientific_name, ")"), 
+        size = 1, fontface = "bold", position = c(0.01, 0.98), 
+        bg.color = 'white', bg.alpha = 0.7
+        ) +
+      tmap::tm_title(paste0(stringr::str_to_sentence(trend_dat$trends_season), 
+                          " abundance trends (", trend_dat$trends_start_year, 
+                          "-", trend_dat$trends_end_year, ")"), 
+                     size = 0.8, position = c(0.01, 0.98), stack = "verticle")
+  }
+}
+```
+
+:::

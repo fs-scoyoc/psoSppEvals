@@ -19,7 +19,7 @@ Welcome to the Planning Service Organization (PSO; USDA Forest Service) Species 
 
 **Depends:** R (\>= 4.1.0)
 
-**Imports:** arcgisbinding, arcgislayers, BIEN, devtools, dplyr, ebirdst, foreign, glue, httr2, janitor, lubridate, methods, natserv, osmdata, purrr, psoGIStools, quarto, readr, readxl, remotes, rgbif, rlandfire, rnaturalearth, sf, stringr, taxize, terra, tibble, tidyr, tidyselect, units, writexl
+**Imports:** arcgisbinding, arcgislayers, BIEN, devtools, dplyr, ebirdst, foreign, fs, glue, httr2, janitor, lubridate, methods, natserv, osmdata, purrr, psoGIStools, quarto, readr, readxl, remotes, rgbif, rlandfire, rnaturalearth, sf, stringr, taxize, terra, tibble, tidyr, tidyselect, units, writexl
 
 **Issues:** This package is under active development and changes often with out warning. Functions may experience breaking changes at any time. If you find a bugs or have an idea for a feature, please submit an [Issue](https://github.com/fs-scoyoc/mpsgSE/issues).
 
@@ -134,7 +134,9 @@ remotes::install_github("fs-scoyoc/psoSppEvals")
 
 -   `read_fc`: Deprecated. Use the `psoGIStools` package moving forward. Read feature class from a geodatabase into R.
 
--   `setup_directories`: Create directories for automated evaluations.
+-   `set_up_directories`: Create directories for automated evaluations.
+
+-   `set_up_pipeline`: Set up targets pipeline.
 
 -   `wkt_string`: Create a well-known text string from an `sf` polygon object for `get_gbif()`.
 

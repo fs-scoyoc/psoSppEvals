@@ -22,6 +22,7 @@ Imports:
     dplyr,
     ebirdst,
     foreign,
+    fs,
     glue,
     httr2,
     janitor,
