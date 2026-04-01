@@ -19,7 +19,7 @@
 #' set_up_pipeline(file.path(scc_library, "Species List"), "LNF")
 #' }
 set_up_pipeline <- function(dir_path, unit_code){
-  template_dir = file.path("inst", "pipeline")
+  template_dir = system.file("pipeline", package = "psoSppEvals")
   pipeline_dir = file.path(dir_path, paste0(unit_code, "_SppEval_Pipeline"))
   if(!dir.exists(pipeline_dir)) dir.create(pipeline_dir, recursive = TRUE)
   fs::dir_copy(template_dir, pipeline_dir)
