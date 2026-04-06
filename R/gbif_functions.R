@@ -103,7 +103,8 @@ build_gbif_spatial_data <- function(gbif_data, spp_list) {
 #'
 #' @seealso [rgbif::pred_within()], [rgbif::occ_download()],
 #'          [rgbif::occ_download_wait()], [rgbif::occ_download_get()],
-#'          [rgbif::occ_download_import()], [sf::st_crs()]
+#'          [rgbif::occ_download_import()], [sf::st_crs()], 
+#'          [correct_taxon_ids()]
 #' @export
 #'
 #' @examples
@@ -167,6 +168,7 @@ get_gbif_data <- function(gbif_key, t_path, aoa_poly = NULL, gbif_user = NULL,
                       occurrenceStatus == "PRESENT" &
                       !basisOfRecord == "FOSSIL_SPECIMEN") |>
       # Create clean scientific names
+      dplyr::mutate_if(is.character, trimws) |> 
       dplyr::mutate(
         taxon_id = acceptedTaxonKey, 
         infraspecificEpithet = ifelse(grepl("^//s*$", infraspecificEpithet),
@@ -185,9 +187,7 @@ get_gbif_data <- function(gbif_key, t_path, aoa_poly = NULL, gbif_user = NULL,
         day_of_year = lubridate::yday(parsed_date),
         parsed_year = lubridate::year(parsed_date),
         source = "GBIF"
-      ) |>
-      dplyr::mutate_if(is.character, trimws) |> 
-      psoSppEvals::correct_taxon_ids()
+      )
   }
   
   # Correct Taxon IDs
@@ -208,9 +208,12 @@ get_gbif_data <- function(gbif_key, t_path, aoa_poly = NULL, gbif_user = NULL,
 #' @param crs Target coordinate reference system (CRS). Either and 
 #'    `sf::st_crs()` object or accepted string (e.g. "EPSG:4326" or "NAD83"). 
 #'    Default is EPSG:4326 (WGS84).
+#' @param process_data Logical. Process data after reading them into R (TRUE ==
+#'     yes, FALSE == no). Default is TRUE. The processing step
+#' @param correct Logical. Run `correct_taxon_ids()` on data. Default is TRUE.
 #'
 #' @return An [sf] object or a [tibble::tibble()].
-#' @seealso [get_taxonomies()], [rgbif::occ_search()]
+#' @seealso [get_taxonomies()], [rgbif::occ_search()], [correct_taxon_ids()]
 #' @export
 #'
 #' @examples
@@ -223,7 +226,8 @@ get_gbif_data <- function(gbif_key, t_path, aoa_poly = NULL, gbif_user = NULL,
 #' # Pull occurrence data
 #' occ <- get_gbif_occ_data(spp)
 #' }
-get_gbif_occ_data <- function(spp_list, spatial = TRUE, crs = "EPSG:4326"){
+get_gbif_occ_data <- function(spp_list, spatial = TRUE, crs = "EPSG:4326", 
+                              process_data = TRUE, correct = TRUE){
   # Query GBIF data
   occ_ls = rgbif::occ_search(taxonKey = spp_list$taxon_id)
   # Convert list to data frame
@@ -238,6 +242,40 @@ get_gbif_occ_data <- function(spp_list, spatial = TRUE, crs = "EPSG:4326"){
       dplyr::filter(!is.na(decimalLatitude) | !is.na(decimalLongitude)) |> 
       gbif_spatial(crs = crs)
   }
+  
+  #-- Process GBIF data
+  if(process_data){
+    occ = occ |>
+      # Filter for species & subspecies and not fossil records
+      dplyr::filter(taxonRank %in% c("SPECIES", "SUBSPECIES", "VARIETY") &
+                      occurrenceStatus == "PRESENT" &
+                      !basisOfRecord == "FOSSIL_SPECIMEN") |>
+      dplyr::mutate_if(is.character, trimws) |>
+      # Create clean scientific names
+      dplyr::mutate(
+        taxon_id = acceptedTaxonKey, 
+        infraspecificEpithet = ifelse(grepl("^//s*$", infraspecificEpithet),
+                                      NA, infraspecificEpithet),
+        scientific_name = paste(trimws(genus), trimws(specificEpithet),
+                                sep = " "),
+        scientific_name = ifelse(!is.na(infraspecificEpithet),
+                                 paste(scientific_name,
+                                       trimws(infraspecificEpithet), sep = " "),
+                                 scientific_name),
+        scientific_name = trimws(scientific_name),
+        # Parse date formats, day of year, and year
+        parsed_date = lubridate::parse_date_time(eventDate, date_formats) |> 
+          as.Date(),
+        # parsed_date = ifelse(lubridate::year(parsed_date) == 9999, NA, date),
+        day_of_year = lubridate::yday(parsed_date),
+        parsed_year = lubridate::year(parsed_date),
+        source = "GBIF"
+      )
+  }
+  
+  # Correct Taxon IDs
+  if(correct) occ = psoSppEvals::correct_taxon_ids(occ) 
+  
   return(occ)
 }
 
