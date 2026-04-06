@@ -4,7 +4,13 @@
 \alias{get_gbif_occ_data}
 \title{Get GBIF occurrence records for a list of species}
 \usage{
-get_gbif_occ_data(spp_list, spatial = TRUE, crs = "EPSG:4326")
+get_gbif_occ_data(
+  spp_list,
+  spatial = TRUE,
+  crs = "EPSG:4326",
+  process_data = TRUE,
+  correct = TRUE
+)
 }
 \arguments{
 \item{spp_list}{A list of species with taxon ID's from \code{get_taxonomies()}.}
@@ -14,6 +20,11 @@ get_gbif_occ_data(spp_list, spatial = TRUE, crs = "EPSG:4326")
 \item{crs}{Target coordinate reference system (CRS). Either and
 \code{sf::st_crs()} object or accepted string (e.g. "EPSG:4326" or "NAD83").
 Default is EPSG:4326 (WGS84).}
+
+\item{process_data}{Logical. Process data after reading them into R (TRUE ==
+yes, FALSE == no). Default is TRUE. The processing step}
+
+\item{correct}{Logical. Run \code{correct_taxon_ids()} on data. Default is TRUE.}
 }
 \value{
 An \link[sf:sf]{sf::sf} object or a \code{\link[tibble:tibble]{tibble::tibble()}}.
@@ -34,5 +45,5 @@ occ <- get_gbif_occ_data(spp)
 }
 }
 \seealso{
-\code{\link[=get_taxonomies]{get_taxonomies()}}, \code{\link[rgbif:occ_search]{rgbif::occ_search()}}
+\code{\link[=get_taxonomies]{get_taxonomies()}}, \code{\link[rgbif:occ_search]{rgbif::occ_search()}}, \code{\link[=correct_taxon_ids]{correct_taxon_ids()}}
 }

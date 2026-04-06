@@ -25,6 +25,7 @@ library("psoSppEvals")
 scc_library <- file.path(Sys.getenv("USERPROFILE"), 
                          "USDA/Mountain Planning Service Group - SCC Library", 
                          "12_Lolo NF")
-set_up_pipeline(file.path(scc_library, "Species List"), "LNF")
+spp_lst_dir <- file.path(scc_library, "Species List")
+set_up_pipeline(dir_path = spp_lst_dir, unit_code = "LNF")
 }
 }

@@ -100,5 +100,6 @@ gbif_dat <- get_gbif_data(gbif_key = '9999999-999999999999999',
 \seealso{
 \code{\link[rgbif:download_predicate_dsl]{rgbif::pred_within()}}, \code{\link[rgbif:occ_download]{rgbif::occ_download()}},
 \code{\link[rgbif:occ_download_wait]{rgbif::occ_download_wait()}}, \code{\link[rgbif:occ_download_get]{rgbif::occ_download_get()}},
-\code{\link[rgbif:occ_download_import]{rgbif::occ_download_import()}}, \code{\link[sf:st_crs]{sf::st_crs()}}
+\code{\link[rgbif:occ_download_import]{rgbif::occ_download_import()}}, \code{\link[sf:st_crs]{sf::st_crs()}},
+\code{\link[=correct_taxon_ids]{correct_taxon_ids()}}
 }
