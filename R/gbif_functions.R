@@ -203,7 +203,8 @@ get_gbif_data <- function(gbif_key, t_path, aoa_poly = NULL, gbif_user = NULL,
 #' This function queries GBIF occurrence records for a species list using the 
 #'     taxon ID from `get_taxonomies()` using [rgbif::occ_search()].
 #'
-#' @param spp_list A list of species with taxon ID's from `get_taxonomies()`.
+#' @param spp_list A data frame of species with taxon ID's from 
+#'     `get_taxonomies()`.
 #' @param spatial Logical (TRUE/FALSE). Return spatial data. Default is TRUE.
 #' @param crs Target coordinate reference system (CRS). Either and 
 #'    `sf::st_crs()` object or accepted string (e.g. "EPSG:4326" or "NAD83"). 
@@ -226,7 +227,7 @@ get_gbif_data <- function(gbif_key, t_path, aoa_poly = NULL, gbif_user = NULL,
 #' # Pull occurrence data
 #' occ <- get_gbif_occ_data(spp)
 #' }
-get_gbif_occ_data <- function(spp_list, spatial = TRUE, crs = "EPSG:4326", 
+get_gbif_occ_data <- function(spp_list, crs = "EPSG:4326", spatial = TRUE, 
                               process_data = TRUE, correct = TRUE){
   # Query GBIF data
   occ_ls = rgbif::occ_search(taxonKey = spp_list$taxon_id)
@@ -236,6 +237,7 @@ get_gbif_occ_data <- function(spp_list, spatial = TRUE, crs = "EPSG:4326",
     return(dat)
   }) |> 
     dplyr::bind_rows()
+  
   # Convert to spatial
   if(spatial){
     occ = occ |> 
