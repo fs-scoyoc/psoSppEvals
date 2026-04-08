@@ -71,7 +71,8 @@ crs = "EPSG:26912" # NAD83 UTM Zone 12
 #     file name of the zip file is your GBIF key, excluding ".zip".
 gbif_key <- "new"
 # TODO: acquire a eBird data key if you don't already have one. 
-#     See the **Data Access** section of https://ebird.github.io/ebirdst/articles/status.html
+#     See the **Data Access** section of 
+#     https://ebird.github.io/ebirdst/articles/status.html
 ebird_key <- Sys.getenv("EBIRDST_KEY")
 
 #-- Directory Paths
@@ -96,11 +97,11 @@ t_gdb <- file.path("T:/FS/NFS/PSO/MPSG/2025_FishlakeNF/1_PreAssessment",
 # NULL if a Native & Known to Occur workbook has not been produced
 # TODO: Update the Excel file names for your project. These file names will be
 #     assigned in the pipeline.
-nko_xlsx_file <- "20260309_FIF_EligibleSppList.xlsx"
+nko_xlsx_file <- NULL
 # Sheet of eligible species (reviewed by Species Group Biologists)
 eligible_sheet <- "Eligible Species - Valid Data"
 # Habitat Crosswalk Excel workbook
-habitat_xwalk_xlsx_file <- "20260318_FIF_Habitats.xlsx"
+habitat_xwalk_xlsx_file <- NULL
 
 
 # Run the R scripts in the R/ folder with your custom functions:
@@ -111,7 +112,7 @@ tar_source()
 list(
   ## Spatial Data ----
   # tar_target(
-  #   sd_proc_bndry,
+  #   sd_admin_bndry,
   #   mpsgSE::read_fc("FIF_ProclaimedBoundary", proj_gdb, crs)
   # ),
   # tar_target(
@@ -120,7 +121,7 @@ list(
   # ),
   # tar_target(
   #   sd_basemap_data,
-  #   build_basemap_data(sd_proc_bndry, sd_plan_area, target_crs = crs)
+  #   build_basemap_data(sd_admin_bndry, sd_plan_area, target_crs = crs)
   # ),
   
   
@@ -146,23 +147,23 @@ list(
   # ),
   # # Utah SWAP List
   # tar_target(
-  #   cl_ut_swap,
+  #   cl_swap,
   #   mpsgSEdata::ut_swap
   # ),
   # # BLM Sensitive Species List
   # tar_target(
-  #   cl_ut_blm_ssl,
+  #   cl_blm_ssl,
   #   mpsgSEdata::ut_blm_ss
   # ),
   # tar_target(
-  #   cl_mlsnf_scc_list, 
+  #   cl_scc_list, 
   #   get_forest_scc(file.path("data", "Manti-LaSal_SCC_20260305.xlsx"))
   # ),
   # # Build master conservation list
   # tar_target(
-  #   cl_master_status_list,
-  #   build_conservation_list(cl_ns_list, cl_rfss_list, cl_bcc_list, cl_ut_swap, 
-  #                           cl_ut_blm_ssl, cl_mlsnf_scc_list)
+  #   cl_status_list,
+  #   build_conservation_list(cl_ns_list, cl_rfss_list, cl_bcc_list, cl_swap, 
+  #                           cl_blm_ssl, cl_scc_list)
   # ),
 
 
@@ -184,9 +185,11 @@ list(
   # ),
   # tar_target(
   #   od_gbif_unit_spp,
-  #   tibble::lst('all_spp' = mpsgSE::build_gbif_spp(od_gbif_unit$all_data),
-  #               'valid_spp' = mpsgSE::build_gbif_spp(od_gbif_unit$valid_data),
-  #               'invalid_spp' = mpsgSE::build_gbif_spp(od_gbif_unit$invalid_data))
+  #   tibble::lst(
+  #     'all_spp' = mpsgSE::build_gbif_spp(od_gbif_unit$all_data),
+  #     'valid_spp' = mpsgSE::build_gbif_spp(od_gbif_unit$valid_data),
+  #     'invalid_spp' = mpsgSE::build_gbif_spp(od_gbif_unit$invalid_data)
+  #     )
   # ),
   # tar_target(
   #   od_gbif_buff,
@@ -210,9 +213,11 @@ list(
   # ),
   # tar_target(
   #   od_sei_unit_spp,
-  #   tibble::lst('all_spp' = mpsgSE::build_seinet_spp(od_sei_unit$all_data),
-  #               'valid_spp' = mpsgSE::build_seinet_spp(od_sei_unit$valid_data),
-  #               'invalid_spp' = mpsgSE::build_seinet_spp(od_sei_unit$invalid_data))
+  #   tibble::lst(
+  #     'all_spp' = mpsgSE::build_seinet_spp(od_sei_unit$all_data),
+  #     'valid_spp' = mpsgSE::build_seinet_spp(od_sei_unit$valid_data),
+  #     'invalid_spp' = mpsgSE::build_seinet_spp(od_sei_unit$invalid_data)
+  #     )
   # ),
   # tar_target(
   #   od_sei_buff,
@@ -238,7 +243,8 @@ list(
   # ),
   # tar_target(
   #   od_imbcr_buff,
-  #   mpsgSE::clip_fc(od_imbcr_data, sd_basemap_data$plan_area_doughnut, "Buffer")
+  #   mpsgSE::clip_fc(od_imbcr_data, sd_basemap_data$plan_area_doughnut, 
+  #                   "Buffer")
   # ),
   # tar_target(
   #   od_imbcr_buff_spp,
@@ -248,32 +254,32 @@ list(
   ### Utah NHP Data ----
   # TODO: This section will need to be modified for you pipeline.
   # tar_target(
-  #   od_unhp_pts,
+  #   od_nhp_pts,
   #   get_unhp_point_data()
   # ),
   # tar_target(
-  #   od_unhp_plants,
+  #   od_nhp_plants,
   #   get_unhp_plant_data()
   # ),
   # tar_target(
-  #   od_unhp_data,
-  #   combine_unhp_data(od_unhp_pts, od_unhp_plants)
+  #   od_nhp_data,
+  #   combine_unhp_data(od_nhp_pts, od_nhp_plants)
   # ),
   # tar_target(
-  #   od_unhp_unit,
-  #   mpsgSE::clip_fc(od_unhp_data, sd_basemap_data$plan_area, unit_code)
+  #   od_nhp_unit,
+  #   mpsgSE::clip_fc(od_nhp_data, sd_basemap_data$plan_area, unit_code)
   # ),
   # tar_target(
-  #   od_unhp_unit_spp,
-  #   build_unhp_spp(od_unhp_unit, unit_code)
+  #   od_nhp_unit_spp,
+  #   build_unhp_spp(od_nhp_unit, unit_code)
   # ),
   # tar_target(
-  #   od_unhp_buff,
-  #   mpsgSE::clip_fc(od_unhp_data, sd_basemap_data$plan_area_doughnut, "Buffer")
+  #   od_nhp_buff,
+  #   mpsgSE::clip_fc(od_nhp_data, sd_basemap_data$plan_area_doughnut, "Buffer")
   # ),
   # tar_target(
-  #   od_unhp_buff_spp,
-  #   build_unhp_spp(od_unhp_buff, unit_code)
+  #   od_nhp_buff_spp,
+  #   build_unhp_spp(od_nhp_buff, unit_code)
   # ),
 
   ### FS EDW Data ----
@@ -306,13 +312,13 @@ list(
   # tar_target(
   #   elig_unit_list,
   #   build_spp_list(od_gbif_unit_spp, od_sei_unit_spp, od_imbcr_unit_spp,
-  #                  od_unhp_unit_spp, od_fs_unit_spp, cl_master_status_list, 
+  #                  od_nhp_unit_spp, od_fs_unit_spp, cl_status_list, 
   #                  unit_code)
   # ),
   # tar_target(
   #   elig_buffer_list,
-  #   build_spp_list(od_gbif_buff_spp, od_sei_buff_spp, od_unhp_buff_spp,
-  #                  od_fs_buff_spp, cl_master_status_list, "Buffer")
+  #   build_spp_list(od_gbif_buff_spp, od_sei_buff_spp, od_imbcr_buff_spp, 
+  #                  od_nhp_buff_spp, od_fs_buff_spp, cl_status_list, "Buffer")
   # ),
   #-- Eligible Species LIst
   # tar_target(
@@ -335,18 +341,18 @@ list(
   # tar_target(
   #   elig_occ_pts,
   #   build_all_occ_data(elig_list, od_gbif_unit, od_sei_unit, od_imbcr_unit, 
-  #                      od_unhp_unit, od_fs_unit)
+  #                      od_nhp_unit, od_fs_unit)
   # ),
   # tar_target(
   #   elig_occ_proj_gdb,
   #   write_spatial_data(elig_list, od_gbif_unit, od_sei_unit, od_imbcr_unit, 
-  #                      od_unhp_unit, od_fs_unit, dataset_name = "EligOccData",
+  #                      od_nhp_unit, od_fs_unit, dataset_name = "EligOccData",
   #                      data_prefix = "Elig_v2", gdb_path = proj_gdb)
   # ),
   # tar_target(
   #   elig_occ_t_gdb,
   #   write_spatial_data(elig_list, od_gbif_unit, od_sei_unit, od_imbcr_unit, 
-  #                      od_unhp_unit, od_fs_unit, dataset_name = "EligOccData",
+  #                      od_nhp_unit, od_fs_unit, dataset_name = "EligOccData",
   #                      data_prefix = "Elig_v3", gdb_path = t_gdb)
   # ),
   
@@ -416,7 +422,7 @@ list(
   #### IUCN ----
   # tar_target(
   #   elig_iucn_maps,
-  #   mpsgSE::get_iucn_shp_paths(elig_list) |> mpsgSE::build_iucn_maps()
+  #   mpsgSE::get_iucn_maps(elig_list)
   # ),
   #-- Write range data
   # tar_target(
@@ -443,7 +449,7 @@ list(
   # ),
   # tar_target(
   #   nko_list,
-  #   read_nko_xlsx(nko_xlsx, tar_master_cons_list = cl_master_status_list)
+  #   read_nko_xlsx(nko_xlsx, tar_master_cons_list = cl_status_list)
   # ),
   
   
@@ -474,18 +480,18 @@ list(
   # tar_target(
   #   nko_occ_data,
   #   build_all_occ_data(nko_list, od_gbif_unit, od_sei_unit, od_imbcr_unit, 
-  #                      od_unhp_unit, od_fs_unit)
+  #                      od_nhp_unit, od_fs_unit)
   # ),
   # tar_target(
   #   write_nko_occ_proj_gdb,
   #   write_spatial_data(nko_list, od_gbif_unit, od_sei_unit, od_imbcr_unit, 
-  #                      od_unhp_unit, od_fs_unit, dataset_name = "NKO_OccData",
+  #                      od_nhp_unit, od_fs_unit, dataset_name = "NKO_OccData",
   #                      data_prefix = "nko", gdb_path = proj_gdb)
   # ),
   # tar_target(
   #   write_nko_occ_t_gdb,
   #   write_spatial_data(nko_list, od_gbif_unit, od_sei_unit, od_imbcr_unit, 
-  #                      od_unhp_unit, od_fs_unit, dataset_name = "NKO_OccData",
+  #                      od_nhp_unit, od_fs_unit, dataset_name = "NKO_OccData",
   #                      data_prefix = "nko", gdb_path = t_gdb)
   # ),
   
@@ -556,7 +562,7 @@ list(
   ##### IMBCR ----
   # tar_target(
   #   nko_imbcr_trend_narratives,
-  #   build_imbcr_trend_narratives(sd_proc_bndry)
+  #   build_imbcr_trend_narratives(sd_admin_bndry)
   # ),
   
   ##### BBS ----
