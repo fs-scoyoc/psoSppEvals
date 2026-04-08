@@ -247,7 +247,10 @@ get_gbif_occ_data <- function(spp_list, crs = "EPSG:4326", spatial = TRUE,
   
   #-- Process GBIF data
   if(process_data){
-    occ = occ |>
+      # Date formats
+  date_formats = c("%Y-%m-%d %H:%M:%S", "%Y-%m-%d", "%Y-%m", "%Y", "ymd HMS",
+                   "ymd", "ymd HM")
+  occ = occ |>
       # Filter for species & subspecies and not fossil records
       dplyr::filter(taxonRank %in% c("SPECIES", "SUBSPECIES", "VARIETY") &
                       occurrenceStatus == "PRESENT" &
