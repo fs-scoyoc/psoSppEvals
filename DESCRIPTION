@@ -1,6 +1,6 @@
 Package: psoSppEvals
 Title: Functions for Creating Species Evalutaions for the Planning Service Organization
-Version: 0.3.0
+Version: 0.4.0
 Authors@R: 
     c(person("Matthew", "Van Scoyoc", , "matthew.vanscoyoc@usda.gov",
              role = c("cre", "aut"), comment = c(ORCID = "0000-0001-6821-4476")), 

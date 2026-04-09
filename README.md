@@ -13,7 +13,7 @@ Welcome to the Planning Service Organization (PSO; USDA Forest Service) Species 
 
 **Maintainer:** [Matt Van Scoyoc](https://github.com/fs-scoyoc)
 
-**Version:** 0.3.0
+**Version:** 0.4.0
 
 **License:** Mit + file [LICENSE](https://github.com/fs-scoyoc/mpsgSE/blob/main/LICENSE.md)
 
