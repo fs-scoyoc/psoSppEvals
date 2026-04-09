@@ -113,11 +113,11 @@ list(
   ## Spatial Data ----
   # tar_target(
   #   sd_admin_bndry,
-  #   psoSppEvals::read_fc("FIF_ProclaimedBoundary", proj_gdb, crs)
+  #   psoGIStools::read_fc("FIF_ProclaimedBoundary", proj_gdb, crs)
   # ),
   # tar_target(
   #   sd_plan_area,
-  #   psoSppEvals::read_fc("FIF_ProclaimedPlanArea", proj_gdb, crs)
+  #   psoGIStools::read_fc("FIF_ProclaimedPlanArea", proj_gdb, crs)
   # ),
   # tar_target(
   #   sd_basemap_data,
@@ -172,15 +172,15 @@ list(
   # tar_target(
   #   od_gbif_data,
   #   psoSppEvals::get_gbif_data(gbif_key = gbif_key, t_path = file.path("data"),
-  #                         aoa_wkt = psoSppEvals::wkt_string(sd_basemap_data$aoa),
-  #                         gbif_user = Sys.getenv("GBIF_USER"),
-  #                         gbif_pwd = Sys.getenv("GBIF_PWD"),
-  #                         gbif_email = Sys.getenv("GBIF_EMAIL"),
-  #                         crs = crs, correct = TRUE)
+  #                              aoa_poly = sd_basemap_data$aoa,
+  #                              gbif_user = Sys.getenv("GBIF_USER"),
+  #                              gbif_pwd = Sys.getenv("GBIF_PWD"),
+  #                              gbif_email = Sys.getenv("GBIF_EMAIL"),
+  #                              crs = crs, correct = TRUE)
   # ),
   # tar_target(
   #   od_gbif_unit,
-  #   psoSppEvals::clip_fc(od_gbif_data, sd_basemap_data$plan_area, unit_code) |>
+  #   ppsoGIStools::clip_fc(od_gbif_data, sd_basemap_data$plan_area, unit_code) |>
   #     data_integrety_qc()
   # ),
   # tar_target(
@@ -193,7 +193,8 @@ list(
   # ),
   # tar_target(
   #   od_gbif_buff,
-  #   psoSppEvals::clip_fc(od_gbif_data, sd_basemap_data$plan_area_doughnut, "Buffer")
+  #   ppsoGIStools::clip_fc(od_gbif_data, sd_basemap_data$plan_area_doughnut, 
+  #                         "Buffer")
   # ),
   # tar_target(
   #   od_gbif_buff_spp,
@@ -208,7 +209,7 @@ list(
   # ),
   # tar_target(
   #   od_sei_unit,
-  #   psoSppEvals::clip_fc(od_sei_data, sd_basemap_data$plan_area, unit_code) |>
+  #   ppsoGIStools::clip_fc(od_sei_data, sd_basemap_data$plan_area, unit_code) |>
   #     data_integrety_qc()
   # ),
   # tar_target(
@@ -221,7 +222,8 @@ list(
   # ),
   # tar_target(
   #   od_sei_buff,
-  #   psoSppEvals::clip_fc(od_sei_data, sd_basemap_data$plan_area_doughnut, "Buffer")
+  #   ppsoGIStools::clip_fc(od_sei_data, sd_basemap_data$plan_area_doughnut, 
+  #                         "Buffer")
   # ),
   # tar_target(
   #   od_sei_buff_spp,
@@ -235,7 +237,7 @@ list(
   # ),
   # tar_target(
   #   od_imbcr_unit,
-  #   psoSppEvals::clip_fc(od_imbcr_data, sd_basemap_data$plan_area, unit_code)
+  #   ppsoGIStools::clip_fc(od_imbcr_data, sd_basemap_data$plan_area, unit_code)
   # ),
   # tar_target(
   #   od_imbcr_unit_spp,
@@ -243,7 +245,7 @@ list(
   # ),
   # tar_target(
   #   od_imbcr_buff,
-  #   psoSppEvals::clip_fc(od_imbcr_data, sd_basemap_data$plan_area_doughnut, 
+  #   ppsoGIStools::clip_fc(od_imbcr_data, sd_basemap_data$plan_area_doughnut, 
   #                   "Buffer")
   # ),
   # tar_target(
@@ -267,7 +269,7 @@ list(
   # ),
   # tar_target(
   #   od_nhp_unit,
-  #   psoSppEvals::clip_fc(od_nhp_data, sd_basemap_data$plan_area, unit_code)
+  #   ppsoGIStools::clip_fc(od_nhp_data, sd_basemap_data$plan_area, unit_code)
   # ),
   # tar_target(
   #   od_nhp_unit_spp,
@@ -275,7 +277,8 @@ list(
   # ),
   # tar_target(
   #   od_nhp_buff,
-  #   psoSppEvals::clip_fc(od_nhp_data, sd_basemap_data$plan_area_doughnut, "Buffer")
+  #   ppsoGIStools::clip_fc(od_nhp_data, sd_basemap_data$plan_area_doughnut, 
+  #                         "Buffer")
   # ),
   # tar_target(
   #   od_nhp_buff_spp,
@@ -290,7 +293,7 @@ list(
   # ),
   # tar_target(
   #   od_fs_unit,
-  #   psoSppEvals::clip_fc(od_fs_data, sd_basemap_data$plan_area, unit_code)
+  #   ppsoGIStools::clip_fc(od_fs_data, sd_basemap_data$plan_area, unit_code)
   # ),
   # tar_target(
   #   od_fs_unit_spp,
@@ -298,7 +301,8 @@ list(
   # ),
   # tar_target(
   #   od_fs_buff,
-  #   psoSppEvals::clip_fc(od_fs_data, sd_basemap_data$plan_area_doughnut, "Buffer")
+  #   ppsoGIStools::clip_fc(od_fs_data, sd_basemap_data$plan_area_doughnut, 
+  #                         "Buffer")
   # ),
   # tar_target(
   #   od_fs_buff_spp,
@@ -606,8 +610,8 @@ list(
   ## Evaluation Templates ----
   # tar_target(
   #   rpt_qmd_params,
-  #   psoSppEvals::build_quarto_params(nko_list, unit_name, states$name[1], crs = crs, 
-  #                               file.path("output", "spp_evals"))
+  #   psoSppEvals::build_quarto_params(nko_list, unit_name, states$name[1], 
+  #                                    crs = crs, file.path("output", "spp_evals"))
   # ),
   # tar_target(
   #   rpt_create_folders,
