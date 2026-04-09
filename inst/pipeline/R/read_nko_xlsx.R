@@ -31,7 +31,7 @@ read_nko_xlsx <- function(xlsx_file, sheet_name = eligible_sheet,
     dplyr::filter(native_known_to_occur %in% nko_select) |> 
     dplyr::select(!dplyr::any_of(taxa_select)) |> 
     dplyr::select(!dplyr::any_of(cl_select)) |> 
-    mpsgSE::get_taxonomies(correct = TRUE) |> 
+    psoSppEvals::get_taxonomies(correct = TRUE) |> 
     dplyr::arrange("kingdom", "phylum", "class", "order", "family", "genus", 
                    "species", "subspecies", "variety", "form", 
                    "scientific_name")

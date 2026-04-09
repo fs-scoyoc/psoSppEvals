@@ -138,7 +138,7 @@ read_nhp_data <- function(lyr, gdb_path = proj_gdb, target_crs = crs){
     dplyr::mutate("scientific_name" = s_name) |> 
     dplyr::select(scientific_name, s_element_id) |> 
     dplyr::distinct() |> 
-    mpsgSE::get_taxonomies(query_field = "scientific_name", correct = TRUE)
+    psoSppEvals::get_taxonomies(query_field = "scientific_name", correct = TRUE)
   # Join data
   nhp_dat = dplyr::left_join(dat, taxonomies, by = "s_element_id",
                              relationship = 'many-to-many')
@@ -181,7 +181,7 @@ combine_unhp_data <- function(unhp_pts_sf, unhp_plants_sf){
   unhp_tids = sf::st_drop_geometry(unhp_data) |> 
     dplyr::select(scientific_name) |> 
     dplyr::distinct() |> 
-    mpsgSE::get_taxonomies(correct = TRUE)
+    psoSppEvals::get_taxonomies(correct = TRUE)
   
   # Return the final dataset
   unhp_data = dplyr::left_join(unhp_data, unhp_tids, by = "scientific_name", 

@@ -16,9 +16,9 @@
 #'     GBIF, SEINet, IMBCR, and Forest Service data will not change. State NHP 
 #'     data might need to be updated or duplicated depending on your pipeline.
 #' 
-#' @param gbif_list Species list from GBIF data using [mpsgSE::gbif_spp()].
-#' @param sei_list Species list from SEINet data using [mpsgSE::seinet_spp()].
-#' @param imbcr_list Species list form IMBCR data using [mpsgSE::imbcr_spp()].
+#' @param gbif_list Species list from GBIF data using [psoSppEvals::gbif_spp()].
+#' @param sei_list Species list from SEINet data using [psoSppEvals::seinet_spp()].
+#' @param imbcr_list Species list form IMBCR data using [psoSppEvals::imbcr_spp()].
 #' @param nhp_list Species list form Utah NHP data from this pipeline. 
 #' @param fs_list Species list form FS EDW data from this pipeline.
 #' @param master_status_list Master status list from this pipeline.
@@ -168,8 +168,8 @@ build_spp_list <- function(gbif_list, sei_list, imbcr_list, nhp_list,
 #'     GBIF, SEINet, and Forest Service data will not change. State NHP 
 #'     data might need to be updated or duplicated depending on your pipeline.
 #' 
-#' @param gbif_list Species list from GBIF data using [mpsgSE::gbif_spp()].
-#' @param sei_list Species list from SEINet data using [mpsgSE::seinet_spp()].
+#' @param gbif_list Species list from GBIF data using [psoSppEvals::gbif_spp()].
+#' @param sei_list Species list from SEINet data using [psoSppEvals::seinet_spp()].
 #' @param nhp_list Species list form Utah NHP data from this pipeline. 
 #' @param fs_list Species list form FS EDW data from this pipeline.
 #' @param master_status_list Master status list from this pipeline.
@@ -560,7 +560,7 @@ evaluate_uncertainty <- function(sf_data, data_source, aoa = plan_area){
   # aoa = targets::tar_read(plan_area)
   
   sf_data$area <- sf::st_area(sf_data)
-  sf_data_clip <- mpsgSE::clip_fc(sf_data, aoa)
+  sf_data_clip <- psoSppEvals::clip_fc(sf_data, aoa)
   sf_data_clip$clip_area <- sf::st_area(sf_data_clip)
   elig_spat <- sf::st_drop_geometry(sf_data_clip) |> 
     dplyr::mutate(area_diff = area - clip_area, 

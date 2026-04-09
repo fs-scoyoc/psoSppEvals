@@ -21,7 +21,7 @@ build_imbcr_trend_narratives <- function(target_aoa, tar_unit_name = unit_name,
   # TODO: Un-comment code below to see available IMBCR strata  
   # readRDS(file = file.path(imbcr_dir, "imbcr_trends.RDS")) |> 
   #   dplyr::pull(stratum) |> unique() |> sort()
-  bcrs = mpsgSE::get_bc_regions(target_aoa) |>  
+  bcrs = psoSppEvals::get_bc_regions(target_aoa) |>  
     dplyr::pull(bcr_label_name) |> 
     unique() |> 
     # TODO: Add relevant IMBCR strata below

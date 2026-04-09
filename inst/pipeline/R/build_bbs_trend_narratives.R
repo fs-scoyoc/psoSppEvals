@@ -15,7 +15,7 @@ build_bbs_trend_narratives <- function(){
                                          "Southern Rockies/Colorado Plateau",
                                          "the United States"))
   
-  bbs_narratives = mpsgSEdata::core_trend |> 
+  bbs_narratives = psoSppEvalsdata::core_trend |> 
     dplyr::filter(region %in% bcrs$region) |>
     dplyr::left_join(bcrs, by = "region") |>
     dplyr::mutate(

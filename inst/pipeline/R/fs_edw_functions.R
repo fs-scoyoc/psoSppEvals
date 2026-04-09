@@ -43,7 +43,7 @@ get_fs_data <- function(tesp_layer, inv_plant_layer, dsn = proj_gdb){
   fs_tids = sf::st_drop_geometry(fs_data) |> 
     dplyr::select(scientific_name) |> 
     dplyr::distinct() |> 
-    mpsgSE::get_taxonomies("scientific_name", correct = TRUE)
+    psoSppEvals::get_taxonomies("scientific_name", correct = TRUE)
   
   # Return the final datasets
   fs_data = dplyr::left_join(fs_data, fs_tids, by = "scientific_name", 

@@ -9,7 +9,7 @@
 get_forest_scc <- function(xlsx_path){
   dat = readxl::read_excel(xlsx_path) |> 
     janitor::clean_names() |> 
-    mpsgSE::get_taxonomies("scientific_name", correct = TRUE) |> 
+    psoSppEvals::get_taxonomies("scientific_name", correct = TRUE) |> 
     dplyr::mutate(
       dup_taxon = ifelse(duplicated(taxon_id) | 
                            duplicated(taxon_id, fromLast = TRUE),

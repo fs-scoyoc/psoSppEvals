@@ -51,11 +51,11 @@ build_all_occ_data <- function(spp_list, gbif_data, seinet_data, imbcr_data,
   }
 
   # Standardize data
-  g_pts = mpsgSE::build_gbif_spatial_data(gbif_data$all_data, spp_list) |> 
+  g_pts = psoSppEvals::build_gbif_spatial_data(gbif_data$all_data, spp_list) |> 
     process_sf(source = "GBIF")
-  s_pts = mpsgSE::build_seinet_spatial_data(seinet_data$all_data, spp_list) |> 
+  s_pts = psoSppEvals::build_seinet_spatial_data(seinet_data$all_data, spp_list) |> 
     process_sf(source = "SEINet")
-  i_pts = mpsgSE::build_imbcr_spatial_data(imbcr_data, spp_list) |> 
+  i_pts = psoSppEvals::build_imbcr_spatial_data(imbcr_data, spp_list) |> 
     process_sf(source = "IMBCR")
   c_pts = dplyr::filter(nhp_data, taxon_id %in% spp_list$taxon_id) |> 
     process_sf(source = "UNHP")
@@ -129,7 +129,7 @@ build_all_occ_data <- function(spp_list, gbif_data, seinet_data, imbcr_data,
 #' @export
 #'
 #' @examples
-#' library(mpsgSE)
+#' library(psoSppEvals)
 #' states <- c("Utah", "Nevada", "New Mexico")
 #' region_number <- "04"
 #' forest_number <- "07"
@@ -241,12 +241,12 @@ write_spatial_data <- function(spp_list, gbif_data, seinet_data, imbcr_data,
   message("Writing GBIF data")
   arcgisbinding::arc.write(
     path = file.path(gdb_path, dataset_name, paste0(data_prefix, "_GBIF")),
-    data = mpsgSE::build_gbif_spatial_data(gbif_data$all_data, spp_list) |> 
+    data = psoSppEvals::build_gbif_spatial_data(gbif_data$all_data, spp_list) |> 
       clean_sf(),
     overwrite = TRUE
   )
   # Build uncertainty buffers
-  gbif_u <- mpsgSE::build_gbif_spatial_data(gbif_data$valid_data, spp_list) |> 
+  gbif_u <- psoSppEvals::build_gbif_spatial_data(gbif_data$valid_data, spp_list) |> 
     dplyr::mutate(
       coordinateUncertaintyInMeters = units::set_units(coordinateUncertaintyInMeters, "m")
     )
@@ -261,12 +261,12 @@ write_spatial_data <- function(spp_list, gbif_data, seinet_data, imbcr_data,
   message("Writing SEINet data")
   arcgisbinding::arc.write(
     path = file.path(gdb_path, dataset_name, paste0(data_prefix, "_SEINet")),
-    data = mpsgSE::build_seinet_spatial_data(seinet_data$all_data, spp_list) |> 
+    data = psoSppEvals::build_seinet_spatial_data(seinet_data$all_data, spp_list) |> 
       clean_sf(),
     overwrite = TRUE
   )
   # Build uncertainty buffers
-  sei_u <- mpsgSE::build_seinet_spatial_data(seinet_data$valid_data, spp_list) |>
+  sei_u <- psoSppEvals::build_seinet_spatial_data(seinet_data$valid_data, spp_list) |>
     dplyr::mutate(
       coordinateUncertaintyInMeters = units::set_units(coordinateUncertaintyInMeters, "m")
     )
@@ -281,7 +281,7 @@ write_spatial_data <- function(spp_list, gbif_data, seinet_data, imbcr_data,
   message("Writing IMBCR data")
   arcgisbinding::arc.write(
     path = file.path(gdb_path, dataset_name, paste0(data_prefix, "_IMBCR")),
-    data = mpsgSE::build_imbcr_spatial_data(imbcr_data, spp_list) |> clean_sf(),
+    data = psoSppEvals::build_imbcr_spatial_data(imbcr_data, spp_list) |> clean_sf(),
     overwrite = TRUE
   )
 

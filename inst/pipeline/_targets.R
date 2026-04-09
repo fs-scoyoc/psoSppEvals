@@ -42,7 +42,7 @@ tar_option_set(
     "dplyr",          # data management
     "janitor",        # data management
     "lubridate",      # makes dating easier
-    "mpsgSE",         # MPSG species evaluation tools
+    "psoSppEvals",         # MPSG species evaluation tools
     "mpsgSEdata",     # MPSG species evaluation data
     "readxl",         # read Excel files
     "sf",             # spatial tools for vector data
@@ -113,11 +113,11 @@ list(
   ## Spatial Data ----
   # tar_target(
   #   sd_admin_bndry,
-  #   mpsgSE::read_fc("FIF_ProclaimedBoundary", proj_gdb, crs)
+  #   psoSppEvals::read_fc("FIF_ProclaimedBoundary", proj_gdb, crs)
   # ),
   # tar_target(
   #   sd_plan_area,
-  #   mpsgSE::read_fc("FIF_ProclaimedPlanArea", proj_gdb, crs)
+  #   psoSppEvals::read_fc("FIF_ProclaimedPlanArea", proj_gdb, crs)
   # ),
   # tar_target(
   #   sd_basemap_data,
@@ -129,21 +129,21 @@ list(
   # # State NatureServe List
   # tar_target(
   #   cl_natureserve_data,
-  #   mpsgSE::get_ns_state_list(state = states$abb[1], correct = TRUE)
+  #   psoSppEvals::get_ns_state_list(state = states$abb[1], correct = TRUE)
   # ),
   # tar_target(
   #   cl_ns_list,
-  #   mpsgSE::build_ns_spp_list(cl_natureserve_data)
+  #   psoSppEvals::build_ns_spp_list(cl_natureserve_data)
   # ),
   # # Regional Foresters Sensitive Species List
   # tar_target(
   #   cl_rfss_list,
-  #   mpsgSE::get_rfss_list(fs_region)
+  #   psoSppEvals::get_rfss_list(fs_region)
   # ),
   # # USFWS Birds of Conservation Concern List
   # tar_target(
   #   cl_bcc_list,
-  #   mpsgSE::get_bcr_list(sd_basemap_data$admin_bndry)
+  #   psoSppEvals::get_bcr_list(sd_basemap_data$admin_bndry)
   # ),
   # # Utah SWAP List
   # tar_target(
@@ -171,8 +171,8 @@ list(
   ### GBIF Data ----
   # tar_target(
   #   od_gbif_data,
-  #   mpsgSE::get_gbif_data(gbif_key = gbif_key, t_path = file.path("data"),
-  #                         aoa_wkt = mpsgSE::wkt_string(sd_basemap_data$aoa),
+  #   psoSppEvals::get_gbif_data(gbif_key = gbif_key, t_path = file.path("data"),
+  #                         aoa_wkt = psoSppEvals::wkt_string(sd_basemap_data$aoa),
   #                         gbif_user = Sys.getenv("GBIF_USER"),
   #                         gbif_pwd = Sys.getenv("GBIF_PWD"),
   #                         gbif_email = Sys.getenv("GBIF_EMAIL"),
@@ -180,75 +180,75 @@ list(
   # ),
   # tar_target(
   #   od_gbif_unit,
-  #   mpsgSE::clip_fc(od_gbif_data, sd_basemap_data$plan_area, unit_code) |>
+  #   psoSppEvals::clip_fc(od_gbif_data, sd_basemap_data$plan_area, unit_code) |>
   #     data_integrety_qc()
   # ),
   # tar_target(
   #   od_gbif_unit_spp,
   #   tibble::lst(
-  #     'all_spp' = mpsgSE::build_gbif_spp(od_gbif_unit$all_data),
-  #     'valid_spp' = mpsgSE::build_gbif_spp(od_gbif_unit$valid_data),
-  #     'invalid_spp' = mpsgSE::build_gbif_spp(od_gbif_unit$invalid_data)
+  #     'all_spp' = psoSppEvals::build_gbif_spp(od_gbif_unit$all_data),
+  #     'valid_spp' = psoSppEvals::build_gbif_spp(od_gbif_unit$valid_data),
+  #     'invalid_spp' = psoSppEvals::build_gbif_spp(od_gbif_unit$invalid_data)
   #     )
   # ),
   # tar_target(
   #   od_gbif_buff,
-  #   mpsgSE::clip_fc(od_gbif_data, sd_basemap_data$plan_area_doughnut, "Buffer")
+  #   psoSppEvals::clip_fc(od_gbif_data, sd_basemap_data$plan_area_doughnut, "Buffer")
   # ),
   # tar_target(
   #   od_gbif_buff_spp,
-  #   mpsgSE::build_gbif_spp(od_gbif_buff)
+  #   psoSppEvals::build_gbif_spp(od_gbif_buff)
   # ),
 
   ### SEINet Data ----
   # tar_target(
   #   od_sei_data,
-  #   mpsgSE::get_seinet_data(file.path("data", "SEINet"), crs = crs,
+  #   psoSppEvals::get_seinet_data(file.path("data", "SEINet"), crs = crs,
   #                           correct = TRUE)
   # ),
   # tar_target(
   #   od_sei_unit,
-  #   mpsgSE::clip_fc(od_sei_data, sd_basemap_data$plan_area, unit_code) |>
+  #   psoSppEvals::clip_fc(od_sei_data, sd_basemap_data$plan_area, unit_code) |>
   #     data_integrety_qc()
   # ),
   # tar_target(
   #   od_sei_unit_spp,
   #   tibble::lst(
-  #     'all_spp' = mpsgSE::build_seinet_spp(od_sei_unit$all_data),
-  #     'valid_spp' = mpsgSE::build_seinet_spp(od_sei_unit$valid_data),
-  #     'invalid_spp' = mpsgSE::build_seinet_spp(od_sei_unit$invalid_data)
+  #     'all_spp' = psoSppEvals::build_seinet_spp(od_sei_unit$all_data),
+  #     'valid_spp' = psoSppEvals::build_seinet_spp(od_sei_unit$valid_data),
+  #     'invalid_spp' = psoSppEvals::build_seinet_spp(od_sei_unit$invalid_data)
   #     )
   # ),
   # tar_target(
   #   od_sei_buff,
-  #   mpsgSE::clip_fc(od_sei_data, sd_basemap_data$plan_area_doughnut, "Buffer")
+  #   psoSppEvals::clip_fc(od_sei_data, sd_basemap_data$plan_area_doughnut, "Buffer")
   # ),
   # tar_target(
   #   od_sei_buff_spp,
-  #   mpsgSE::build_seinet_spp(od_sei_buff)
+  #   psoSppEvals::build_seinet_spp(od_sei_buff)
   # ),
 
   ### IMBCR Data ----
   # tar_target(
   #   od_imbcr_data,
-  #   mpsgSE::get_imbcr_data(fs_unit = unit_name, crs = crs)
+  #   psoSppEvals::get_imbcr_data(fs_unit = unit_name, crs = crs)
   # ),
   # tar_target(
   #   od_imbcr_unit,
-  #   mpsgSE::clip_fc(od_imbcr_data, sd_basemap_data$plan_area, unit_code)
+  #   psoSppEvals::clip_fc(od_imbcr_data, sd_basemap_data$plan_area, unit_code)
   # ),
   # tar_target(
   #   od_imbcr_unit_spp,
-  #   mpsgSE::build_imbcr_spp(od_imbcr_unit)
+  #   psoSppEvals::build_imbcr_spp(od_imbcr_unit)
   # ),
   # tar_target(
   #   od_imbcr_buff,
-  #   mpsgSE::clip_fc(od_imbcr_data, sd_basemap_data$plan_area_doughnut, 
+  #   psoSppEvals::clip_fc(od_imbcr_data, sd_basemap_data$plan_area_doughnut, 
   #                   "Buffer")
   # ),
   # tar_target(
   #   od_imbcr_buff_spp,
-  #   mpsgSE::build_imbcr_spp(od_imbcr_buff)
+  #   psoSppEvals::build_imbcr_spp(od_imbcr_buff)
   # ),
 
   ### Utah NHP Data ----
@@ -267,7 +267,7 @@ list(
   # ),
   # tar_target(
   #   od_nhp_unit,
-  #   mpsgSE::clip_fc(od_nhp_data, sd_basemap_data$plan_area, unit_code)
+  #   psoSppEvals::clip_fc(od_nhp_data, sd_basemap_data$plan_area, unit_code)
   # ),
   # tar_target(
   #   od_nhp_unit_spp,
@@ -275,7 +275,7 @@ list(
   # ),
   # tar_target(
   #   od_nhp_buff,
-  #   mpsgSE::clip_fc(od_nhp_data, sd_basemap_data$plan_area_doughnut, "Buffer")
+  #   psoSppEvals::clip_fc(od_nhp_data, sd_basemap_data$plan_area_doughnut, "Buffer")
   # ),
   # tar_target(
   #   od_nhp_buff_spp,
@@ -290,7 +290,7 @@ list(
   # ),
   # tar_target(
   #   od_fs_unit,
-  #   mpsgSE::clip_fc(od_fs_data, sd_basemap_data$plan_area, unit_code)
+  #   psoSppEvals::clip_fc(od_fs_data, sd_basemap_data$plan_area, unit_code)
   # ),
   # tar_target(
   #   od_fs_unit_spp,
@@ -298,7 +298,7 @@ list(
   # ),
   # tar_target(
   #   od_fs_buff,
-  #   mpsgSE::clip_fc(od_fs_data, sd_basemap_data$plan_area_doughnut, "Buffer")
+  #   psoSppEvals::clip_fc(od_fs_data, sd_basemap_data$plan_area_doughnut, "Buffer")
   # ),
   # tar_target(
   #   od_fs_buff_spp,
@@ -329,7 +329,7 @@ list(
   ### Synonyms ----
   # tar_target(
   #   elig_synonyms,
-  #   mpsgSE::get_synonyms(elig_list)
+  #   psoSppEvals::get_synonyms(elig_list)
   # ),
 
 
@@ -370,26 +370,26 @@ list(
   #### NatureServe ----
   # tar_target(
   #   elig_ns_habitats,
-  #   mpsgSE::get_ns_habitat(cl_ns_list, elig_list)
+  #   psoSppEvals::get_ns_habitat(cl_ns_list, elig_list)
   # ),
   # tar_target(
   #   elig_ns_habitat_count,
-  #   mpsgSE::count_spp_by_hab(elig_ns_habitats)
+  #   psoSppEvals::count_spp_by_hab(elig_ns_habitats)
   # ),
   # #### LANDFIRE EVT ----
   # tar_target(
   #   elig_lf_evt,
-  #   mpsgSE::pull_landfire(sd_basemap_data$plan_area, lf_dir, 
+  #   psoSppEvals::pull_landfire(sd_basemap_data$plan_area, lf_dir, 
   #                         "matthew.vanscoyoc@usda.gov")
   # ),
   # tar_target(
   #   elig_spp_lf_evt,
-  #   mpsgSE::extract_landfire_evt(elig_list, elig_occ_pts, lf_dir)
+  #   psoSppEvals::extract_landfire_evt(elig_list, elig_occ_pts, lf_dir)
   # ),
   #-- Write Excel workbook
   # tar_target(
   #   write_elig_habitat_xlsx,
-  #   mpsgSE::write_habitat_xlsx(elig_ns_habitat_count, elig_lf_evt, 
+  #   psoSppEvals::write_habitat_xlsx(elig_ns_habitat_count, elig_lf_evt, 
   #                              elig_spp_lf_evt, unit_code, 
   #                              scc_library = scc_library)
   # ),
@@ -399,13 +399,13 @@ list(
   #### BIEN ----
   # tar_target(
   #   elig_bien_maps,
-  #   mpsgSE::download_bien_maps(elig_list, 
+  #   psoSppEvals::download_bien_maps(elig_list, 
   #                              output_path = file.path("output/bien_maps"))
   # ),
   #### eBird ----
   # tar_target(
   #   elig_ebird_status_maps,
-  #   mpsgSE::download_ebird_status_maps(
+  #   psoSppEvals::download_ebird_status_maps(
   #     elig_list,
   #     output_path = ebird_dir,
   #     ebird_access_key = ebird_key
@@ -413,7 +413,7 @@ list(
   # ),
   # tar_target(
   #   elig_ebird_range_maps,
-  #   mpsgSE::download_ebird_range_maps(
+  #   psoSppEvals::download_ebird_range_maps(
   #     elig_list,
   #     output_path = ebird_dir,
   #     ebird_access_key = ebird_key
@@ -422,19 +422,19 @@ list(
   #### IUCN ----
   # tar_target(
   #   elig_iucn_maps,
-  #   mpsgSE::get_iucn_maps(elig_list)
+  #   psoSppEvals::get_iucn_maps(elig_list)
   # ),
   #-- Write range data
   # tar_target(
   #   write_elig_range_data_gdb,
-  #   mpsgSE::write_range_data(bien_maps = elig_bien_maps,
+  #   psoSppEvals::write_range_data(bien_maps = elig_bien_maps,
   #                            ebird_range = elig_ebird_range_maps,
   #                            iucn_maps = elig_iucn_maps,
   #                            gdb_path = proj_gdb)
   # ),
   # tar_target(
   #   write_elig_range_data_tgdb,
-  #   mpsgSE::write_range_data(bien_maps = elig_bien_maps,
+  #   psoSppEvals::write_range_data(bien_maps = elig_bien_maps,
   #                            ebird_range = elig_ebird_range_maps,
   #                            iucn_maps = elig_iucn_maps,
   #                            gdb_path = t_gdb)
@@ -456,13 +456,13 @@ list(
   ### Pull Synonyms ----
   # tar_target(
   #   nko_synonyms,
-  #   mpsgSE::get_synonyms(nko_list)
+  #   psoSppEvals::get_synonyms(nko_list)
   # ),
   
   ### Read Habitat Crosswalk ----
   # tar_target(
   #   nko_ns_habitats,
-  #   mpsgSE::get_ns_habitat(cl_ns_list, nko_list)
+  #   psoSppEvals::get_ns_habitat(cl_ns_list, nko_list)
   # ),
   # tar_target(
   #   nko_habitat_xwalk_xlsx,
@@ -499,41 +499,41 @@ list(
   #### BIEN ----
   # tar_target(
   #   nko_bien_maps,
-  #   mpsgSE::download_bien_maps(nko_list, output_path = bien_dir)
+  #   psoSppEvals::download_bien_maps(nko_list, output_path = bien_dir)
   # ),
   #### eBird ----
   # tar_target(
   #   nko_ebird_status_maps,
-  #   mpsgSE::download_ebird_status_maps(nko_list, output_path = ebird_dir,
+  #   psoSppEvals::download_ebird_status_maps(nko_list, output_path = ebird_dir,
   #                                      ebird_access_key = ebird_key)
   # ),
   # tar_target(
   #   nko_ebird_range_maps,
-  #   mpsgSE::download_ebird_range_maps(nko_list, output_path = ebird_dir,
+  #   psoSppEvals::download_ebird_range_maps(nko_list, output_path = ebird_dir,
   #                                     ebird_access_key = ebird_key)
   # ),
   #### IUCN ----
   # tar_target(
   #   nko_iucn_maps,
-  #   mpsgSE::get_iucn_maps(nko_list)
+  #   psoSppEvals::get_iucn_maps(nko_list)
   # ),
   #### List map sources ----
   # tar_target(
   #   nko_map_source,
-  #   mpsgSE::build_map_source(nko_list, nko_bien_maps, nko_ebird_range_maps,
+  #   psoSppEvals::build_map_source(nko_list, nko_bien_maps, nko_ebird_range_maps,
   #                            nko_iucn_maps)
   # ),
   #### Write range data ----
   # tar_target(
   #   write_nko_range_data_gdb,
-  #   mpsgSE::write_range_data(bien_maps = nko_bien_maps,
+  #   psoSppEvals::write_range_data(bien_maps = nko_bien_maps,
   #                            ebird_range = nko_ebird_range_maps,
   #                            iucn_maps = nko_iucn_maps,
   #                            gdb_path = proj_gdb)
   # ),
   # tar_target(
   #   write_nko_range_data_tgdb,
-  #   mpsgSE::write_range_data(bien_maps = nko_bien_maps,
+  #   psoSppEvals::write_range_data(bien_maps = nko_bien_maps,
   #                            ebird_range = nko_ebird_range_maps,
   #                            iucn_maps = nko_iucn_maps,
   #                            gdb_path = t_gdb)
@@ -544,17 +544,17 @@ list(
   #### Pull eBird Trend Data ----
   # tar_target(
   #   nko_ebird_trend_maps,
-  #   mpsgSE::download_ebird_trends_maps(nko_list, output_path = ebird_dir,
+  #   psoSppEvals::download_ebird_trends_maps(nko_list, output_path = ebird_dir,
   #                                      ebird_access_key = ebird_key)
   # ),
   # tar_target(
   #   nko_ebird_trends,
-  #   mpsgSE::get_ebird_trends(nko_list, output_path = ebird_dir,
+  #   psoSppEvals::get_ebird_trends(nko_list, output_path = ebird_dir,
   #                            ebird_access_key = ebird_key)
   # ),
   # tar_target(
   #   nko_ebird_regional_trends,
-  #   mpsgSE::get_ebird_regional_stats(nko_list, ebird_access_key = ebird_key)
+  #   psoSppEvals::get_ebird_regional_stats(nko_list, ebird_access_key = ebird_key)
   # ),
   
   
@@ -606,17 +606,17 @@ list(
   ## Evaluation Templates ----
   # tar_target(
   #   rpt_qmd_params,
-  #   mpsgSE::build_quarto_params(nko_list, unit_name, states$name[1], crs = crs, 
+  #   psoSppEvals::build_quarto_params(nko_list, unit_name, states$name[1], crs = crs, 
   #                               file.path("output", "spp_evals"))
   # ),
   # tar_target(
   #   rpt_create_folders,
-  #   mpsgSE::setup_directories(rpt_qmd_params)
+  #   psoSppEvals::setup_directories(rpt_qmd_params)
   # ),
   # tar_target(
   #   rpt_auto_evals,
-  #   # mpsgSE::write_evals(dplyr::sample_n(rpt_qmd_params, 5))
-  #   mpsgSE::write_evals(rpt_qmd_params[rpt_qmd_params$taxon_id != 8727679, ])
+  #   # psoSppEvals::write_evals(dplyr::sample_n(rpt_qmd_params, 5))
+  #   psoSppEvals::write_evals(rpt_qmd_params[rpt_qmd_params$taxon_id != 8727679, ])
   # ),
   # tar_target(
   #   rpt_release_reports,
