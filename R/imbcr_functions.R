@@ -72,9 +72,9 @@ build_imbcr_spatial_data <- function(imbcr_data, spp_list){
 #' get_imbcr_data(mgmt_units)
 #' }
 get_imbcr_data <- function(fs_unit, crs = NULL, dir_path = NULL){
-  # library('sf')
-  # fs_unit = "Medicine Bow-Routt National Forests"
-  # crs = "EPSG:26913"
+  library('sf')
+  fs_unit = "Black Hills National Forest"
+  crs = "EPSG:26913"
 
   # Define file path
   if(is.null(dir_path)){
@@ -84,9 +84,9 @@ get_imbcr_data <- function(fs_unit, crs = NULL, dir_path = NULL){
   # IMBCR Data ----
   message("Reading IMBCR data")
   dat = readRDS(file.path(dir_path, "imbcr_data.RDS")) |>
-    dplyr::filter(mgmt_unit %in% fs_unit) |>
-    dplyr::filter(!stringr::str_detect(species, "Unknown"))
-
+    dplyr::filter(mgmt_unit %in% fs_unit) |> 
+    dplyr::filter(!is.na(taxon_id))
+  
   # Re-project CRS
   if(!is.null(crs)){
     if(sf::st_crs(dat) != crs) dat = sf::st_transform(dat, crs = crs)

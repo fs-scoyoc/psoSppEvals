@@ -42,8 +42,9 @@ tar_option_set(
     "dplyr",          # data management
     "janitor",        # data management
     "lubridate",      # makes dating easier
-    "psoSppEvals",         # MPSG species evaluation tools
-    "mpsgSEdata",     # MPSG species evaluation data
+    "mpsgSEdata",     # species evaluation data
+    "psoGIStools",    # gis tools
+    "psoSppEvals",    # species evaluation tools
     "readxl",         # read Excel files
     "sf",             # spatial tools for vector data
     "stringr",        # string (character) management tools
@@ -89,8 +90,8 @@ lf_dir <- file.path("data/LANDFIRE")
 # TODO: Update the geodatabase paths for your project
 proj_gdb <- file.path("data", "SBF_SppOcc_Data.gdb")
 # sf::st_layers(proj_gdb) |> dplyr::pull(name) |> sort() # View features in gdb
-t_gdb <- file.path("T:/FS/NFS/PSO/MPSG/2025_FishlakeNF/1_PreAssessment", 
-                   "Projects/SpeciesList_FIF/SpeciesList_FIF.gdb")
+t_gdb <- file.path("T:/FS/NFS/PSO/MPSG/2026_SmokeyBearNF/1_PreAssessment", 
+                   "Projects/SpeciesList_SBF/SpeciesList_SBF.gdb")
 
 #-- Name of Native & Known to Occur Excel workbook
 # Reviewed by Species Group Biologists
@@ -113,11 +114,11 @@ list(
   ## Spatial Data ----
   # tar_target(
   #   sd_admin_bndry,
-  #   psoGIStools::read_fc("FIF_ProclaimedBoundary", proj_gdb, crs)
+  #   psoGIStools::read_fc("SBF_ProclaimedBoundary", proj_gdb, crs)
   # ),
   # tar_target(
   #   sd_plan_area,
-  #   psoGIStools::read_fc("FIF_ProclaimedPlanArea", proj_gdb, crs)
+  #   psoGIStools::read_fc("SBF_ProclaimedPlanArea", proj_gdb, crs)
   # ),
   # tar_target(
   #   sd_basemap_data,
@@ -148,12 +149,12 @@ list(
   # # Utah SWAP List
   # tar_target(
   #   cl_swap,
-  #   mpsgSEdata::ut_swap
+  #   read_swap(file.path("data", "State_SWAP.xlsx")
   # ),
   # # BLM Sensitive Species List
   # tar_target(
   #   cl_blm_ssl,
-  #   mpsgSEdata::ut_blm_ss
+  #   read_blm_scc(file.path("data", "StateBLM_SSL.xlsx")
   # ),
   # tar_target(
   #   cl_scc_list, 
@@ -180,7 +181,8 @@ list(
   # ),
   # tar_target(
   #   od_gbif_unit,
-  #   ppsoGIStools::clip_fc(od_gbif_data, sd_basemap_data$plan_area, unit_code) |>
+  #   ppsoGIStools::clip_fc(od_gbif_data, sd_basemap_data$plan_area) |>
+  #     dplyr::mutate(locale = unit_code) |>
   #     data_integrety_qc()
   # ),
   # tar_target(
@@ -193,8 +195,8 @@ list(
   # ),
   # tar_target(
   #   od_gbif_buff,
-  #   ppsoGIStools::clip_fc(od_gbif_data, sd_basemap_data$plan_area_doughnut, 
-  #                         "Buffer")
+  #   ppsoGIStools::clip_fc(od_gbif_data, sd_basemap_data$plan_area_doughnut) |>
+  #     dplyr::mutate(locale = "Buffer")
   # ),
   # tar_target(
   #   od_gbif_buff_spp,
@@ -209,7 +211,8 @@ list(
   # ),
   # tar_target(
   #   od_sei_unit,
-  #   ppsoGIStools::clip_fc(od_sei_data, sd_basemap_data$plan_area, unit_code) |>
+  #   ppsoGIStools::clip_fc(od_sei_data, sd_basemap_data$plan_area) |>
+  #     dplyr::mutate(locale = unit_code) |>
   #     data_integrety_qc()
   # ),
   # tar_target(
@@ -222,8 +225,8 @@ list(
   # ),
   # tar_target(
   #   od_sei_buff,
-  #   ppsoGIStools::clip_fc(od_sei_data, sd_basemap_data$plan_area_doughnut, 
-  #                         "Buffer")
+  #   ppsoGIStools::clip_fc(od_sei_data, sd_basemap_data$plan_area_doughnut) |>
+  #     dplyr::mutate(locale = "Buffer")
   # ),
   # tar_target(
   #   od_sei_buff_spp,
@@ -237,7 +240,8 @@ list(
   # ),
   # tar_target(
   #   od_imbcr_unit,
-  #   ppsoGIStools::clip_fc(od_imbcr_data, sd_basemap_data$plan_area, unit_code)
+  #   ppsoGIStools::clip_fc(od_imbcr_data, sd_basemap_data$plan_area) |>
+  #     dplyr::mutate(locale = unit_code)
   # ),
   # tar_target(
   #   od_imbcr_unit_spp,
@@ -245,8 +249,8 @@ list(
   # ),
   # tar_target(
   #   od_imbcr_buff,
-  #   ppsoGIStools::clip_fc(od_imbcr_data, sd_basemap_data$plan_area_doughnut, 
-  #                   "Buffer")
+  #   ppsoGIStools::clip_fc(od_imbcr_data, sd_basemap_data$plan_area_doughnut) |>
+  #     dplyr::mutate(locale = "Buffer")
   # ),
   # tar_target(
   #   od_imbcr_buff_spp,
@@ -269,20 +273,21 @@ list(
   # ),
   # tar_target(
   #   od_nhp_unit,
-  #   ppsoGIStools::clip_fc(od_nhp_data, sd_basemap_data$plan_area, unit_code)
+  #   ppsoGIStools::clip_fc(od_nhp_data, sd_basemap_data$plan_area) |>
+  #     dplyr::mutate(locale = unit_code)
   # ),
   # tar_target(
   #   od_nhp_unit_spp,
-  #   build_unhp_spp(od_nhp_unit, unit_code)
+  #   build_unhp_spp(od_nhp_unit, unit_code, "UNHP")
   # ),
   # tar_target(
   #   od_nhp_buff,
-  #   ppsoGIStools::clip_fc(od_nhp_data, sd_basemap_data$plan_area_doughnut, 
-  #                         "Buffer")
+  #   ppsoGIStools::clip_fc(od_nhp_data, sd_basemap_data$plan_area_doughnut) |>
+  #     dplyr::mutate(locale = "Buffer")
   # ),
   # tar_target(
   #   od_nhp_buff_spp,
-  #   build_unhp_spp(od_nhp_buff, unit_code)
+  #   build_unhp_spp(od_nhp_buff, "Buffer", "UNHP")
   # ),
 
   ### FS EDW Data ----
@@ -293,7 +298,8 @@ list(
   # ),
   # tar_target(
   #   od_fs_unit,
-  #   ppsoGIStools::clip_fc(od_fs_data, sd_basemap_data$plan_area, unit_code)
+  #   ppsoGIStools::clip_fc(od_fs_data, sd_basemap_data$plan_area) |>
+  #     dplyr::mutate(locale = unit_code)
   # ),
   # tar_target(
   #   od_fs_unit_spp,
@@ -301,8 +307,8 @@ list(
   # ),
   # tar_target(
   #   od_fs_buff,
-  #   ppsoGIStools::clip_fc(od_fs_data, sd_basemap_data$plan_area_doughnut, 
-  #                         "Buffer")
+  #   ppsoGIStools::clip_fc(od_fs_data, sd_basemap_data$plan_area_doughnut) |>
+  #     dplyr::mutate(locale = "Buffer")
   # ),
   # tar_target(
   #   od_fs_buff_spp,
@@ -403,25 +409,16 @@ list(
   #### BIEN ----
   # tar_target(
   #   elig_bien_maps,
-  #   psoSppEvals::download_bien_maps(elig_list, 
-  #                              output_path = file.path("output/bien_maps"))
+  #   psoSppEvals::download_bien_maps(elig_list, output_path = bien_dir)
   # ),
   #### eBird ----
   # tar_target(
   #   elig_ebird_status_maps,
-  #   psoSppEvals::download_ebird_status_maps(
-  #     elig_list,
-  #     output_path = ebird_dir,
-  #     ebird_access_key = ebird_key
-  #   )
+  #   psoSppEvals::download_ebird_status_maps(elig_list, ebird_dir, ebird_key)
   # ),
   # tar_target(
   #   elig_ebird_range_maps,
-  #   psoSppEvals::download_ebird_range_maps(
-  #     elig_list,
-  #     output_path = ebird_dir,
-  #     ebird_access_key = ebird_key
-  #   )
+  #   psoSppEvals::download_ebird_range_maps(elig_list, ebird_dir, ebird_key)
   # ),
   #### IUCN ----
   # tar_target(
@@ -432,16 +429,16 @@ list(
   # tar_target(
   #   write_elig_range_data_gdb,
   #   psoSppEvals::write_range_data(bien_maps = elig_bien_maps,
-  #                            ebird_range = elig_ebird_range_maps,
-  #                            iucn_maps = elig_iucn_maps,
-  #                            gdb_path = proj_gdb)
+  #                                 ebird_range = elig_ebird_range_maps,
+  #                                 iucn_maps = elig_iucn_maps,
+  #                                 gdb_path = proj_gdb)
   # ),
   # tar_target(
   #   write_elig_range_data_tgdb,
   #   psoSppEvals::write_range_data(bien_maps = elig_bien_maps,
-  #                            ebird_range = elig_ebird_range_maps,
-  #                            iucn_maps = elig_iucn_maps,
-  #                            gdb_path = t_gdb)
+  #                                 ebird_range = elig_ebird_range_maps,
+  #                                 iucn_maps = elig_iucn_maps,
+  #                                 gdb_path = t_gdb)
   # ),
   
   
@@ -503,18 +500,16 @@ list(
   #### BIEN ----
   # tar_target(
   #   nko_bien_maps,
-  #   psoSppEvals::download_bien_maps(nko_list, output_path = bien_dir)
+  #   psoSppEvals::download_bien_maps(nko_list, bien_dir)
   # ),
   #### eBird ----
   # tar_target(
   #   nko_ebird_status_maps,
-  #   psoSppEvals::download_ebird_status_maps(nko_list, output_path = ebird_dir,
-  #                                      ebird_access_key = ebird_key)
+  #   psoSppEvals::download_ebird_status_maps(nko_list, ebird_dir, ebird_key)
   # ),
   # tar_target(
   #   nko_ebird_range_maps,
-  #   psoSppEvals::download_ebird_range_maps(nko_list, output_path = ebird_dir,
-  #                                     ebird_access_key = ebird_key)
+  #   psoSppEvals::download_ebird_range_maps(nko_list, ebird_dir, ebird_key)
   # ),
   #### IUCN ----
   # tar_target(
@@ -525,22 +520,22 @@ list(
   # tar_target(
   #   nko_map_source,
   #   psoSppEvals::build_map_source(nko_list, nko_bien_maps, nko_ebird_range_maps,
-  #                            nko_iucn_maps)
+  #                                 nko_iucn_maps)
   # ),
   #### Write range data ----
   # tar_target(
   #   write_nko_range_data_gdb,
   #   psoSppEvals::write_range_data(bien_maps = nko_bien_maps,
-  #                            ebird_range = nko_ebird_range_maps,
-  #                            iucn_maps = nko_iucn_maps,
-  #                            gdb_path = proj_gdb)
+  #                                 ebird_range = nko_ebird_range_maps,
+  #                                 iucn_maps = nko_iucn_maps,
+  #                                 gdb_path = proj_gdb)
   # ),
   # tar_target(
   #   write_nko_range_data_tgdb,
   #   psoSppEvals::write_range_data(bien_maps = nko_bien_maps,
-  #                            ebird_range = nko_ebird_range_maps,
-  #                            iucn_maps = nko_iucn_maps,
-  #                            gdb_path = t_gdb)
+  #                                 ebird_range = nko_ebird_range_maps,
+  #                                 iucn_maps = nko_iucn_maps,
+  #                                 gdb_path = t_gdb)
   # ),
   
   
@@ -548,17 +543,15 @@ list(
   #### Pull eBird Trend Data ----
   # tar_target(
   #   nko_ebird_trend_maps,
-  #   psoSppEvals::download_ebird_trends_maps(nko_list, output_path = ebird_dir,
-  #                                      ebird_access_key = ebird_key)
+  #   psoSppEvals::download_ebird_trends_maps(nko_list, ebird_dir, ebird_key)
   # ),
   # tar_target(
   #   nko_ebird_trends,
-  #   psoSppEvals::get_ebird_trends(nko_list, output_path = ebird_dir,
-  #                            ebird_access_key = ebird_key)
+  #   psoSppEvals::get_ebird_trends(nko_list, ebird_dir, ebird_key)
   # ),
   # tar_target(
   #   nko_ebird_regional_trends,
-  #   psoSppEvals::get_ebird_regional_stats(nko_list, ebird_access_key = ebird_key)
+  #   psoSppEvals::get_ebird_regional_stats(nko_list, ebird_key)
   # ),
   
   
