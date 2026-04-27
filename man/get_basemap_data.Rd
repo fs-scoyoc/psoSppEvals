@@ -5,41 +5,29 @@
 \title{Get base map data}
 \usage{
 get_basemap_data(
-  states,
-  region_number,
-  forest_number,
   forest_name,
   admin_bndry = TRUE,
   plan_area = TRUE,
-  districts = TRUE,
   target_crs = "EPSG:4326"
 )
 }
 \arguments{
-\item{states}{A list of state names or abbreviations.}
+\item{forest_name}{Character. Name of national forest or grassland of
+interest.}
 
-\item{region_number}{The Forest Service Region number}
+\item{admin_bndry}{Optional. An \code{sf} object of the administrative boundary.
+Default is TRUE. If TRUE, the \emph{EDW_ForestSystemBoundaries_01} layer will
+be read in from the Forest Service ArcGIS REST service using
+\code{\link[psoGIStools:read_edw_lyr]{psoGIStools::read_edw_lyr()}} and filtered using \emph{forest_name}.}
 
-\item{forest_number}{The Forest Service Forest number.}
+\item{plan_area}{Optional. An \code{sf} object of the administrative boundary.
+Default is TRUE. If TRUE, the \emph{EDW_SurfaceOwnership_01} layer will
+be read in from the Forest Service ArcGIS REST service using
+\code{\link[psoGIStools:read_edw_lyr]{psoGIStools::read_edw_lyr()}} and clipped to the admin_bndry, then
+filtered for Forest Service land.}
 
-\item{forest_name}{The Name of the National Forest.}
-
-\item{admin_bndry}{Optional. 'sf' object of administrative Forest Service
-boundary can be provided. Default is TRUE. If TRUE administrative Forest
-Service boundary will be pulled from the Forest Service ArcGIS REST
-service.}
-
-\item{plan_area}{Optional. 'sf' object of the plan area (Forest Service land)
-boundary can be provided. Default is TRUE. If TRUE the plan area boundary
-will be pulled from the Forest Service ArcGIS REST service.}
-
-\item{districts}{Optional. 'sf' object of the Forest Service district
-boundaries for the National Forest can be provided. Default is TRUE. If
-TRUE the district boundary will be pulled from the Forest Service ArcGIS
-REST service.}
-
-\item{target_crs}{The target coordinate reference system. The default is
-EPSG:4326 (WGS 84).}
+\item{target_crs}{Target coordinate reference system. Default is EPSG:4326
+(WGS84).}
 }
 \value{
 A list of \link[sf:sf]{sf::sf} objects.
@@ -61,23 +49,14 @@ data are acquired using \code{\link[rnaturalearth:ne_countries]{rnaturalearth::n
 \code{\link[rnaturalearth:ne_states]{rnaturalearth::ne_states()}} functions. These data are in the NAD83 CONUS
 Albers (EPSG:5070).
 
-National Forest-scale data include 'admin_bndry', 'plan_area', 'districts',
-'aoa', 'aoa_bbox', and 'plan_area_doughnut'. 'admin_bndry', 'plan_area',
-and 'districts' are acquired using \code{\link[=read_edw_lyr]{read_edw_lyr()}}. 'buffer', 'aoa',
-'aoa_bbox', and 'plan_area_doughnut' are derived using the \link[sf:sf]{sf::sf} package.
-'aoa', or area of analysis, is a 4828 meter (3 mile) buffer of
-'admin_bndry' using \code{\link[sf:geos_unary]{sf::st_buffer()}}. 'aoa_bbox' is a bounding box of
-'aoa' using \code{\link[sf:st_bbox]{sf::st_bbox()}}. 'plan_area_doughnut' is a 1000 meter buffer
-of 'plan_area' with 'plan_area' erased using \code{\link[sf:geos_binary_ops]{sf::st_difference()}}.
-These data are returned in the coordinate reference system provided by
-the \code{crs} parameter.
-
-Pulling roads data from OpenStreetMap has not been working lately. This part
-of the function is  currently commented out. Roads data include 'roads'.
-These data are acquired using the \link[osmdata:osmdata]{osmdata::osmdata} package, primarily
-\code{\link[osmdata:getbb]{osmdata::getbb()}}, \code{\link[osmdata:opq]{osmdata::opq()}}, and \code{\link[osmdata:osmdata_sf]{osmdata::osmdata_sf()}}. These
-data are returned in the coordinate reference system provided by the
-\code{crs} parameter.
+National Forest-scale data include 'admin_bndry', 'plan_area',  'aoa',
+and 'plan_area_doughnut'. 'admin_bndry' and 'plan_area' are acquired
+using \code{\link[psoGIStools:read_edw_lyr]{psoGIStools::read_edw_lyr()}}. 'aoa' and 'plan_area_doughnut' are derived using
+the \link[sf:sf]{sf::sf} package. 'aoa', or area of analysis, is a 4828 meter (3 mile)
+buffer of 'admin_bndry' using \code{\link[sf:geos_unary]{sf::st_buffer()}}. 'plan_area_doughnut' is
+a 1000 meter buffer of 'plan_area' with 'plan_area' erased using
+\code{\link[sf:geos_binary_ops]{sf::st_difference()}}. These data are returned in the coordinate
+reference system provided by the \code{crs} parameter.
 }
 \note{
 The basic ownership layer (\emph{EDW_BasicOwnership_02}) has not been reading into
@@ -89,11 +68,11 @@ Pulling roads data from OpenStreetMap has not been working lately. This part
 of the function is  currently commented out and the roads data are not
 returned.
 
-Sometimes the connection to the Forest Service REST Service or \link[osmdata:osmdata]{osmdata::osmdata}
-fails. This will throw the following error message: "\strong{Error:}
-tar_make() Status code: 500. Error: json". In most instances, the
-function can simply be executed again to retrieve the data. Check the
-data servers if the error is persistent.
+Sometimes the connection to the Forest Service REST Service  fails. This will
+throw the following error message: "\strong{Error:} tar_make() Status code:
+500. Error: json". In most instances, the function can simply be executed
+again to retrieve the data. Check the data servers if the error is
+persistent.
 }
 \examples{
 \dontrun{
@@ -107,6 +86,6 @@ basemap_data <- get_basemap_data(states, region_number, forest_number,
 }
 }
 \seealso{
-\code{\link[=read_edw_lyr]{read_edw_lyr()}}, \code{\link[rnaturalearth:ne_countries]{rnaturalearth::ne_countries()}},
+\code{\link[psoGIStools:read_edw_lyr]{psoGIStools::read_edw_lyr()}}, \code{\link[rnaturalearth:ne_countries]{rnaturalearth::ne_countries()}},
 \link[rnaturalearth:ne_states]{rnaturalearth::ne_states}, \code{\link[osmdata:osmdata_sf]{osmdata::osmdata_sf()}}
 }

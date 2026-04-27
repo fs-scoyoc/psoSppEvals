@@ -12,7 +12,7 @@
 #' @param scc_library Directory path to SCC SharePoint Library to make a copy in.
 #'
 #' @returns Nothing.
-#' @seealso [count_spp_by_hab()], [pull_landfire()], [extract_landfire_evt()]
+#' @seealso [count_spp_by_hab()], [pull_landfire_evt()], [extract_landfire_evt()]
 #' @export
 #'
 #' @examples

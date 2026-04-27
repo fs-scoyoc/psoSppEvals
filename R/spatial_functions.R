@@ -17,23 +17,19 @@
 #'     of the function is  currently commented out and the roads data are not 
 #'     returned.
 #'
-#' @param states A list of state names or abbreviations.
-#' @param region_number The Forest Service Region number
-#' @param forest_number The Forest Service Forest number.
-#' @param forest_name The Name of the National Forest.
-#' @param admin_bndry Optional. 'sf' object of administrative Forest Service 
-#'     boundary can be provided. Default is TRUE. If TRUE administrative Forest
-#'     Service boundary will be pulled from the Forest Service ArcGIS REST 
-#'     service.
-#' @param plan_area Optional. 'sf' object of the plan area (Forest Service land) 
-#'     boundary can be provided. Default is TRUE. If TRUE the plan area boundary 
-#'     will be pulled from the Forest Service ArcGIS REST service.
-#' @param districts Optional. 'sf' object of the Forest Service district 
-#'     boundaries for the National Forest can be provided. Default is TRUE. If 
-#'     TRUE the district boundary will be pulled from the Forest Service ArcGIS 
-#'     REST service.
-#' @param target_crs The target coordinate reference system. The default is 
-#'      EPSG:4326 (WGS 84).
+#' @param forest_name Character. Name of national forest or grassland of 
+#'     interest.
+#' @param admin_bndry Optional. An `sf` object of the administrative boundary. 
+#'     Default is TRUE. If TRUE, the *EDW_ForestSystemBoundaries_01* layer will 
+#'     be read in from the Forest Service ArcGIS REST service using 
+#'     [psoGIStools::read_edw_lyr()] and filtered using *forest_name*.
+#' @param plan_area Optional. An `sf` object of the administrative boundary. 
+#'     Default is TRUE. If TRUE, the *EDW_SurfaceOwnership_01* layer will 
+#'     be read in from the Forest Service ArcGIS REST service using 
+#'     [psoGIStools::read_edw_lyr()] and clipped to the admin_bndry, then 
+#'     filtered for Forest Service land.
+#' @param target_crs Target coordinate reference system. Default is EPSG:4326 
+#'     (WGS84).
 #'
 #' @details
 #' `get_basemap_data` returns a list of spatial features used to produce 
@@ -44,29 +40,20 @@
 #'     [rnaturalearth::ne_states()] functions. These data are in the NAD83 CONUS 
 #'     Albers (EPSG:5070).
 #' @details
-#' National Forest-scale data include 'admin_bndry', 'plan_area', 'districts', 
-#'     'aoa', 'aoa_bbox', and 'plan_area_doughnut'. 'admin_bndry', 'plan_area', 
-#'     and 'districts' are acquired using [read_edw_lyr()]. 'buffer', 'aoa', 
-#'     'aoa_bbox', and 'plan_area_doughnut' are derived using the [sf] package. 
-#'     'aoa', or area of analysis, is a 4828 meter (3 mile) buffer of 
-#'     'admin_bndry' using [sf::st_buffer()]. 'aoa_bbox' is a bounding box of 
-#'     'aoa' using [sf::st_bbox()]. 'plan_area_doughnut' is a 1000 meter buffer 
-#'     of 'plan_area' with 'plan_area' erased using [sf::st_difference()]. 
-#'     These data are returned in the coordinate reference system provided by 
-#'     the `crs` parameter.
-#' @details
-#' Pulling roads data from OpenStreetMap has not been working lately. This part 
-#'     of the function is  currently commented out. Roads data include 'roads'. 
-#'     These data are acquired using the [osmdata] package, primarily 
-#'     [osmdata::getbb()], [osmdata::opq()], and [osmdata::osmdata_sf()]. These 
-#'     data are returned in the coordinate reference system provided by the 
-#'     `crs` parameter.
+#' National Forest-scale data include 'admin_bndry', 'plan_area',  'aoa', 
+#'     and 'plan_area_doughnut'. 'admin_bndry' and 'plan_area' are acquired 
+#'     using [read_edw_lyr()]. 'aoa' and 'plan_area_doughnut' are derived using 
+#'     the [sf] package. 'aoa', or area of analysis, is a 4828 meter (3 mile) 
+#'     buffer of 'admin_bndry' using [sf::st_buffer()]. 'plan_area_doughnut' is 
+#'     a 1000 meter buffer of 'plan_area' with 'plan_area' erased using 
+#'     [sf::st_difference()]. These data are returned in the coordinate 
+#'     reference system provided by the `crs` parameter.
 #' @note
-#' Sometimes the connection to the Forest Service REST Service or [osmdata] 
-#'     fails. This will throw the following error message: "**Error:** 
-#'     tar_make() Status code: 500. Error: json". In most instances, the 
-#'     function can simply be executed again to retrieve the data. Check the 
-#'     data servers if the error is persistent. 
+#' Sometimes the connection to the Forest Service REST Service  fails. This will 
+#'     throw the following error message: "**Error:** tar_make() Status code: 
+#'     500. Error: json". In most instances, the function can simply be executed 
+#'     again to retrieve the data. Check the data servers if the error is 
+#'     persistent. 
 #' @returns A list of [sf] objects.
 #' @seealso [read_edw_lyr()], [rnaturalearth::ne_countries()], 
 #'          [rnaturalearth::ne_states], [osmdata::osmdata_sf()]
@@ -82,13 +69,9 @@
 #' basemap_data <- get_basemap_data(states, region_number, forest_number, 
 #'                                  forest_name)
 #' }
-get_basemap_data = function(states, region_number, forest_number, forest_name,
-                            admin_bndry = TRUE, plan_area = TRUE, 
-                            districts = TRUE, target_crs = "EPSG:4326"){
+get_basemap_data = function(forest_name, admin_bndry = TRUE, plan_area = TRUE, 
+                            target_crs = "EPSG:4326"){
   
-  # states = "Colorado"
-  # region_number = "02"
-  # forest_number = "15"
   # forest_name = "White River National Forests"
   # target_crs = "EPSG:26913"
   # admin_bndry = targets::tar_read(admin_bndry)
@@ -124,38 +107,39 @@ get_basemap_data = function(states, region_number, forest_number, forest_name,
     dplyr::filter(name != "Hawaii", name != "Alaska") |>
     sf::st_transform(crs = 5070)
   
+  
   message("FS Boundaries")
   # Administrative Boundary
   if (isTRUE(admin_bndry)) {
-    ad_bdy = psoSppEvals::read_edw_lyr("EDW_ForestSystemBoundaries_01") |> 
-      dplyr::filter(region == region_number & forestnumber == forest_number) |>
-      sf::st_transform(target_crs) |> 
-      sf::st_make_valid()
-    } else (ad_bdy = admin_bndry)
-  # Plan Area (Forest Service Land)
-  if (isTRUE(plan_area)) {
-    pl_ar = psoSppEvals::read_edw_lyr("EDW_BasicOwnership_02") |> 
-      dplyr::filter(forestname == forest_name) |>
-      dplyr::filter(ownerclassification == "USDA FOREST SERVICE") |>
-      sf::st_transform(target_crs) |> 
-      sf::st_make_valid()
-    } else (pl_ar = plan_area)
-  # Ranger Districts
-  if (isTRUE(districts)){
-    dists = psoSppEvals::read_edw_lyr("EDW_RangerDistricts_03", layer = 1) |>
+    admin_bndry = psoSppEvals::read_edw_lyr("EDW_ForestSystemBoundaries_01") |>
       dplyr::filter(region == region_number & forestnumber == forest_number) |>
       sf::st_transform(target_crs) |>
       sf::st_make_valid()
-    } else (dists = districts)
+    }
+  # Plan Area (Forest Service Land)
+  if (isTRUE(plan_area)) {
+    plan_area = psoSppEvals::read_edw_lyr("EDW_SurfaceOwnership_01") |>
+      psoGIStools::clip_sf(admin_bndry) |>
+      dplyr::filter(ownerclassification == "USDA FOREST SERVICE") |>
+      sf::st_transform(target_crs) |>
+      sf::st_make_valid()
+    }
+  # # Ranger Districts
+  # if (isTRUE(districts)){
+  #   dists = psoSppEvals::read_edw_lyr("EDW_RangerDistricts_03", layer = 1) |>
+  #     dplyr::filter(region == region_number & forestnumber == forest_number) |>
+  #     sf::st_transform(target_crs) |>
+  #     sf::st_make_valid()
+  #   } else (dists = districts)
   # Area of Analysis
-  aoa = sf::st_buffer(admin_bndry, units::as_units(3,"mi")) |> 
-    sf::st_transform(target_crs) |> 
+  aoa = sf::st_buffer(admin_bndry, units::as_units(3,"mi")) |>
+    sf::st_transform(target_crs) |>
     sf::st_make_valid()
   # Buffer
-  plan_area_doughnut = sf::st_buffer(pl_ar, units::as_units(1,"km")) |> 
-    sf::st_difference(pl_ar) |> 
-    sf::st_transform(target_crs) |> 
-    sf::st_make_valid() |> 
+  plan_area_doughnut = sf::st_buffer(plan_area, units::as_units(1,"km")) |>
+    sf::st_difference(plan_area) |>
+    sf::st_transform(target_crs) |>
+    sf::st_make_valid() |>
     suppressWarnings()
 
   #-- Roads
@@ -176,148 +160,8 @@ get_basemap_data = function(states, region_number, forest_number, forest_name,
   #   sf::st_crop(roads_aoa) |> 
   #   suppressWarnings()
   
-  dat = tibble::lst(americas, north_america, l_48, aoa, 
-                    "admin_bndry" = ad_bdy, "plan_area" = pl_ar, 
-                    "districts" = dists, plan_area_doughnut)
+  #-- Assemble final data set
+  dat = tibble::lst(americas, north_america, l_48, aoa, admin_bndry, plan_area,
+                    plan_area_doughnut)
   return(dat)
 }
-
-
-# Deprecated Functions ----
-
-#' **Deprecated**. Clip feature class to polygon
-#' 
-#' This function is not maintained, but remains here for now. Use the 
-#'     `psoGIStools` package. This function clips a `sf` object using
-#'     `sf::st_intersection()`. First, this function checks that the coordinate
-#'     reference system (CRS) of the input object is the same as the clipping
-#'     object. If it is not, this function transforms the clipping object to CRS
-#'     of the input object using `sf::st_transform()`before clipping. The output
-#'     CRS is not changed.
-#'
-#' @param sf_lyr  Spatial (`sf`) object to be clipped.
-#' @param sf_clip Polygon (`sf`) object used to clip.
-#' @param locale  Optional. Short description of clipped layer, usually the 
-#'                    location (e.g., forest acronym or "Buffer").
-#'
-#' @return An [sf] object
-#' @seealso [sf::st_intersection()], [sf::st_transform()]
-#' @export
-#' 
-#' @examples
-#' \dontrun{
-#' library("psoSppEvals")
-#' 
-#' # Read spatial data into R
-#' t_path <- file.path("T:/path/to/project/directory")
-#' gdb_path <- file.path(t_path, "GIS_Data.gdb")
-#' sf_plan_area <- read_fc(lyr = "PlanArea", dsn = gdb_path, crs = "NAD83")
-#' 
-#' # Pull data from existing GBIF query
-#' gbif_dat <- get_gbif(gbif_key = '9999999-999999999999999', 
-#'                      t_path = file.path(t_path, "data"))
-#' 
-#' # Convert to spatial object
-#' gbif_sf <- gbif_spatial(gbif_dat, "NAD83")
-#' 
-#' # Clip to extents
-#' unit_gbif <- clip_fc(gbif_sf, sf_plan_area)
-#' }
-clip_fc <- function(sf_lyr, sf_clip, locale = NULL){
-  
-  # Transform clipping layer
-  if(sf::st_crs(sf_lyr) != sf::st_crs(sf_clip)){
-    sf_clip = sf::st_transform(sf_clip, crs = sf::st_crs(sf_lyr))
-  }
-  
-  # Clip input layer
-  sf_lyr = sf::st_intersection(sf_lyr, sf_clip) |> 
-    dplyr::select(-tidyselect::any_of(colnames(sf_clip)))
-  
-  # Add locale
-  if(!is.null(locale)){
-    sf_lyr = dplyr::mutate(sf_lyr, locale = locale)
-  }
-  
-  return(sf_lyr)
-}
-
-
-#' **Deprecated**. Read spatial data from Forest Service ArcGIS REST Services
-#' 
-#' This function is not maintained, but remains here for now. Use the 
-#'     `psoGIStools` package. This function reads spatial features from the 
-#'     Forest Service ArcGIS REST Services. Either the public ArcGIS REST 
-#'     Service, https://apps.fs.usda.gov/arcx/rest/services/EDW, or the internal 
-#'     ArcGIS REST Service, https://apps.fs.usda.gov/arcn/rest/services/EDW, 
-#'     using the `arcgislayers` package. You must be on a Forest Service network 
-#'     to access data from the internal ArcGIS REST Service.
-#'
-#' @param map_name Character. Name of map layer.
-#' @param layer Integer. Number of layer to read. Default is  zero (0).
-#' @param service Character. The public ("arcx") or internal ("arcn") ArcGIS 
-#'     REST Service code. Default is "arcx". You must be on a Forest Service 
-#'     network for "arcn" to work.
-#' @param target_crs Coordinate reference system (crs). Default is EPSG:4326 
-#'      (WGS 84).
-#'
-#' @return An [sf] object or [terra::SpatRaster-class].
-#' @seealso [arcgislayers::arc_read()], [sf::st_transform()]
-#' @export
-#' 
-#' @examples
-#' library(psoSppEvals)
-#' 
-#' # Administrative Boundary for the Dixie National Forest
-#' admin_bndry <- read_edw_lyr("EDW_ForestSystemBoundaries_01", layer = 1) |> 
-#'   dplyr::filter(forestname == "Dixie National Forest")
-read_edw_lyr <- function(map_name, layer = 0, service = "arcx", 
-                         target_crs = "EPSG:4326"){
-  
-  # map_name = "EDW_BioTESP_01"; layer = 1; service = "arcn"
-  # map_name = "EDW_ForestSystemBoundaries_01"; layer = 0; service = "arcx"
-  
-  edw_rest <- glue::glue("https://apps.fs.usda.gov/{service}/rest/services/EDW/")
-  lyr = arcgislayers::arc_read(
-    glue::glue("{edw_rest}/{map_name}/MapServer/{layer}")
-  ) |>
-    janitor::clean_names() |> 
-    sf::st_make_valid() |> 
-    sf::st_transform(crs = target_crs)
-  return(lyr)
-}
-
-
-#' **Deprecated**. Read feature class into R.
-#' 
-#' This function is not maintained, but remains here for now. Use the 
-#'     `psoGIStools` package. This function uses the `sf` package to read a 
-#'     feature class into R from a geodatabase (*.gdb) using the `sf::read_sf()` 
-#'     function. It then checks that the feature class is in the target 
-#'     coordinate reference system (CRS) and will transform the feature to the 
-#'     target CRS if it is not.
-#'
-#' @param lyr Feature class name.
-#' @param dsn Path to geodatabase that holds `lyr`.
-#' @param target_crs Target coordinate reference system (CRS). Either and 
-#'   `sf::st_crs()` object or accepted input string for `sf::st_crs()` (e.g. 
-#'   "WGS84" or "NAD83"). See [sf::st_crs()] for more details. Default is NULL. 
-#'   If NULL, resulting [sf] object will not be transformed.
-#'
-#' @return sf object
-#' @seealso [sf::read_sf()], [sf::st_crs()]
-#' @export
-#' 
-#' @examples
-#' \dontrun{
-#' library("psoSppEvals")
-#' 
-#' read_fc(lyr = "feature_name", dsn = file.path("T:/path/to/geodatabase"), 
-#'         crs = "NAD83")
-#' }
-read_fc <- function(lyr, dsn, target_crs = NULL){
-  fc = sf::read_sf(layer = lyr, dsn = dsn) |> sf::st_make_valid()
-  if(!is.null(target_crs)){fc = sf::st_transform(fc, crs = target_crs)}
-  return(fc)
-}
-

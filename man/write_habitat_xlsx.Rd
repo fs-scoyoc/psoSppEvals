@@ -39,5 +39,5 @@ and \code{extract_landfire_evt()} and writes them to an Excel workbook.
 message("Check back soon")
 }
 \seealso{
-\code{\link[=count_spp_by_hab]{count_spp_by_hab()}}, \code{\link[=pull_landfire]{pull_landfire()}}, \code{\link[=extract_landfire_evt]{extract_landfire_evt()}}
+\code{\link[=count_spp_by_hab]{count_spp_by_hab()}}, \code{\link[=pull_landfire_evt]{pull_landfire_evt()}}, \code{\link[=extract_landfire_evt]{extract_landfire_evt()}}
 }

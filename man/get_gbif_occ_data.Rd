@@ -6,20 +6,21 @@
 \usage{
 get_gbif_occ_data(
   spp_list,
-  spatial = TRUE,
   crs = "EPSG:4326",
+  spatial = TRUE,
   process_data = TRUE,
   correct = TRUE
 )
 }
 \arguments{
-\item{spp_list}{A list of species with taxon ID's from \code{get_taxonomies()}.}
-
-\item{spatial}{Logical (TRUE/FALSE). Return spatial data. Default is TRUE.}
+\item{spp_list}{A data frame of species with taxon ID's from
+\code{get_taxonomies()}.}
 
 \item{crs}{Target coordinate reference system (CRS). Either and
 \code{sf::st_crs()} object or accepted string (e.g. "EPSG:4326" or "NAD83").
 Default is EPSG:4326 (WGS84).}
+
+\item{spatial}{Logical (TRUE/FALSE). Return spatial data. Default is TRUE.}
 
 \item{process_data}{Logical. Process data after reading them into R (TRUE ==
 yes, FALSE == no). Default is TRUE. The processing step}

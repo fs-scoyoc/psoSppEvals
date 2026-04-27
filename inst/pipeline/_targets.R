@@ -171,7 +171,7 @@ list(
   ## Occurrence Data ----
   ### GBIF Data ----
   # tar_target(
-  #   od_gbif_data,
+  #   occ_gbif_data,
   #   psoSppEvals::get_gbif_data(gbif_key = gbif_key, t_path = file.path("data"),
   #                              aoa_poly = sd_basemap_data$aoa,
   #                              gbif_user = Sys.getenv("GBIF_USER"),
@@ -180,139 +180,139 @@ list(
   #                              crs = crs, correct = TRUE)
   # ),
   # tar_target(
-  #   od_gbif_unit,
-  #   ppsoGIStools::clip_fc(od_gbif_data, sd_basemap_data$plan_area) |>
+  #   occ_gbif_unit,
+  #   ppsoGIStools::clip_fc(occ_gbif_data, sd_basemap_data$plan_area) |>
   #     dplyr::mutate(locale = unit_code) |>
   #     data_integrety_qc()
   # ),
   # tar_target(
-  #   od_gbif_unit_spp,
+  #   occ_gbif_unit_spp,
   #   tibble::lst(
-  #     'all_spp' = psoSppEvals::build_gbif_spp(od_gbif_unit$all_data),
-  #     'valid_spp' = psoSppEvals::build_gbif_spp(od_gbif_unit$valid_data),
-  #     'invalid_spp' = psoSppEvals::build_gbif_spp(od_gbif_unit$invalid_data)
+  #     'all_spp' = psoSppEvals::build_gbif_spp(occ_gbif_unit$all_data),
+  #     'valid_spp' = psoSppEvals::build_gbif_spp(occ_gbif_unit$valid_data),
+  #     'invalid_spp' = psoSppEvals::build_gbif_spp(occ_gbif_unit$invalid_data)
   #     )
   # ),
   # tar_target(
-  #   od_gbif_buff,
-  #   ppsoGIStools::clip_fc(od_gbif_data, sd_basemap_data$plan_area_doughnut) |>
+  #   occ_gbif_buff,
+  #   ppsoGIStools::clip_fc(occ_gbif_data, sd_basemap_data$plan_area_doughnut) |>
   #     dplyr::mutate(locale = "Buffer")
   # ),
   # tar_target(
-  #   od_gbif_buff_spp,
-  #   psoSppEvals::build_gbif_spp(od_gbif_buff)
+  #   occ_gbif_buff_spp,
+  #   psoSppEvals::build_gbif_spp(occ_gbif_buff)
   # ),
 
   ### SEINet Data ----
   # tar_target(
-  #   od_sei_data,
+  #   occ_sei_data,
   #   psoSppEvals::get_seinet_data(file.path("data", "SEINet"), crs = crs,
   #                           correct = TRUE)
   # ),
   # tar_target(
-  #   od_sei_unit,
-  #   ppsoGIStools::clip_fc(od_sei_data, sd_basemap_data$plan_area) |>
+  #   occ_sei_unit,
+  #   ppsoGIStools::clip_fc(occ_sei_data, sd_basemap_data$plan_area) |>
   #     dplyr::mutate(locale = unit_code) |>
   #     data_integrety_qc()
   # ),
   # tar_target(
-  #   od_sei_unit_spp,
+  #   occ_sei_unit_spp,
   #   tibble::lst(
-  #     'all_spp' = psoSppEvals::build_seinet_spp(od_sei_unit$all_data),
-  #     'valid_spp' = psoSppEvals::build_seinet_spp(od_sei_unit$valid_data),
-  #     'invalid_spp' = psoSppEvals::build_seinet_spp(od_sei_unit$invalid_data)
+  #     'all_spp' = psoSppEvals::build_seinet_spp(occ_sei_unit$all_data),
+  #     'valid_spp' = psoSppEvals::build_seinet_spp(occ_sei_unit$valid_data),
+  #     'invalid_spp' = psoSppEvals::build_seinet_spp(occ_sei_unit$invalid_data)
   #     )
   # ),
   # tar_target(
-  #   od_sei_buff,
-  #   ppsoGIStools::clip_fc(od_sei_data, sd_basemap_data$plan_area_doughnut) |>
+  #   occ_sei_buff,
+  #   ppsoGIStools::clip_fc(occ_sei_data, sd_basemap_data$plan_area_doughnut) |>
   #     dplyr::mutate(locale = "Buffer")
   # ),
   # tar_target(
-  #   od_sei_buff_spp,
-  #   psoSppEvals::build_seinet_spp(od_sei_buff)
+  #   occ_sei_buff_spp,
+  #   psoSppEvals::build_seinet_spp(occ_sei_buff)
   # ),
 
   ### IMBCR Data ----
   # tar_target(
-  #   od_imbcr_data,
+  #   occ_imbcr_data,
   #   psoSppEvals::get_imbcr_data(fs_unit = unit_name, crs = crs)
   # ),
   # tar_target(
-  #   od_imbcr_unit,
-  #   ppsoGIStools::clip_fc(od_imbcr_data, sd_basemap_data$plan_area) |>
+  #   occ_imbcr_unit,
+  #   ppsoGIStools::clip_fc(occ_imbcr_data, sd_basemap_data$plan_area) |>
   #     dplyr::mutate(locale = unit_code)
   # ),
   # tar_target(
-  #   od_imbcr_unit_spp,
-  #   psoSppEvals::build_imbcr_spp(od_imbcr_unit)
+  #   occ_imbcr_unit_spp,
+  #   psoSppEvals::build_imbcr_spp(occ_imbcr_unit)
   # ),
   # tar_target(
-  #   od_imbcr_buff,
-  #   ppsoGIStools::clip_fc(od_imbcr_data, sd_basemap_data$plan_area_doughnut) |>
+  #   occ_imbcr_buff,
+  #   ppsoGIStools::clip_fc(occ_imbcr_data, sd_basemap_data$plan_area_doughnut) |>
   #     dplyr::mutate(locale = "Buffer")
   # ),
   # tar_target(
-  #   od_imbcr_buff_spp,
-  #   psoSppEvals::build_imbcr_spp(od_imbcr_buff)
+  #   occ_imbcr_buff_spp,
+  #   psoSppEvals::build_imbcr_spp(occ_imbcr_buff)
   # ),
 
   ### Utah NHP Data ----
   # TODO: This section will need to be modified for you pipeline.
   # tar_target(
-  #   od_nhp_pts,
+  #   occ_nhp_pts,
   #   get_unhp_point_data()
   # ),
   # tar_target(
-  #   od_nhp_plants,
+  #   occ_nhp_plants,
   #   get_unhp_plant_data()
   # ),
   # tar_target(
-  #   od_nhp_data,
-  #   combine_unhp_data(od_nhp_pts, od_nhp_plants)
+  #   occ_nhp_data,
+  #   combine_unhp_data(occ_nhp_pts, occ_nhp_plants)
   # ),
   # tar_target(
-  #   od_nhp_unit,
-  #   ppsoGIStools::clip_fc(od_nhp_data, sd_basemap_data$plan_area) |>
+  #   occ_nhp_unit,
+  #   ppsoGIStools::clip_fc(occ_nhp_data, sd_basemap_data$plan_area) |>
   #     dplyr::mutate(locale = unit_code)
   # ),
   # tar_target(
-  #   od_nhp_unit_spp,
-  #   build_unhp_spp(od_nhp_unit, unit_code, "UNHP")
+  #   occ_nhp_unit_spp,
+  #   build_unhp_spp(occ_nhp_unit, unit_code, "UNHP")
   # ),
   # tar_target(
-  #   od_nhp_buff,
-  #   ppsoGIStools::clip_fc(od_nhp_data, sd_basemap_data$plan_area_doughnut) |>
+  #   occ_nhp_buff,
+  #   ppsoGIStools::clip_fc(occ_nhp_data, sd_basemap_data$plan_area_doughnut) |>
   #     dplyr::mutate(locale = "Buffer")
   # ),
   # tar_target(
-  #   od_nhp_buff_spp,
-  #   build_unhp_spp(od_nhp_buff, "Buffer", "UNHP")
+  #   occ_nhp_buff_spp,
+  #   build_unhp_spp(occ_nhp_buff, "Buffer", "UNHP")
   # ),
 
   ### FS EDW Data ----
   # tar_target(
-  #   od_fs_data,
+  #   occ_fs_data,
   #   get_fs_data("Biology_TESP_OccurrenceAll_3miBuffer",
   #               "Biology_InvasivePlant_All_3miBuffer")
   # ),
   # tar_target(
-  #   od_fs_unit,
-  #   ppsoGIStools::clip_fc(od_fs_data, sd_basemap_data$plan_area) |>
+  #   occ_fs_unit,
+  #   ppsoGIStools::clip_fc(occ_fs_data, sd_basemap_data$plan_area) |>
   #     dplyr::mutate(locale = unit_code)
   # ),
   # tar_target(
-  #   od_fs_unit_spp,
-  #   build_fs_spp(od_fs_unit, unit_code)
+  #   occ_fs_unit_spp,
+  #   build_fs_spp(occ_fs_unit, unit_code)
   # ),
   # tar_target(
-  #   od_fs_buff,
-  #   ppsoGIStools::clip_fc(od_fs_data, sd_basemap_data$plan_area_doughnut) |>
+  #   occ_fs_buff,
+  #   ppsoGIStools::clip_fc(occ_fs_data, sd_basemap_data$plan_area_doughnut) |>
   #     dplyr::mutate(locale = "Buffer")
   # ),
   # tar_target(
-  #   od_fs_buff_spp,
-  #   build_fs_spp(od_fs_buff, unit_code)
+  #   occ_fs_buff_spp,
+  #   build_fs_spp(occ_fs_buff, unit_code)
   # ),
 
 
@@ -321,14 +321,14 @@ list(
   ### Build Species Lists ----
   # tar_target(
   #   elig_unit_list,
-  #   build_spp_list(od_gbif_unit_spp, od_sei_unit_spp, od_imbcr_unit_spp,
-  #                  od_nhp_unit_spp, od_fs_unit_spp, cl_status_list, 
+  #   build_spp_list(occ_gbif_unit_spp, occ_sei_unit_spp, occ_imbcr_unit_spp,
+  #                  occ_nhp_unit_spp, occ_fs_unit_spp, cl_status_list, 
   #                  unit_code)
   # ),
   # tar_target(
   #   elig_buffer_list,
-  #   build_spp_list(od_gbif_buff_spp, od_sei_buff_spp, od_imbcr_buff_spp, 
-  #                  od_nhp_buff_spp, od_fs_buff_spp, cl_status_list, "Buffer")
+  #   build_spp_list(occ_gbif_buff_spp, occ_sei_buff_spp, occ_imbcr_buff_spp, 
+  #                  occ_nhp_buff_spp, occ_fs_buff_spp, cl_status_list, "Buffer")
   # ),
   #-- Eligible Species LIst
   # tar_target(
@@ -350,19 +350,19 @@ list(
   #     eligible species.
   # tar_target(
   #   elig_occ_pts,
-  #   build_all_occ_data(elig_list, od_gbif_unit, od_sei_unit, od_imbcr_unit, 
-  #                      od_nhp_unit, od_fs_unit)
+  #   build_all_occ_data(elig_list, occ_gbif_unit, occ_sei_unit, occ_imbcr_unit, 
+  #                      occ_nhp_unit, occ_fs_unit)
   # ),
   # tar_target(
   #   elig_occ_proj_gdb,
-  #   write_spatial_data(elig_list, od_gbif_unit, od_sei_unit, od_imbcr_unit, 
-  #                      od_nhp_unit, od_fs_unit, dataset_name = "EligOccData",
+  #   write_spatial_data(elig_list, occ_gbif_unit, occ_sei_unit, occ_imbcr_unit, 
+  #                      occ_nhp_unit, occ_fs_unit, dataset_name = "EligOccData",
   #                      data_prefix = "Elig_v2", gdb_path = proj_gdb)
   # ),
   # tar_target(
   #   elig_occ_t_gdb,
-  #   write_spatial_data(elig_list, od_gbif_unit, od_sei_unit, od_imbcr_unit, 
-  #                      od_nhp_unit, od_fs_unit, dataset_name = "EligOccData",
+  #   write_spatial_data(elig_list, occ_gbif_unit, occ_sei_unit, occ_imbcr_unit, 
+  #                      occ_nhp_unit, occ_fs_unit, dataset_name = "EligOccData",
   #                      data_prefix = "Elig_v3", gdb_path = t_gdb)
   # ),
   
@@ -480,19 +480,19 @@ list(
   # TODO: This section will need to be modified for you pipeline.
   # tar_target(
   #   nko_occ_data,
-  #   build_all_occ_data(nko_list, od_gbif_unit, od_sei_unit, od_imbcr_unit, 
-  #                      od_nhp_unit, od_fs_unit)
+  #   build_all_occ_data(nko_list, occ_gbif_unit, occ_sei_unit, occ_imbcr_unit, 
+  #                      occ_nhp_unit, occ_fs_unit)
   # ),
   # tar_target(
   #   write_nko_occ_proj_gdb,
-  #   write_spatial_data(nko_list, od_gbif_unit, od_sei_unit, od_imbcr_unit, 
-  #                      od_nhp_unit, od_fs_unit, dataset_name = "NKO_OccData",
+  #   write_spatial_data(nko_list, occ_gbif_unit, occ_sei_unit, occ_imbcr_unit, 
+  #                      occ_nhp_unit, occ_fs_unit, dataset_name = "NKO_OccData",
   #                      data_prefix = "nko", gdb_path = proj_gdb)
   # ),
   # tar_target(
   #   write_nko_occ_t_gdb,
-  #   write_spatial_data(nko_list, od_gbif_unit, od_sei_unit, od_imbcr_unit, 
-  #                      od_nhp_unit, od_fs_unit, dataset_name = "NKO_OccData",
+  #   write_spatial_data(nko_list, occ_gbif_unit, occ_sei_unit, occ_imbcr_unit, 
+  #                      occ_nhp_unit, occ_fs_unit, dataset_name = "NKO_OccData",
   #                      data_prefix = "nko", gdb_path = t_gdb)
   # ),
   

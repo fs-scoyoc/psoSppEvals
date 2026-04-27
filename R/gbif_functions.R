@@ -48,7 +48,7 @@ build_gbif_spatial_data <- function(gbif_data, spp_list) {
     # dplyr::mutate(taxon_id = acceptedTaxonKey) |>
     dplyr::filter(taxon_id %in% spp_list$taxon_id) |>
     dplyr::mutate(gbif_occ_url = paste0("https://www.gbif.org/occurrence/",
-                                        as.character(gbifID / 1))) |>
+                                        as.character(gbifID/1))) |>
     dplyr::select(dplyr::any_of(var_names))
 
   # Return final data frame

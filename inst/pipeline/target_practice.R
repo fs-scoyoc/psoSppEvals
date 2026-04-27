@@ -21,7 +21,7 @@ targets::tar_make(names = dplyr::starts_with("sd"))
 targets::tar_make(names = dplyr::starts_with("cl"))
 
 # Run occurrence data (od) targets
-targets::tar_make(names = dplyr::starts_with("od"))
+targets::tar_make(names = dplyr::starts_with("occ"))
 
 # Run eligible species (elig) targets
 targets::tar_make(names = dplyr::starts_with("elig"))

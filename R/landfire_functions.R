@@ -6,8 +6,10 @@
 #'
 #' @param plan_area_sf Plan Area `sf` polygon object.
 #' @param lf_dir Directory path to save raster to.
-#' @param email_address Email address. Passesd on to [rlandfire::landfireAPIv2()].
+#' @param email_address Email address. Passed on to [rlandfire::landfireAPIv2()].
 #' @param res Raster resolution. Default is 30.
+#' @param product A character for the EVT product of interest. Default is 
+#'     *LF2024_EVT*. See https://lfps.usgs.gov/products for mor list of products.
 #'
 #' @returns A list of two data frames summarizing area of EVT.
 #' @export
@@ -19,8 +21,9 @@
 #' message("Example coming soon. To a theater near you.")
 #' 
 #' }
-pull_landfire <- function(plan_area_sf, lf_dir, email_address, res = 30){
-  # plan_area_sf = targets::tar_read(plan_area)
+pull_landfire_evt <- function(plan_area_sf, lf_dir, email_address, res = 30, 
+                              product = "LF2024_EVT"){
+  # plan_area_sf = targets::tar_read(sd_plan_area)
   # lf_dir = file.path("data", "LANDFIRE")
   # email_address = Sys.getenv("GBIF_EMAIL")
 
@@ -29,11 +32,10 @@ pull_landfire <- function(plan_area_sf, lf_dir, email_address, res = 30){
   # Transform AoA to WGS 84
   aoa_sf = sf::st_buffer(plan_area_sf, 1000) |> 
     sf::st_transform(crs = "epsg:4326")
-  # Generate AoA wkt string
-  lf_aoi = rlandfire::getAOI(aoa_sf)
   # Pull EVT data from LANDFIRE API
-  resp = rlandfire::landfireAPIv2(products = "250EVT", aoi = lf_aoi,
-                                  email_address, resolution = res,
+  resp = rlandfire::landfireAPIv2(products = product, resolution = res, 
+                                  aoi = rlandfire::getAOI(aoa_sf),
+                                  email = email_address,
                                   path = tempfile(fileext = ".zip"),
                                   method = 'auto', verbose = FALSE)
   # Unzip raster and save to lf_dir

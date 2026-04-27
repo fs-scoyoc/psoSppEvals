@@ -48,10 +48,11 @@ get_bcr_list <- function(sf_lyr){
 #' @export
 #'
 #' @examples
+#' library("psoGIStools")
 #' library("psoSppEvals")
 #' 
 #' # Pull the Administrative Boundary for the Dixie National Forest
-#' adm_bdy <- psoGIStools::read_edw_lyr("EDW_ForestSystemBoundaries_01", 1) |> 
+#' adm_bdy <- read_edw_lyr("EDW_ForestSystemBoundaries_01") |> 
 #'   dplyr::filter(region == "04" & forestnumber == "07")
 #' get_bc_regions(adm_bdy)
 get_bc_regions <- function(sf_lyr){
