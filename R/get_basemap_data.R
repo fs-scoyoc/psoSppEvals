@@ -6,16 +6,7 @@
 #'     scale data are acquired using the `rnaturalearth` package and Forest 
 #'     Service data are acquired from Forest Service ArcGIS Rest Services
 #'     (https://apps.fs.usda.gov/arcx/rest/services/EDW) using `arcgislayers` 
-#'     package. Roads data are acquired using the `osmdata` package.
-#' @note
-#' The basic ownership layer (*EDW_BasicOwnership_02*) has not been reading into 
-#'     R from the Forest Service REST Service lately. Use a user-defined plan 
-#'     area spatial feature in the `plan_area` parameter for this function to 
-#'     work properly.
-#' @note
-#' Pulling roads data from OpenStreetMap has not been working lately. This part 
-#'     of the function is  currently commented out and the roads data are not 
-#'     returned.
+#'     package.
 #'
 #' @param forest_name Character. Name of national forest or grassland of 
 #'     interest.
@@ -62,12 +53,8 @@
 #' @examples
 #' \dontrun{
 #' library(psoSppEvals)
-#' states <- c("Utah", "Nevada", "New Mexico")
-#' region_number <- "04"
-#' forest_number <- "07"
 #' forest_name <- "Dixie National Forest"
-#' basemap_data <- get_basemap_data(states, region_number, forest_number, 
-#'                                  forest_name)
+#' basemap_data <- get_basemap_data(forest_name)
 #' }
 get_basemap_data = function(forest_name, admin_bndry = TRUE, plan_area = TRUE, 
                             target_crs = "EPSG:4326"){
@@ -76,7 +63,6 @@ get_basemap_data = function(forest_name, admin_bndry = TRUE, plan_area = TRUE,
   # target_crs = "EPSG:26913"
   # admin_bndry = targets::tar_read(admin_bndry)
   # plan_area = targets::tar_read(plan_area)
-  # districts = TRUE
   
   message("Western hemisphere")
   americas = rnaturalearth::ne_countries(scale = "medium",
@@ -111,14 +97,14 @@ get_basemap_data = function(forest_name, admin_bndry = TRUE, plan_area = TRUE,
   message("FS Boundaries")
   # Administrative Boundary
   if (isTRUE(admin_bndry)) {
-    admin_bndry = psoSppEvals::read_edw_lyr("EDW_ForestSystemBoundaries_01") |>
-      dplyr::filter(region == region_number & forestnumber == forest_number) |>
+    admin_bndry = psoGIStools::read_edw_lyr("EDW_ForestSystemBoundaries_01") |>
+      dplyr::filter(forestname == unit_name) |> 
       sf::st_transform(target_crs) |>
       sf::st_make_valid()
     }
   # Plan Area (Forest Service Land)
   if (isTRUE(plan_area)) {
-    plan_area = psoSppEvals::read_edw_lyr("EDW_SurfaceOwnership_01") |>
+    plan_area = psoGIStools::read_edw_lyr("EDW_SurfaceOwnership_01") |>
       psoGIStools::clip_sf(admin_bndry) |>
       dplyr::filter(ownerclassification == "USDA FOREST SERVICE") |>
       sf::st_transform(target_crs) |>
@@ -127,7 +113,7 @@ get_basemap_data = function(forest_name, admin_bndry = TRUE, plan_area = TRUE,
   # # Ranger Districts
   # if (isTRUE(districts)){
   #   dists = psoSppEvals::read_edw_lyr("EDW_RangerDistricts_03", layer = 1) |>
-  #     dplyr::filter(region == region_number & forestnumber == forest_number) |>
+  #           dplyr::filter(forestname == unit_name) |>
   #     sf::st_transform(target_crs) |>
   #     sf::st_make_valid()
   #   } else (dists = districts)

@@ -75,6 +75,7 @@ and are then downloaded to a local or network directory using
 }
 \examples{
 \dontrun{
+library("psoGIStools")
 library("psoSppEvals")
 
 # Read spatial data into R

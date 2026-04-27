@@ -3,15 +3,16 @@
 #' This function writes spatial (`sf`) BIEN, eBird, and IUCN range data to a 
 #'     geodatabase and has the option to return a list of `sf` objects. 
 #'
-#' @param bien_maps bien maps from this pipeline
-#' @param ebird_range eBird range maps from this pipeline
-#' @param iucn_maps iucn maps from this pipeline
-#' @param gdb_path path to geodatabase
+#' @param bien_maps Spatial data from `download_bien_maps()`.
+#' @param ebird_range Spatial data `download_ebird_range_maps()`.
+#' @param iucn_maps Spatial data from `get_iucn_maps()`.
+#' @param gdb_path Path to geodatabase.
 #' @param return_sf Optional. TRUE/FALSE. Return a list of `sf` objects. Default 
 #'     is FALSE.
 #'
 #' @returns A list of `sf` objects including BIEN, eBird, and IUCN range data.
-#' @seealso [download_bien_maps()], [download_ebird_range_maps()], [build_iucn_maps()]
+#' @seealso [download_bien_maps()], [download_ebird_range_maps()], 
+#'     [get_iucn_maps()]
 #' @export
 #' 
 #' @examples

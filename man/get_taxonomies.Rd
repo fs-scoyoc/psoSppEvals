@@ -2,7 +2,13 @@
 % Please edit documentation in R/get_taxonomies.R
 \name{get_taxonomies}
 \alias{get_taxonomies}
-\title{Get Taxonomies from GBIF}
+\title{Function in this script:
+\itemize{
+\item get_taxonomies()
+\item get_synonyms()
+\item correct_taxon_ids()
+Get Taxonomies from GBIF
+}}
 \usage{
 get_taxonomies(spp_list, query_field = "scientific_name", correct = FALSE)
 }

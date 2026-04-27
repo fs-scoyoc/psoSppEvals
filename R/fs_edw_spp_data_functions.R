@@ -59,7 +59,7 @@ pull_edw_bio_data <- function(aoa_sf, crs,
     return(dat)
   }
   
-  # Pull Data ----
+  ## Pull Data ----
   message("Reading Aquatic Biota")
   aq_biota = pull_edw("EDW_Aquatic_Biota_Observations_01", 0) |> try()
   if(methods::is(aq_biota, "sf")){
@@ -87,11 +87,11 @@ pull_edw_bio_data <- function(aoa_sf, crs,
       bio_tesp = FALSE
       })
   
-  # Combine Data ----
+  ## Combine Data ----
   dat_ls = list(aq_biota, invplant, bio_tesp)
   dat = dat_ls[dat_ls != "FALSE"] |> dplyr::bind_rows() |> sf::st_as_sf()
 
-  # Get taxon ID's  ----
+  ## Get taxon ID's  ----
   message("Getting taxon ID's")
   taxa = dat |> 
     sf::st_drop_geometry() |> 
@@ -99,12 +99,13 @@ pull_edw_bio_data <- function(aoa_sf, crs,
     dplyr::distinct() |> 
     psoSppEvals::get_taxonomies(query_field = "scientific_name", correct = TRUE)
   
-  # Final Data Set ----
+  ## Final Data Set ----
   # Format Dates
   date_formats = c("%m/%d/%Y", "%Y", "%Y-%m", "%Y-%m-%d %H:%M:%S")
   date_vars = c("survey_obs_date", "date_collected", 
                 "date_collected_most_recent", "last_update", 
                 "last_update_survey")
+  
   # Function to safely parse dates
   parse_date_safe <- function(x, time_zone = 'UTC') {
     # Try multiple formats; return NA if parsing fails

@@ -1,3 +1,9 @@
+#' Functions in this script:
+#' -   build_seinet_spatial_data()
+#' -   get_seinet_data()
+#' -   build_seinet_spp()
+
+
 #' Subset eligible species from SEINet data and reduce variables.
 #'
 #' @param sei_data Spatial SEINet data from [get_seinet_data()].
@@ -24,10 +30,8 @@
 #' sei_dat <- get_seinet_data(data_folder, crs = "NAD83")
 #' # Create species list
 #' spp_list <- sei_spp(sei_dat)
-#' # Subset species list
-#' birds <- dplyr::filter(class == "Aves")
 #' # Subset spatial SEINet data
-#' sei_birds <- build_seinet_spatial_data(sei_dat, birds)
+#' sei_fs <- build_seinet_spatial_data(sei_dat, spp_list)
 #' }
 build_seinet_spatial_data <- function(sei_data, spp_list) {
 

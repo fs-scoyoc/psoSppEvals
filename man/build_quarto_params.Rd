@@ -2,7 +2,13 @@
 % Please edit documentation in R/automated_report_functions.R
 \name{build_quarto_params}
 \alias{build_quarto_params}
-\title{Build Quarto Parameters for Automated Evaluation Templates}
+\title{Functions in this script:
+\itemize{
+\item build_quarto_params()
+\item set_up_directories()
+\item write_evlas()
+Build Quarto Parameters for Automated Evaluation Templates
+}}
 \usage{
 build_quarto_params(
   spp_list,

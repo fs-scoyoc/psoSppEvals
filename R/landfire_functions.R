@@ -1,3 +1,8 @@
+#' Functions in this script:
+#' -   pull_landfire_evt()
+#' -   extract_landfire_evt()
+
+
 #' Download LANDFIRE Existing Vegetation Type (250EVT)
 #' 
 #' This function downloads and saves LANDFIRE Existing Vegetation Type (250EVT) 
@@ -105,8 +110,8 @@ pull_landfire_evt <- function(plan_area_sf, lf_dir, email_address, res = 30,
 #' 
 #' }
 extract_landfire_evt <- function(spp_list, spp_pts_sf, lf_dir){
-  # spp_list = targets::tar_read(nat_known_list)
-  # spp_pts_sf = targets::tar_read(all_occ_data)
+  # spp_list = targets::tar_read(scc_list)
+  # spp_pts_sf = targets::tar_read(scc_occ_pts)
   # lf_dir = file.path("data", "LANDFIRE")
   
   # Read in raster

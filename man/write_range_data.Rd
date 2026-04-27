@@ -13,13 +13,13 @@ write_range_data(
 )
 }
 \arguments{
-\item{bien_maps}{bien maps from this pipeline}
+\item{bien_maps}{Spatial data from \code{download_bien_maps()}.}
 
-\item{ebird_range}{eBird range maps from this pipeline}
+\item{ebird_range}{Spatial data \code{download_ebird_range_maps()}.}
 
-\item{iucn_maps}{iucn maps from this pipeline}
+\item{iucn_maps}{Spatial data from \code{get_iucn_maps()}.}
 
-\item{gdb_path}{path to geodatabase}
+\item{gdb_path}{Path to geodatabase.}
 
 \item{return_sf}{Optional. TRUE/FALSE. Return a list of \code{sf} objects. Default
 is FALSE.}
@@ -37,5 +37,6 @@ message("Stay tuned.")
 
 }
 \seealso{
-\code{\link[=download_bien_maps]{download_bien_maps()}}, \code{\link[=download_ebird_range_maps]{download_ebird_range_maps()}}, \code{\link[=build_iucn_maps]{build_iucn_maps()}}
+\code{\link[=download_bien_maps]{download_bien_maps()}}, \code{\link[=download_ebird_range_maps]{download_ebird_range_maps()}},
+\code{\link[=get_iucn_maps]{get_iucn_maps()}}
 }

@@ -1,3 +1,12 @@
+#' Functions in this script:
+#' -   build_gbif_spatial_data()
+#' -   get_gbif_data()
+#' -   get_gbif_occ_data()
+#' -   build_gbif_spp()
+#' -   wkt_string()
+#' -   gbif_spatial()
+
+
 #' Subset eligible species from GBIF data and reduce variables.
 #'
 #' @param gbif_data Spatial GBIF data from [get_gbif_data()].
@@ -109,6 +118,7 @@ build_gbif_spatial_data <- function(gbif_data, spp_list) {
 #'
 #' @examples
 #' \dontrun{
+#' library("psoGIStools")
 #' library("psoSppEvals")
 #'
 #' # Read spatial data into R

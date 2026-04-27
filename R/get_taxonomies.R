@@ -1,3 +1,9 @@
+#' Function in this script:
+#' -   get_taxonomies()
+#' -   get_synonyms()
+#' -   correct_taxon_ids()
+
+
 #' Get Taxonomies from GBIF
 #'
 #' This function adds taxonomy information from GBIF to any data frame that has

@@ -1,3 +1,8 @@
+#' Functions in this script:
+#' -   get_bcr_list()
+#' -   get_bc_regions()
+
+
 #' Get USGS Birds of Conservation Concern (BCC) breeding bird list for National 
 #'     Forest or Grassland.
 #' 
@@ -12,10 +17,11 @@
 #' @export
 #'
 #' @examples
+#' library("psoGIStools")
 #' library("psoSppEvals")
 #' 
 #' # Pull the Administrative Boundary for the Dixie National Forest
-#' adm_bdy = psoGIStools::read_edw_lyr("EDW_ForestSystemBoundaries_01", 1) |>
+#' adm_bdy = read_edw_lyr("EDW_ForestSystemBoundaries_01") |>
 #'   dplyr::filter(region == "04" & forestnumber == "07")
 #' 
 #' # Get list of birds of conservation concern
