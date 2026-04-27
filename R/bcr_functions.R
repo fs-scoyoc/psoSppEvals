@@ -17,6 +17,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' library("psoGIStools")
 #' library("psoSppEvals")
 #' 
@@ -26,6 +27,7 @@
 #' 
 #' # Get list of birds of conservation concern
 #' get_bcr_list(adm_bdy)
+#' }
 get_bcr_list <- function(sf_lyr){
   bcrs = psoSppEvals::get_bc_regions(sf_lyr) |> dplyr::pull(bcr_label)
   bcc = psoSppEvals::bcc_list
@@ -54,6 +56,7 @@ get_bcr_list <- function(sf_lyr){
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' library("psoGIStools")
 #' library("psoSppEvals")
 #' 
@@ -61,6 +64,7 @@ get_bcr_list <- function(sf_lyr){
 #' adm_bdy <- read_edw_lyr("EDW_ForestSystemBoundaries_01") |> 
 #'   dplyr::filter(region == "04" & forestnumber == "07")
 #' get_bc_regions(adm_bdy)
+#' }
 get_bc_regions <- function(sf_lyr){
   sf::st_intersection(
     sf::st_make_valid(sf_lyr),

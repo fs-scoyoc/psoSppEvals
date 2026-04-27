@@ -17,6 +17,7 @@ This function clips the Birds of Conservation Regions \link[sf:sf]{sf::sf} objec
 polygon.
 }
 \examples{
+\dontrun{
 library("psoGIStools")
 library("psoSppEvals")
 
@@ -24,4 +25,5 @@ library("psoSppEvals")
 adm_bdy <- read_edw_lyr("EDW_ForestSystemBoundaries_01") |> 
   dplyr::filter(region == "04" & forestnumber == "07")
 get_bc_regions(adm_bdy)
+}
 }

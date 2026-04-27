@@ -17,7 +17,6 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     arcgisbinding, 
-    arcgislayers,
     BIEN,
     dplyr,
     ebirdst,
@@ -29,9 +28,7 @@ Imports:
     lubridate,
     methods,
     natserv,
-    osmdata,
     psoGIStools,
-    purrr,
     quarto,
     readr,
     readxl,
@@ -44,7 +41,6 @@ Imports:
     terra,
     tibble,
     tidyr,
-    tidyselect, 
     units,
     writexl
 Roxygen: list(markdown = TRUE)

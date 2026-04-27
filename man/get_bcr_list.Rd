@@ -24,6 +24,7 @@ This function returns a data frame of bird species that occur in the Birds of
 Conservation Regions a National Forest or Grassland overlaps.
 }
 \examples{
+\dontrun{
 library("psoGIStools")
 library("psoSppEvals")
 
@@ -33,4 +34,5 @@ adm_bdy = read_edw_lyr("EDW_ForestSystemBoundaries_01") |>
 
 # Get list of birds of conservation concern
 get_bcr_list(adm_bdy)
+}
 }
