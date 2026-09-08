@@ -30,12 +30,12 @@
 get_taxonomies <- function(spp_list, query_field = "scientific_name", 
                            authorship = TRUE, correct = TRUE) {
   # spp_list = psoSppEvals::sp_list_ex
-  # xlsx_path = file.path("data-raw/data", "2026_CA_SGCN_CDFW.xlsx")
-  # spp_list = readxl::read_excel(xlsx_path, sheet = "CA SGCN", skip = 1) |>
-  #   janitor::clean_names() |>
-  #   dplyr::filter(!is.na(scientific_name)) |>
-  #   dplyr::select(taxonomic_group:common_name, state_listing_status,
-  #                 conservation_concern_rare_plant_rank)
+  # # xlsx_path = file.path("data-raw/data", "2026_CA_SGCN_CDFW.xlsx")
+  # # spp_list = readxl::read_excel(xlsx_path, sheet = "CA SGCN", skip = 1) |>
+  # #   janitor::clean_names() |>
+  # #   dplyr::filter(!is.na(scientific_name)) |>
+  # #   dplyr::select(taxonomic_group:common_name, state_listing_status,
+  # #                 conservation_concern_rare_plant_rank)
   # query_field = "scientific_name"; correct = TRUE; authorship = TRUE
   
   # Get list of distinct species.
@@ -110,7 +110,7 @@ get_taxonomies <- function(spp_list, query_field = "scientific_name",
       t_id = taxonomy_list[[i]]$id[nrow(taxonomy_list[[i]])] |> as.character()
       asc = taxonomy_list[[i]]$name[nrow(taxonomy_list[[i]])] |> as.character()
       if(asc == "unranked") asc = NA
-      n_tax = taxonomy_list[[1]] |> 
+      n_tax = taxonomy_list[[i]] |> 
         dplyr::select(rank, name) |> 
         tidyr::pivot_wider(names_from = rank, values_from = name) |> 
         dplyr::mutate(

@@ -20,6 +20,9 @@ devtools::document() # Update package documentation
 devtools::check() # Check for package errors
 
 devtools::load_all() # load package in development mode
+sp_l <- get_taxonomies(sp_list_ex)
+get_synonyms(sp_l)
+
 devtools::install() # manually test
 
 #-- Add, commit, and push package to GITHub in the terminal
