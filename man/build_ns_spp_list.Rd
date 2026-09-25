@@ -19,8 +19,8 @@ rankings using data returned from \code{get_ns_state_list()}.
 \examples{
 \dontrun{
 library("psoSppEvals")
-ns_co <- get_ns_state_list("CO", taxonomy = FALSE)
-spp_list <- build_ns_spp_list(ns_co)
+co_ns_data <- get_ns_state_list("CO")
+co_ns_spp_list <- build_ns_spp_list(co_ns_data)
 }
 }
 \seealso{

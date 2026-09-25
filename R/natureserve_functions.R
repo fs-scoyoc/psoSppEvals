@@ -25,30 +25,36 @@
 #' @examples
 #' \dontrun{
 #' library("psoSppEvals")
-#' ns_co <- get_ns_state_list("CO", taxonomy = FALSE)
-#' spp_list <- build_ns_spp_list(ns_co)
+#' co_ns_data <- get_ns_state_list("CO")
+#' co_ns_spp_list <- build_ns_spp_list(co_ns_data)
 #' }
 build_ns_spp_list <- function(ns_data){
-  # ns_data = ns_co
+  # ns_data = get_ns_state_list("CO")
   
   # columns to select
-  col_select1 <- c("taxon_id", "gbif_taxonID", "element_code",
-                   "scientific_name", "common_name",
+  status_cols <- c("taxon_id", "gbif_taxonID", "element_code",
+                   "common_name", "scientific_name",
                    "species_group_broad", "species_group_fine",
                    "nature_serve_global_rank", 
                    "nature_serve_rounded_global_rank",
-                   "u_s_endangered_species_act_status", "sara_status")
-  col_select2 = c("distribution", "view_on_nature_serve_explorer",
-                  "kingdom", "phylum", "class", "order", "family", "genus",
-                  "species", "subspecies", "variety", "form", "synonyms",
-                  "source")
+                   "u_s_endangered_species_act_status", "cosewic_status", 
+                   "sara_status")
+  taxonomy_cols = c("duplicated_taxon", "rank", "accepted_scientific_name",
+                    "authorship",
+                    "kingdom", "phylum", "class", "order", "family", "genus",
+                    "species", "subspecies", "variety", "form",
+                    "synonyms", "distribution", "view_on_nature_serve_explorer",
+                    "source")
   
+  # ns_data[
+  #   names(ns_data)[stringr::str_detect(names(ns_data), "state_list")]
+  # ][[1]] |> colnames()
   
   dat = ns_data[
     names(ns_data)[stringr::str_detect(names(ns_data), "state_list")]
     ][[1]] |>
-    dplyr::select(dplyr::any_of(col_select1), dplyr::contains("sRank"),
-                  dplyr::any_of(col_select2)) |>
+    dplyr::select(dplyr::any_of(status_cols), dplyr::contains("sRank"),
+                  dplyr::any_of(taxonomy_cols)) |>
     dplyr::distinct() |>
     dplyr::rename('broad_group' = species_group_broad,
                   'fine_group' = species_group_fine,
@@ -289,7 +295,8 @@ get_ns_state_list <- function(state, taxonomy = TRUE, correct = TRUE) {
   }
   
   # Generate request from API
-  export <- natserv::ns_export(location = list(nation = "US", subnation = state),
+  export <- natserv::ns_export(location = list(nation = "US", 
+                                               subnation = state),
                                format = "xlsx")
   res <- natserv::ns_export_status(export)
   while (res$state != "Finished") res <- natserv::ns_export_status(export)
@@ -362,7 +369,10 @@ get_ns_habitat <- function(ns_state_list, spp_list) {
     dplyr::mutate(
       api_shortcode = stringr::str_extract(view_on_nature_serve_explorer,
                                            "ELEMENT_GLOBAL\\.\\d+\\.\\d+"),
-      ns_taxon_api_url = glue::glue("https://explorer.natureserve.org/api/data/taxon/{api_shortcode}")) |>
+      ns_taxon_api_url = glue::glue(
+        "https://explorer.natureserve.org/api/data/taxon/{api_shortcode}"
+        )
+      ) |>
     dplyr::distinct() |>
     dplyr::group_by(taxon_id) |>
     dplyr::mutate(n = dplyr::n()) |>
@@ -419,7 +429,9 @@ get_ns_habitat <- function(ns_state_list, spp_list) {
 
       get_all_habs = function(x, ls_json) {
         hab_type = x
-        hab_list = ls_json[glue::glue("species{stringr::str_to_title(hab_type)}Habitats")]
+        hab_list = ls_json[glue::glue(
+          "species{stringr::str_to_title(hab_type)}Habitats"
+          )]
         hab_list[[1]] |>
           lapply(return_habs_from_hab_cat, hab_type) |>
           dplyr::bind_rows()
@@ -462,8 +474,8 @@ get_ns_habitat <- function(ns_state_list, spp_list) {
 #'     data returned into a `tibble::tibble()`.
 #
 #' @param species_list A character vector of species names.
-#' @param states A character vector of 2-letter US state codes. Default is NULL, if
-#'     NULL all US states are returned.
+#' @param states A character vector of 2-letter US state codes. Default is NULL, 
+#'     if NULL all US states are returned.
 #'
 #' @return A [tibble::tibble()]
 #' @export
@@ -497,12 +509,15 @@ ns_ranks <- function(species_list, states = NULL) {
     if (nrow(nsdat$results) > 0) {
       #-- Find and validate indices
       # Index of input species name
-      i <- which(sapply(nsdat$results$scientificName, FUN = function(x) sp %in% x))
+      i <- which(sapply(nsdat$results$scientificName, 
+                        FUN = function(x) sp %in% x))
       # Validate i
       if (length(i) > 1) i <- min(i)
       if (length(i) == 0) i <- 1
       #-- Create initial data
-      dat <- tibble::tibble(dplyr::select(nsdat$results, -speciesGlobal)[i, ]) |>
+      dat <- tibble::tibble(
+        dplyr::select(nsdat$results, -speciesGlobal)[i, ]
+        ) |>
         dplyr::bind_cols(nsdat$results$speciesGlobal[i, ]) |>
         dplyr::select(
           scientificName, primaryCommonName, roundedGRank, gRank,

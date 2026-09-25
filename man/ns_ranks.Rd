@@ -9,8 +9,8 @@ ns_ranks(species_list, states = NULL)
 \arguments{
 \item{species_list}{A character vector of species names.}
 
-\item{states}{A character vector of 2-letter US state codes. Default is NULL, if
-NULL all US states are returned.}
+\item{states}{A character vector of 2-letter US state codes. Default is NULL,
+if NULL all US states are returned.}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble::tibble()}}

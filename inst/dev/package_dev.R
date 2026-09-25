@@ -21,7 +21,7 @@ devtools::check() # Check for package errors
 
 devtools::load_all() # load package in development mode
 sp_l <- get_taxonomies(sp_list_ex)
-get_synonyms(sp_l)
+sp_s <- get_synonyms(sp_l)
 
 devtools::install() # manually test
 
